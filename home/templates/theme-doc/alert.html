@@ -1,0 +1,66 @@
+{% extends "common/base_sidebar.html" %}
+{% load static %} 
+{% block head_content %}
+<style>
+    .nav-item.active {
+        background-color: #fff !important;
+        border-top-left-radius: .5rem;
+        border-top-right-radius: .5rem;
+        font-weight: 600;
+    }
+</style>
+{% endblock %}
+{% block page_content %}
+<ul class="nav">
+  <li class="nav-item"><a class="nav-link text-muted" href="{% url 'theme' %}">Home</a></li>
+  <li class="nav-item active"><a class="nav-link text-primary" href="{% url 'theme' 'alert' %}">Alert</a></li>
+  <li class="nav-item"><a class="nav-link text-muted" href="{% url 'theme' 'badge' %}">Badge</a></li>
+  <li class="nav-item"><a class="nav-link text-muted" href="{% url 'theme' 'breadcrumb' %}">Breadcrumb</a></li>
+  <li class="nav-item"><a class="nav-link text-muted" href="{% url 'theme' 'button' %}">Button</a></li>
+  <li class="nav-item"><a class="nav-link text-muted" href="{% url 'theme' 'card' %}">Card</a></li>
+  <li class="nav-item"><a class="nav-link text-muted" href="{% url 'theme' 'form' %}">Form</a></li>
+  <li class="nav-item"><a class="nav-link text-muted" href="{% url 'theme' 'icon' %}">Icon</a></li>
+  <li class="nav-item"><a class="nav-link text-muted" href="{% url 'theme' 'image' %}">Image</a></li>
+  <li class="nav-item"><a class="nav-link text-muted" href="{% url 'theme' 'table' %}">Table</a></li>
+  <li class="nav-item"><a class="nav-link text-muted" href="{% url 'theme' 'typography' %}">Typography</a></li>
+</ul>
+<hr class="m-0" style="border: 0px solid #d2dae4;"/>
+        <!-- page body -->
+        <div class="row">
+            <div class="col">
+
+              <section id="alerts-page">
+                <div class="card mt-n4">
+                  <div class="card-header h4">Alerts</div>
+                  <div class="card-body">
+                    <div class="alert alert-primary mt-4" role="alert">
+                      Primary alert [class="alert alert-primary"]
+                    </div>
+                    <div class="alert alert-secondary mt-4" role="alert">
+                      Secondary alert [class="alert alert-secondary"]
+                    </div>
+                    <div class="alert alert-success mt-4" role="alert">
+                      Success alert [class="alert alert-success"]
+                    </div>
+                    <div class="alert alert-danger mt-4" role="alert">
+                      Danger alert [class="alert alert-danger"]
+                    </div>                   
+                  </div>   
+                  <div class="card-footer text-bg-dark">
+                    <code>
+                      div.alert.alert-primary.mt-4 (role="alert") <br/>
+                      div.alert.alert-secondary.mt-4 (role="alert") <br/>
+                      div.alert.alert-success.mt-4 (role="alert") <br/>
+                      div.alert.alert-danger.mt-4 (role="alert") <br/>
+                    </code>
+                  </div>            
+                </div>
+              </section>
+
+          </div>
+        </div>
+{% endblock %}
+
+{% block scripts %} 
+
+{% endblock %}

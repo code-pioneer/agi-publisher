@@ -35,7 +35,7 @@ python manage.py migrate
 python manage.py createsuperuser
 ```
 
-6. Run Unit Tesecase
+6. Run Unit Test Case
 ```
 python manage.py test
 ```

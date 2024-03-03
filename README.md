@@ -10,7 +10,7 @@ Primary goal of `agi-publisher` is to leverage LLM as team of AGI working togeth
 ```
 mkdir myproject
 cd myproject
-git clone https://github.com/vhpatel73/django-accelerator-digidrey.git .
+git clone https://github.com/code-poineer/agi-publisher.git .
 ```
 
 2. Create Virtual Environment

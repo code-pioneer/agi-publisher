@@ -1,7 +1,11 @@
 import os
 from pathlib import Path
+import environ
 
 BASE_DIR = Path(__file__).resolve().parent.parent
+
+env = environ.Env()
+environ.Env.read_env(env_file=f'{BASE_DIR}/.env')
 
 SECRET_KEY = 'django-insecure-9n-#a+j7w6fc9li$q%x%s4+cz&z3q=%8k_6rye%*vlm58!6wzf'
 
@@ -22,6 +26,7 @@ INSTALLED_APPS = [
     'allauth.socialaccount',
     'allauth.socialaccount.providers.google',
     'home',
+    'blog',
 ]
 
 MIDDLEWARE = [
@@ -117,3 +122,6 @@ SOCIALACCOUNT_PROVIDERS = {
         }
     }
 }
+
+LLM_MODEL = env("LLM_MODEL", default=None)
+OPENAI_API_KEY  = env("OPENAI_API_KEY",default=None)

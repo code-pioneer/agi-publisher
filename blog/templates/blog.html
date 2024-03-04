@@ -1,0 +1,202 @@
+{% extends "common/base_sidebar.html" %}
+{% load static %} 
+{% block page_content %}
+<div id="parentchat">
+    <!-- Card -->
+    <div class="card flex-grow-1 overflow-auto "  style=" box-shadow: none;">
+      <div class="card-body" >
+        <div id="empty-chat" class="text-center">
+     
+          <!-- Image -->
+          <img src="{% static 'assets/img/agi.jpeg' %}" alt="..." class="card-img-top img-fluid" style="max-width: 70%">
+          <!-- Title -->  
+        </div>       
+        <div style="padding-top:10px;">
+          <div id="imgbot" style="display: none;">{% static 'assets/img/bot.gif' %}</div>
+          <div id="imgusr" style="display: none;">{% static 'assets/img/question-blue.jpeg' %}</div>
+          <ul id="chat" class="list-group list-group-flush list my-n3">
+          </ul>
+          <br></br>
+        </div>
+      </div>
+    </div>
+  
+    <div class="mt-auto"  style="flex:1"></div>
+    <form id="prompt-form" name="prompt-form" style="display: flex; position: fixed; bottom: 0;left: 250px;right: 0;padding: 20px; background-color: #f8f9fa;">
+      {% csrf_token %}
+      <input type="hidden" id="app" name="app" value="{{ app }}" />
+  
+      <div style="display: flex; flex-direction: column; flex: 1; align-items: flex-start;">
+        <div class="input-group input-group-merge">
+          <input type="text" id="prompt" name="prompt" class="form-control form-control-appended"
+            placeholder="What's on your mind?" style="border: 2px solid cornflowerblue;" autofocus />
+          <div class="input-group-append">
+            <button id="loading_btn" class="btn btn-primary" type="button" disabled style="display: none;">
+              <span class="spinner-grow spinner-grow-sm" role="status" aria-hidden="true"></span>
+              <span class="sr-only">Loading...</span>
+            </button>
+            <input id="send_btn" class="btn btn-primary" type="submit" value="Send" />
+          </div>
+        </div>
+      </div>
+    </form>
+  
+    <!-- A template form for response rendering -->
+  
+    <div id="prompt-response-template" style="display: none;">
+      <form id="feedback-form" name="feedback-form">
+        {% csrf_token %}
+        <li class='list-group-item' style='padding-left:15px;border: none;'>
+          <div class='row align-items-top'>
+            <div class='col-auto'>
+              <a href='#' class='avatar'><img src='{% static "assets/img/bot.gif" %}' alt='...'
+                  class='avatar-img rounded-circle' style='max-height:30px;max-width:30px;'></a>
+            </div>
+            <div class='col ml-n2'>
+              <div class="card">
+                <div class="card-body" style="padding: 15px;">
+                  <p class='mb-0 text-muted'>
+                    @msg@
+                  </p>
+                  <div class="card-footer" style="padding: 15px;">
+                  <input type="hidden" id="conversationId" name="conversationId" value="{{ conversationId }}" />
+                  <input type="hidden" id="feedbacktype" name="feedbacktype" value="" />
+  
+                  <div class="text-muted" style="text-align: right;">
+                    <small>
+                      Please help us to fine tune model by providing feedback ...
+                      <button id="thumbs-up-btn" class="btn btn-primary btn-sm" data-toggle="collapse"
+                      data-target="#multiCollapse" aria-expanded="false" aria-controls="multiCollapse"
+                        onclick="handleLikes()" type="button">
+                        <span class="fe fe-thumbs-up"></span>
+                      </button>
+  
+                      <button id="thumbs-down-btn" class="btn btn-primary btn-sm" data-toggle="collapse"
+                        data-target="#multiCollapse" aria-expanded="false" aria-controls="multiCollapse"
+                        onclick="handleDisLikes()" type="button">
+                        <span class="fe fe-thumbs-down"></span>
+                      </button>
+                    </small>
+                  </div>
+                  <div class="collapse multi-collapse" id="multiCollapse">
+                    <div class="card card-body" style="margin-top: 15px; background-color:#f9fbfd;">
+                      <div class="form-group">
+                        <label for="feedbacktext">Elabrate business rule to help model provide accurate
+                          information:</label>
+                        <textarea class="form-control" id="feedbacktext" name="feedbacktext" rows="3"></textarea>
+                      </div>
+                      <button id="feedback_loading_btn" class="btn btn-primary" type="button" disabled
+                        style="display: none;">
+                        <span class="spinner-grow spinner-grow-sm" role="status" aria-hidden="true"></span>
+                        <span class="sr-only">Sending...</span>
+                      </button>
+                      <input id="feedback_btn" class="btn btn-primary" type="submit" value="Train model" />
+                      <div id="feeback_alert_success" class="alert alert-primary alert-dismissible fade show" role="alert" style="text-align: center; margin-top: 2rem;">
+                        <h4 class="alert-heading">Thank You! Your feedback has been recorded.</h4>
+                        <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                          <span aria-hidden="true">&times;</span>
+                        </button>
+                      </div>
+                      <div id="feeback_alert_error" class="alert alert-primary alert-dismissible fade show" role="alert" style="text-align: center; margin-top: 2rem;">
+                        <h4 class="alert-heading">Sorry Something went wrong... Try again.</h4>
+                        <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                          <span aria-hidden="true">&times;</span>
+                      </button>
+                      </div>
+                    </div>
+  
+                  </div>
+         
+  
+                </div>
+              </div>
+            </div>
+        </li>
+      </form>
+    </div>
+  
+  </div>
+
+{% endblock %}
+
+{% block scripts %}
+<script>
+  function getCookie(name) {
+    let cookieValue = null;
+    if (document.cookie && document.cookie !== "") {
+      const cookies = document.cookie.split(";");
+      for (let i = 0; i < cookies.length; i++) {
+        const cookie = cookies[i].trim();
+        if (cookie.substring(0, name.length + 1) === (name + "=")) {
+          cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+          break;
+        }
+      }
+    }
+    return cookieValue;
+  }
+  function handleLikes() {
+    $('#feedbacktype').val('likes');
+    $('#parentchat')[0].scrollTop = $('#parentchat')[0].scrollHeight;
+
+  }
+
+  function handleDisLikes() {
+    $('#feedbacktype').val('dislikes');
+    $('#parentchat')[0].scrollTop = $('#parentchat')[0].scrollHeight;
+
+  }
+
+  $(document).on('submit', '#prompt-form', function (e) {
+    console.log('test')
+    e.preventDefault();
+    imgloc = $('#imgusr').html();
+    prompt = $('#prompt').val();
+    if (prompt == null || prompt == '') return;
+    chatblock = "<li class='list-group-item shadow-md' style='background-color:transparent;color:#12263f; padding-left:15px;border: none;'><div class='row align-items-top'> <div class='col-auto'><a href='#' class='avatar' style='height: auto;'><img src='" + imgloc + "' alt='...' class='avatar-img rounded-circle' style='max-height:30px;max-width:30px;'></a></div><div class='col ml-n2'><p class='mb-0'>" + prompt + "</p></div></div></li>";
+    $('#empty-chat').hide();
+    $('#chat').html(chatblock);
+    $('#send_btn').hide();
+    $('#loading_btn').show();
+    $.ajax({
+      type: 'POST',
+      url: "{% url 'chat_prompt' %}",
+      data: $(this).serialize(),
+      data2: {
+        prompt: $('#prompt').val(),
+        app: $('#app').val(),
+        csrfmidddlewaretoken: $('input[name=csrfmidddlewaretoken]').val()
+      },
+      headers: {
+        "X-Requested-With": "XMLHttpRequest",
+        "X-CSRFToken": getCookie("csrftoken"),
+      },
+      success: function (response) {
+        $('#prompt').val('');
+        imgbot = $('#imgbot').html();
+        conversationId = response.conversationId;
+        answer = response.answer;
+        prt = $('#prompt-response-template').html().replace("@msg@", answer);
+        prt = prt.replace('multi-collapse collapse show', 'multi-collapse collapse');
+        $('#chat').append(prt);
+        $('#parentchat')[0].scrollTop = $('#parentchat')[0].scrollHeight;
+        $('#send_btn').show();
+        $('#loading_btn').hide();
+        $('#feeback_alert_success').hide()
+    $('#feeback_alert_error').hide()
+
+
+
+      },
+      error: function (err) {
+        $('#chat').append("<li class='list-group-item' style='padding-left:15px;'><div class='row align-items-top'> <div class='col-auto'><a href='#' class='avatar'><img src='" + imgbot + "' alt='...' class='avatar-img rounded-circle' style='max-height:30px;max-width:30px;'></a></div><div class='col ml-n2'><p class='mb-0 text-danger'>Something went wrong :( ... ... ... Try one more time in few seconds!</p></div></div></li><br>");
+        $('#send_btn').show();
+        $('#loading_btn').hide();
+      }
+    })
+  })
+
+
+ 
+</script>
+{% endblock %}

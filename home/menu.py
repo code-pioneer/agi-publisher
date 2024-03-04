@@ -100,7 +100,21 @@ menuitems = [
                     "badgetype":"success",
                     "logo": 'assets/img/disclaimer.png',
                     "tags":[]
-                }                                  
+                },
+                {   "uri":"/blog",
+                    "menu":"Blog",
+                    "header":"Django Blog AGI",
+                    "subheader":"AGI demo using Blog Generation",
+                    "desc":"Short description of Homepage",
+                    "pub":"Active since 8/2/2023",
+                    "icon": "bi-pencil-square",
+                    "primary": True,
+                    "badge":False,
+                    "badgetext":"3",
+                    "badgetype":"success",
+                    "logo": 'assets/img/chat.png',
+                    "tags":[]
+                },                                   
 ] 
     
 def get_navbar(menukey):

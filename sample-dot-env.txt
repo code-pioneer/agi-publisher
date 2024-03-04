@@ -1,0 +1,5 @@
+#Required environment variables for blog agi app
+
+LLM_MODEL=<gpt-3.5-turbo-1106 or any other llm>
+DEBUG=<True>
+OPENAI_API_KEY=<openai api key>

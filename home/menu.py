@@ -1,12 +1,12 @@
-site_name = "Django Accelerator"
-seo_description = "Quick startup template for django"
-seo_keywords = "django accelerator, django, python, social login"
+site_name = "Creativify"
+seo_description = "Hire digital content creators, aka AGI workers, to generate content like blog and relevant marketing material"
+seo_keywords = "Autonomous Content creator, AGI, Opensource"
 
 menuitems = [ 
                 {   "uri":"/",
                     "menu":"Home",
-                    "header":"Django Accelerator",
-                    "subheader":"Get started with Django in 10 min",
+                    "header":"Creativify",
+                    "subheader":"Autonomous digital content creators",
                     "desc":"Short description of Homepage",
                     "pub":"Active since 8/2/2023",
                     "icon": "bi-house-door",
@@ -20,7 +20,7 @@ menuitems = [
                 {   "uri":"/docs/",
                     "menu":"Get Started",
                     "header":"Get Started",
-                    "subheader":"Django Accelerator",
+                    "subheader":"Creativify",
                     "desc":"Short description of Documentation",
                     "pub":"Active since 8/2/2023",
                     "icon": "bi-book",
@@ -34,7 +34,7 @@ menuitems = [
                 {   "uri":"/theme/",
                     "menu":"Theme",
                     "header":"Theme Documentation",
-                    "subheader":"Django Accelerator",
+                    "subheader":"Creativify",
                     "desc":"Nest theme documentation",
                     "pub":"Active since 8/2/2023",
                     "icon": "bi-filetype-html",
@@ -48,7 +48,7 @@ menuitems = [
                 {   "uri":"/profile/",
                     "menu":"Profile",
                     "header":"Profile",
-                    "subheader":"Django Accelerator",
+                    "subheader":"Creativify",
                     "desc":"Love to hear from you",
                     "pub":"Active since 8/2/2023",
                     "icon": "bi-person-fill",
@@ -62,7 +62,7 @@ menuitems = [
                 {   "uri":"/contactus/",
                     "menu":"Contact Us",
                     "header":"Contact Us",
-                    "subheader":"Django Accelerator",
+                    "subheader":"Creativify",
                     "desc":"Love to hear from you",
                     "pub":"Active since 8/2/2023",
                     "icon": "bi-pencil-square",
@@ -76,7 +76,7 @@ menuitems = [
                 {   "uri":"/aboutus/",
                     "menu":"About Us",
                     "header":"About Us",
-                    "subheader":"Django Accelerator",
+                    "subheader":"Creativify",
                     "desc":"More about us",
                     "pub":"Active since 8/2/2023",
                     "icon": "bi-buildings-fill",
@@ -90,7 +90,7 @@ menuitems = [
                 {   "uri":"/disclaimer/",
                     "menu":"Disclaimer",
                     "header":"Disclaimer",
-                    "subheader":"Django Accelerator",
+                    "subheader":"Creativify",
                     "desc":"Detail disclaimer",
                     "pub":"Active since 8/2/2023",
                     "icon": "bi-info-square-fill",
@@ -103,8 +103,8 @@ menuitems = [
                 },
                 {   "uri":"/blog",
                     "menu":"Blog",
-                    "header":"Django Blog AGI",
-                    "subheader":"AGI demo using Blog Generation",
+                    "header":"Creativify",
+                    "subheader":"Autonomous digital content creators",
                     "desc":"Short description of Homepage",
                     "pub":"Active since 8/2/2023",
                     "icon": "bi-pencil-square",

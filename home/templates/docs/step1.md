@@ -1,6 +1,6 @@
 ## Overview
 
-Primary goal of `django-accelerator-digidrey` is to skip the boilerplate setup, jump right into development, and concentrate on building core features and functionalities.
+Primary goal of `creativify` is to skip the boilerplate setup, jump right into development of autonomous agents for content creation.
 
 If you are looking at this from your working app, you have perform this step. Go to the second step - **Setup OAuth**.
 

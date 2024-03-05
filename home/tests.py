@@ -15,7 +15,7 @@ class Home_View_TestCase(TestCase):
 
     def test_view(self):
         response = self.client.post("/", {})
-        self.assertContains(response, "taralnest.com &copy; 2019")
+        self.assertContains(response, "digidrey.com")
         self.assertContains(response, "taralnest.min.css")
         self.assertContains(response, "bootstrap.bundle.min.js")
         self.assertNotContains(response, "step1.md")
@@ -27,14 +27,14 @@ class GettingStarted_View_TestCase(TestCase):
 
     def test_view1(self):
         response = self.client.post("/docs/", {})
-        self.assertContains(response, "taralnest.com &copy; 2019")
+        self.assertContains(response, "digidrey.com")
         self.assertContains(response, "Get Started")
         self.assertContains(response, "step1.md")
         self.assertNotContains(response, "Theme Documentation")
 
     def test_view2(self):
         response = self.client.post("/docs/step6.md", {})
-        self.assertContains(response, "taralnest.com &copy; 2019")
+        self.assertContains(response, "digidrey.com")
         self.assertContains(response, "Get Started")
         self.assertContains(response, "Deploy Django on GCP Cloud Run")
         self.assertNotContains(response, "Create POSTGRESQL database on local workstation")
@@ -46,14 +46,14 @@ class Theme_View_TestCase(TestCase):
 
     def test_get_view1(self):
         response = self.client.post("/theme/", {})
-        self.assertContains(response, "taralnest.com &copy; 2019")
+        self.assertContains(response, "digidrey.com")
         self.assertContains(response, "Theme Documentation")
         self.assertContains(response, "Illustrations")
         self.assertNotContains(response, "step2.md")
 
     def test_get_view2(self):
         response = self.client.get("/theme/card", {})
-        self.assertContains(response, "taralnest.com &copy; 2019")
+        self.assertContains(response, "digidrey.com")
         self.assertContains(response, "Theme Documentation")
         self.assertContains(response, "Gradient State Card")
         self.assertNotContains(response, "step2.md")
@@ -90,12 +90,12 @@ class Static_Views_TestCase(TestCase):
 
     def test_get_view_aboutus(self):
         response = self.client.post("/aboutus/", {})
-        self.assertContains(response, "taralnest.com &copy; 2019")
+        self.assertContains(response, "digidrey.com")
         self.assertContains(response, "👋 Hello 👋")
         self.assertNotContains(response, "step2.md")
 
     def test_get_view_disclaimer(self):
         response = self.client.get("/disclaimer/", {})
-        self.assertContains(response, "taralnest.com &copy; 2019")
+        self.assertContains(response, "digidrey.com")
         self.assertContains(response, "By using our website, you hereby consent ")
         self.assertNotContains(response, "step2.md")

@@ -4,7 +4,7 @@ from django.http import JsonResponse, HttpResponseServerError
 import markdown
 from .forms import ConversationForm
 from home import menu
-from . import agi 
+from . import agi_agent 
 
 blog_template   = 'blog.html'
 
@@ -24,7 +24,7 @@ def chat_post(request):
     try:
         if form.is_valid():
             prompt = request.POST.get("prompt")
-            resp_dict = agi.blogAgent(topic=prompt) 
+            resp_dict = agi_agent.blogAgent(topic=prompt) 
             answer =  resp_dict['answer'] 
             md = markdown.Markdown(extensions=["fenced_code"])
             html = md.convert(answer)

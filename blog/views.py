@@ -19,7 +19,7 @@ def chat_get(request):
         return HttpResponseServerError('Humm... Something went wrong... Try later')
     
 # @login_required
-def chat_post(request):
+async def chat_post(request):
     form = ConversationForm(request.POST)
     try:
         if form.is_valid():

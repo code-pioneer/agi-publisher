@@ -24,11 +24,11 @@ async def chat_post(request):
     try:
         if form.is_valid():
             prompt = request.POST.get("prompt")
-            resp_dict = agi_agent.blogAgent(topic=prompt) 
-            answer =  resp_dict['answer'] 
-            md = markdown.Markdown(extensions=["fenced_code"])
-            html = md.convert(answer)
-            data = {'answer': html}               
+            resp_dict = await agi_agent.blogAgent(topic=prompt) 
+            answer =  str(resp_dict['answer'])
+            #md = markdown.Markdown(extensions=["fenced_code"])
+            #html = md.convert(answer)
+            data = {'answer': answer}               
             return JsonResponse(data)
         else:
             message = {'answer': '''Apologies, I am not equipped to handle this particular task. Please consider another query or topic for assistance.'''}

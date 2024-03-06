@@ -1,11 +1,11 @@
 from langchain.agents import tool
 from langchain_core.prompts import PromptTemplate
 from langchain_openai import ChatOpenAI
-from mainapp.settings import LLM_MODEL, TOOLS
-
+from langchain_core.callbacks import Callbacks
+from mainapp.settings import LLM_MODEL, TOOLS, STREAMING
 
 @tool
-def reviseBlog(blog: str, feedback: str) -> str:
+async def reviseBlog(blog: str, feedback: str, callbacks: Callbacks) -> str:
     """Revise the blog when proofreading is complete and revisions are needed."""
     print(f'reviseBlog - {feedback}')
     revise_blog_template = PromptTemplate.from_template(
@@ -16,8 +16,15 @@ def reviseBlog(blog: str, feedback: str) -> str:
      
     Answer: """
     )
-    llm = ChatOpenAI(model=LLM_MODEL, temperature=0)
-    task = revise_blog_template.format(blog=blog, feedback=feedback)
-    return llm.invoke(task)
+    llm = ChatOpenAI(model=LLM_MODEL, temperature=0, streaming=STREAMING)
+    chain = revise_blog_template | llm.with_config(
+        {
+            "run_name": "Publish Blog Html",
+            "tags": ["tool_llm"],
+            "callbacks": callbacks, 
+        }
+    )
+    chunks = [chunk async for chunk in chain.astream({"blog": blog,"feedback": feedback})]
+    return "".join(chunk.content for chunk in chunks)
 
 TOOLS.append(reviseBlog)

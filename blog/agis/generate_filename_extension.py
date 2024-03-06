@@ -2,12 +2,11 @@ from langchain.agents import tool
 from langchain_core.prompts import PromptTemplate
 from langchain_openai import ChatOpenAI
 from mainapp.settings import LLM_MODEL
-from mainapp.settings import LLM_MODEL, TOOLS
-
-
+from langchain_core.callbacks import Callbacks
+from mainapp.settings import LLM_MODEL, TOOLS, STREAMING
 
 @tool
-def generate_filename(result: str) -> str:
+async def generate_filename(result: str, callbacks: Callbacks) -> str:
     """Generate filename once blog is ready to be saved."""
     print(f'generate_filename')
     save_blog_template = PromptTemplate.from_template(
@@ -22,13 +21,19 @@ def generate_filename(result: str) -> str:
 
     Blog: {blog}
 
-
     Answer: 
     Filename: """
     )
     
-    llm = ChatOpenAI(model=LLM_MODEL, temperature=0)
-    task = save_blog_template.format(blog=result)
-    return llm.invoke(task)
+    llm = ChatOpenAI(model=LLM_MODEL, temperature=0, streaming=STREAMING)
+    chain = save_blog_template | llm.with_config(
+        {
+            "run_name": "Generate Filename",
+            "tags": ["tool_llm"],
+            "callbacks": callbacks, 
+        }
+    )
+    chunks = [chunk async for chunk in chain.astream({"blog": result})]
+    return "".join(chunk.content for chunk in chunks)
 
 TOOLS.append(generate_filename)

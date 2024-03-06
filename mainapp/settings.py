@@ -127,3 +127,4 @@ LLM_MODEL = env("LLM_MODEL", default=None)
 OPENAI_API_KEY  = env("OPENAI_API_KEY",default=None)
 
 TOOLS = []
+STREAMING = True

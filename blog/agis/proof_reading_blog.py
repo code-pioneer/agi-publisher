@@ -1,11 +1,11 @@
 from langchain.agents import tool
 from langchain_core.prompts import PromptTemplate
 from langchain_openai import ChatOpenAI
-from mainapp.settings import LLM_MODEL, TOOLS
-
+from langchain_core.callbacks import Callbacks
+from mainapp.settings import LLM_MODEL, TOOLS, STREAMING
 
 @tool
-def proofreadingBlog(blog: str) -> str:
+async def proofreadingBlog(blog: str,callbacks: Callbacks) -> str:
     """Proofread the blog once it's generated."""
     print(f'proofreadingBlog')
 
@@ -28,8 +28,16 @@ def proofreadingBlog(blog: str) -> str:
     Feedback:"""
 )
     blog = blog.replace('"', '')
-    llm = ChatOpenAI(model=LLM_MODEL, temperature=0)
-    task = proofreading_blog_template.format(blog=blog)
-    return llm.invoke(task)
+    llm = ChatOpenAI(model=LLM_MODEL, temperature=0, streaming=STREAMING)
+    chain = proofreading_blog_template | llm.with_config(
+        {
+            "run_name": "Proof Reading Blog LLM",
+            "tags": ["tool_llm"],
+            "callbacks": callbacks,  # <-- Propagate callbacks
+        }
+    )
+    chunks = [chunk async for chunk in chain.astream({"blog": blog})]
+    return "".join(chunk.content for chunk in chunks)
+
 
 TOOLS.append(proofreadingBlog)

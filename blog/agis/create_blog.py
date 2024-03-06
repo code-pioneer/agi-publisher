@@ -1,11 +1,12 @@
 from langchain.agents import tool
 from langchain_core.prompts import PromptTemplate
 from langchain_openai import ChatOpenAI
-from mainapp.settings import LLM_MODEL, TOOLS
+from langchain_core.callbacks import Callbacks
+from mainapp.settings import LLM_MODEL, TOOLS, STREAMING
 
 
 @tool
-def createBlog(topic: str) -> str:
+async def createBlog(topic: str, callbacks: Callbacks) -> str:
     """Generate a blog for a given topic."""
     print(f'createBlog')
     create_blog_template = PromptTemplate.from_template(
@@ -28,8 +29,15 @@ def createBlog(topic: str) -> str:
      
     Answer: """
     )
-    llm = ChatOpenAI(model=LLM_MODEL, temperature=0)
-    task = create_blog_template.format(topic=topic)
-    return llm.invoke(task)
+    llm = ChatOpenAI(model=LLM_MODEL, temperature=0, streaming=STREAMING)
+    chain = create_blog_template | llm.with_config(
+        {
+            "run_name": "Create Blog LLM",
+            "tags": ["tool_llm"],
+            "callbacks": callbacks, 
+        }
+    )
+    chunks = [chunk async for chunk in chain.astream({"topic": topic})]
+    return "".join(chunk.content for chunk in chunks)
 
 TOOLS.append(createBlog)

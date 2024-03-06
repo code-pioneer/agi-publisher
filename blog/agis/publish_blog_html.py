@@ -1,7 +1,7 @@
 from langchain.agents import tool
 from langchain_core.prompts import PromptTemplate
 from langchain_openai import ChatOpenAI
-from mainapp.settings import LLM_MODEL
+from mainapp.settings import LLM_MODEL, TOOLS
 
 @tool
 def publishBlogHtml(blog: str) -> str:
@@ -22,3 +22,5 @@ def publishBlogHtml(blog: str) -> str:
     llm = ChatOpenAI(model=LLM_MODEL, temperature=0)
     task = html_blog_template.format(blog=blog)
     return llm.invoke(task)
+
+TOOLS.append(publishBlogHtml)

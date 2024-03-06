@@ -1,7 +1,7 @@
 from langchain.agents import tool
 from langchain_core.prompts import PromptTemplate
 from langchain_openai import ChatOpenAI
-from mainapp.settings import LLM_MODEL
+from mainapp.settings import LLM_MODEL, TOOLS
 
 
 @tool
@@ -19,3 +19,5 @@ def reviseBlog(blog: str, feedback: str) -> str:
     llm = ChatOpenAI(model=LLM_MODEL, temperature=0)
     task = revise_blog_template.format(blog=blog, feedback=feedback)
     return llm.invoke(task)
+
+TOOLS.append(reviseBlog)

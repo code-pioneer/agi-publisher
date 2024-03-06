@@ -1,7 +1,7 @@
 from langchain.agents import tool
 from langchain_core.prompts import PromptTemplate
 from langchain_openai import ChatOpenAI
-from mainapp.settings import LLM_MODEL
+from mainapp.settings import LLM_MODEL, TOOLS
 
 
 @tool
@@ -31,3 +31,5 @@ def createBlog(topic: str) -> str:
     llm = ChatOpenAI(model=LLM_MODEL, temperature=0)
     task = create_blog_template.format(topic=topic)
     return llm.invoke(task)
+
+TOOLS.append(createBlog)

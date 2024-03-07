@@ -1,5 +1,4 @@
 from langchain.agents import tool
-from mainapp.settings import TOOLS
 import os
 import aiofiles 
 
@@ -17,4 +16,5 @@ async def save_to_file(result: str, filename: str) -> str:
     print(f'save_to_file')
     return await write_file(result=result,filename=filename)
 
-TOOLS.append(save_to_file)
+def setup():
+    return save_to_file

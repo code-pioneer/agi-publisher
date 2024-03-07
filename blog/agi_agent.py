@@ -1,15 +1,16 @@
 from langchain.agents import AgentExecutor, create_openai_tools_agent
 from langchain_openai import ChatOpenAI
 from langchain import hub
-from mainapp.settings import LLM_MODEL, TOOLS
-from blog.agis import create_blog, proof_reading_blog, revise_blog, publish_blog_html, publish_blog_md, save_to_file, generate_filename_extension
+from mainapp.settings import LLM_MODEL
+from blog.agis.tools import agent_tools
+
+tools = agent_tools()
 
 def init_agent():
     prompt = hub.pull("hwchase17/openai-tools-agent")
     llm = ChatOpenAI(model=LLM_MODEL, temperature=0)
-    print(f'Numer of Tools: {len(TOOLS)} TOOLS: {TOOLS}')
-    agent = create_openai_tools_agent(llm, TOOLS, prompt)
-    return AgentExecutor(agent=agent, tools=TOOLS, verbose=True, handle_parsing_errors=True).with_config({"run_name":"Agent"})
+    agent = create_openai_tools_agent(llm, tools, prompt)
+    return AgentExecutor(agent=agent, tools=tools, verbose=True, handle_parsing_errors=True).with_config({"run_name":"Agent"})
 
 # def blogAgent(topic):
 #     input = f'Your objective is to perform all required tasks as part of this fullfillment. Publishing as HTML or Mark Down. Avoid publishing in both HTML and Mark Down format. Topic: {topic}'

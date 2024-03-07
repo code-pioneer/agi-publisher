@@ -2,7 +2,7 @@ from langchain.agents import tool
 from langchain_core.prompts import PromptTemplate
 from langchain_openai import ChatOpenAI
 from langchain_core.callbacks import Callbacks
-from mainapp.settings import LLM_MODEL, TOOLS, STREAMING
+from mainapp.settings import LLM_MODEL, STREAMING
 
 @tool
 async def proofreadingBlog(blog: str,callbacks: Callbacks) -> str:
@@ -40,4 +40,5 @@ async def proofreadingBlog(blog: str,callbacks: Callbacks) -> str:
     return "".join(chunk.content for chunk in chunks)
 
 
-TOOLS.append(proofreadingBlog)
+def setup():
+    return proofreadingBlog

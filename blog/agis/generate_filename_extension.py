@@ -3,7 +3,7 @@ from langchain_core.prompts import PromptTemplate
 from langchain_openai import ChatOpenAI
 from mainapp.settings import LLM_MODEL
 from langchain_core.callbacks import Callbacks
-from mainapp.settings import LLM_MODEL, TOOLS, STREAMING
+from mainapp.settings import LLM_MODEL, STREAMING
 
 @tool
 async def generate_filename(result: str, callbacks: Callbacks) -> str:
@@ -36,4 +36,5 @@ async def generate_filename(result: str, callbacks: Callbacks) -> str:
     chunks = [chunk async for chunk in chain.astream({"blog": result})]
     return "".join(chunk.content for chunk in chunks)
 
-TOOLS.append(generate_filename)
+def setup():
+    return generate_filename

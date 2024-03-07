@@ -2,7 +2,7 @@ from langchain.agents import tool
 from langchain_core.prompts import PromptTemplate
 from langchain_openai import ChatOpenAI
 from langchain_core.callbacks import Callbacks
-from mainapp.settings import LLM_MODEL, TOOLS, STREAMING
+from mainapp.settings import LLM_MODEL, STREAMING
 
 @tool
 async def reviseBlog(blog: str, feedback: str, callbacks: Callbacks) -> str:
@@ -27,4 +27,5 @@ async def reviseBlog(blog: str, feedback: str, callbacks: Callbacks) -> str:
     chunks = [chunk async for chunk in chain.astream({"blog": blog,"feedback": feedback})]
     return "".join(chunk.content for chunk in chunks)
 
-TOOLS.append(reviseBlog)
+def setup():
+    return reviseBlog

@@ -22,13 +22,12 @@
     </div>
   
     <div class="mt-auto"  style="flex:1"></div>
-    <form id="prompt-form" name="prompt-form" style="display: flex; position: fixed; bottom: 0;left: 250px;right: 0;padding: 20px; background-color: #f8f9fa;">
+    <form id="topic-form" name="topic-form" style="display: flex; position: fixed; bottom: 0;left: 250px;right: 0;padding: 20px; background-color: #f8f9fa;">
       {% csrf_token %}
-      <input type="hidden" id="app" name="app" value="{{ app }}" />
   
       <div style="display: flex; flex-direction: column; flex: 1; align-items: flex-start;">
         <div class="input-group input-group-merge">
-          <input type="text" id="prompt" name="prompt" class="form-control form-control-appended"
+          <input type="text" id="topic" name="topic" class="form-control form-control-appended"
             placeholder="What's on your mind?" style="border: 2px solid cornflowerblue;" autofocus />
           <div class="input-group-append">
             <button id="loading_btn" class="btn btn-primary" type="button" disabled style="display: none;">
@@ -43,7 +42,7 @@
   
     <!-- A template form for response rendering -->
   
-    <div id="prompt-response-template" style="display: none;">
+    <div id="topic-response-template" style="display: none;">
       <form id="feedback-form" name="feedback-form">
         {% csrf_token %}
         <li class='list-group-item' style='padding-left:15px;border: none;'>
@@ -147,24 +146,22 @@
 
   }
 
-  $(document).on('submit', '#prompt-form', function (e) {
-    console.log('test')
+  $(document).on('submit', '#topic-form', function (e) {
     e.preventDefault();
     imgloc = $('#imgusr').html();
-    prompt = $('#prompt').val();
-    if (prompt == null || prompt == '') return;
-    chatblock = "<li class='list-group-item shadow-md' style='background-color:transparent;color:#12263f; padding-left:15px;border: none;'><div class='row align-items-top'> <div class='col-auto'><a href='#' class='avatar' style='height: auto;'><img src='" + imgloc + "' alt='...' class='avatar-img rounded-circle' style='max-height:30px;max-width:30px;'></a></div><div class='col ml-n2'><p class='mb-0'>" + prompt + "</p></div></div></li>";
+    topic = $('#topic').val();
+    if (topic == null || topic == '') return;
+    chatblock = "<li class='list-group-item shadow-md' style='background-color:transparent;color:#12263f; padding-left:15px;border: none;'><div class='row align-items-top'> <div class='col-auto'><a href='#' class='avatar' style='height: auto;'><img src='" + imgloc + "' alt='...' class='avatar-img rounded-circle' style='max-height:30px;max-width:30px;'></a></div><div class='col ml-n2'><p class='mb-0'>" + topic + "</p></div></div></li>";
     $('#empty-chat').hide();
     $('#chat').html(chatblock);
     $('#send_btn').hide();
     $('#loading_btn').show();
     $.ajax({
       type: 'POST',
-      url: "{% url 'chat_prompt' %}",
+      url: "{% url 'create' %}",
       data: $(this).serialize(),
       data2: {
-        prompt: $('#prompt').val(),
-        app: $('#app').val(),
+        topic: $('#topic').val(),
         csrfmidddlewaretoken: $('input[name=csrfmidddlewaretoken]').val()
       },
       headers: {
@@ -172,11 +169,11 @@
         "X-CSRFToken": getCookie("csrftoken"),
       },
       success: function (response) {
-        $('#prompt').val('');
+        $('#topic').val('');
         imgbot = $('#imgbot').html();
         conversationId = response.conversationId;
         answer = response.answer;
-        prt = $('#prompt-response-template').html().replace("@msg@", answer);
+        prt = $('#topic-response-template').html().replace("@msg@", answer);
         prt = prt.replace('multi-collapse collapse show', 'multi-collapse collapse');
         $('#chat').append(prt);
         $('#parentchat')[0].scrollTop = $('#parentchat')[0].scrollHeight;

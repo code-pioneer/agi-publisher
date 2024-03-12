@@ -5,7 +5,7 @@ from langchain_core.callbacks import Callbacks
 from mainapp.settings import LLM_MODEL, STREAMING
 
 @tool
-async def proofreadingBlog(blog: str,callbacks: Callbacks) -> str:
+async def proofreadingBlog(answer: str,callbacks: Callbacks) -> str:
     """Proofread the blog once it's generated."""
     print(f'proofreadingBlog')
 
@@ -24,10 +24,11 @@ async def proofreadingBlog(blog: str,callbacks: Callbacks) -> str:
     Blog: {blog}
 
     Answer: 
+    Thoughts: Include 5 keywords that highlights your thoughts and reasoning that you applied to come this conclusion.
     Score: 
     Feedback:"""
 )
-    blog = blog.replace('"', '')
+    answer = answer.replace('"', '')
     llm = ChatOpenAI(model=LLM_MODEL, temperature=0, streaming=STREAMING)
     chain = proofreading_blog_template | llm.with_config(
         {
@@ -36,9 +37,12 @@ async def proofreadingBlog(blog: str,callbacks: Callbacks) -> str:
             "callbacks": callbacks,  # <-- Propagate callbacks
         }
     )
-    chunks = [chunk async for chunk in chain.astream({"blog": blog})]
+    chunks = [chunk async for chunk in chain.astream({"blog": answer})]
     return "".join(chunk.content for chunk in chunks)
 
 
 def setup():
     return proofreadingBlog
+
+def profile():
+    return '🔎 ProfReader'

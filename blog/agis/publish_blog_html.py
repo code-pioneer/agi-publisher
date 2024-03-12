@@ -13,7 +13,7 @@ async def publishBlogHtml(blog: str, callbacks: Callbacks) -> str:
     """You are an AI language model assistant. Your objective is to convert given Blog in to HTML text for Blog publication:
     Do not ommit any content. 
     Avoid using href. 
-
+    Impartant: Remove "Thoughts", "Infuence", "Ignored" from the blog content.
     Blog: {blog}
 
     Answer format should be. 
@@ -33,3 +33,6 @@ async def publishBlogHtml(blog: str, callbacks: Callbacks) -> str:
 
 def setup():
     return publishBlogHtml
+  
+def profile():
+    return '👨 HTML assistant'

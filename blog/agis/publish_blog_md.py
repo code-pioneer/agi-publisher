@@ -14,6 +14,9 @@ async def publishBlogMD(blog: str, callbacks: Callbacks) -> str:
     Do not ommit any content.  
     Do not include save_to_file in html href.
 
+    Impartant: Remove "Thoughts", "Infuence", "Ignored" from the blog content.
+
+
     Blog: {blog}
 
     Answer format should be. 
@@ -33,3 +36,6 @@ async def publishBlogMD(blog: str, callbacks: Callbacks) -> str:
 
 def setup():
     return publishBlogMD
+
+def profile():
+    return '👩 Markdown assistant'

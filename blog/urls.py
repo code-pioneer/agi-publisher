@@ -2,6 +2,8 @@ from django.urls import path
 from . import views
 
 urlpatterns = [
-    path('', views.chat_get, name= "chat"),
-    path('post', views.chat_post, name = "chat_prompt"),
+    path('', views.get_blogs, name= "user_blogs"),
+    path('create', views.create, name="create"),
+    path('retrieve', views.retrieve, name="retrieve"),
+
 ]

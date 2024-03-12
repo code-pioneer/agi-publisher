@@ -29,3 +29,6 @@ async def reviseBlog(blog: str, feedback: str, callbacks: Callbacks) -> str:
 
 def setup():
     return reviseBlog
+
+def profile():
+    return '📑 Blog Editer'

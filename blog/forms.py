@@ -1,5 +1,10 @@
+
+from .models import BlogRequestModel
 from django import forms
+from django.forms import Textarea, CharField
 
-class ConversationForm(forms.Form):
+class BlogRequestForm(forms.ModelForm):
 
-    prompt = forms.CharField(widget=forms.Textarea, label='prompt', min_length=2)
+    class Meta:
+        model = BlogRequestModel
+        exclude = ["user","ts","status"]

@@ -18,3 +18,6 @@ async def save_to_file(result: str, filename: str) -> str:
 
 def setup():
     return save_to_file
+
+def profile():
+    return '📢 Publish'

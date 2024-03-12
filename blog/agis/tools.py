@@ -9,6 +9,24 @@ def agent_tools():
     tools.append(publish_blog_md.setup())
     tools.append(save_to_file.setup())
     tools.append(generate_filename_extension.setup())
-    print(f'Numer of Tools: {len(tools)} TOOLS: {[tool.name for tool in tools]}')
-
     return tools
+
+def tools_profiles():
+    profiles = []
+    profiles.append(create_blog.profile())
+    profiles.append(proof_reading_blog.profile())
+    profiles.append(revise_blog.profile())
+    profiles.append(publish_blog_html.profile())
+    profiles.append(publish_blog_md.profile())
+    profiles.append(save_to_file.profile())
+    profiles.append(generate_filename_extension.profile())
+    return profiles
+
+
+def tool_profile(tool_name):
+    profiles = tools_profiles()
+    tools = agent_tools()
+    for tool in tools:
+        if tool.name == tool_name:
+            return profiles[tools.index(tool)]
+    return None

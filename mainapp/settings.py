@@ -14,6 +14,7 @@ DEBUG = False
 ALLOWED_HOSTS = ['*']
 
 INSTALLED_APPS = [
+    'channels',
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
@@ -59,6 +60,8 @@ TEMPLATES = [
 ]
 
 WSGI_APPLICATION = 'mainapp.wsgi.application'
+ASGI_APPLICATION = 'mainapp.asgi.application'
+
 
 DATABASES = {
     'default': {
@@ -126,3 +129,13 @@ SOCIALACCOUNT_PROVIDERS = {
 LLM_MODEL = env("LLM_MODEL", default=None)
 OPENAI_API_KEY  = env("OPENAI_API_KEY",default=None)
 STREAMING = True
+BLOG_CREATE_CHANNEL_NAME = 'blog_create_channel'
+
+CHANNEL_LAYERS = {
+ "default": {
+        "BACKEND": "channels_redis.core.RedisChannelLayer",
+        "CONFIG": {
+            "hosts": [("127.0.0.1", 6379)],
+        },
+    },
+}

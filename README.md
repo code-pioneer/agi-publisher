@@ -23,6 +23,7 @@ source venv/bin/activate
 ```
 pip install --upgrade pip
 pip install -r requirements.txt
+brew install redis
 ```
 
 4. Setup database
@@ -40,7 +41,17 @@ python manage.py createsuperuser
 python manage.py test
 ```
 
-7. Start server
+7. Start Redis server
+```
+redis-server
+```
+
+8. Start task worker
+```
+python manage.py runworker blog_create_channel
+```
+
+9. Start server
 ```
 python manage.py runserver --insecure
 ```

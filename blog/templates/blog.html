@@ -59,57 +59,6 @@
                   @msg@
                 </p>
                 <div class="card-footer" style="padding: 15px;">
-                  <input type="hidden" id="conversationId" name="conversationId" value="{{ conversationId }}" />
-                  <input type="hidden" id="feedbacktype" name="feedbacktype" value="" />
-
-                  <div class="text-muted" style="text-align: right;">
-                    <small>
-                      Please help us to fine tune model by providing feedback ...
-                      <button id="thumbs-up-btn" class="btn btn-primary btn-sm" data-toggle="collapse"
-                        data-target="#multiCollapse" aria-expanded="false" aria-controls="multiCollapse"
-                        onclick="handleLikes()" type="button">
-                        <span class="fe fe-thumbs-up"></span>
-                      </button>
-
-                      <button id="thumbs-down-btn" class="btn btn-primary btn-sm" data-toggle="collapse"
-                        data-target="#multiCollapse" aria-expanded="false" aria-controls="multiCollapse"
-                        onclick="handleDisLikes()" type="button">
-                        <span class="fe fe-thumbs-down"></span>
-                      </button>
-                    </small>
-                  </div>
-                  <div class="collapse multi-collapse" id="multiCollapse">
-                    <div class="card card-body" style="margin-top: 15px; background-color:#f9fbfd;">
-                      <div class="form-group">
-                        <label for="feedbacktext">Elabrate business rule to help model provide accurate
-                          information:</label>
-                        <textarea class="form-control" id="feedbacktext" name="feedbacktext" rows="3"></textarea>
-                      </div>
-                      <button id="feedback_loading_btn" class="btn btn-primary" type="button" disabled
-                        style="display: none;">
-                        <span class="spinner-grow spinner-grow-sm" role="status" aria-hidden="true"></span>
-                        <span class="sr-only">Sending...</span>
-                      </button>
-                      <input id="feedback_btn" class="btn btn-primary" type="submit" value="Train model" />
-                      <div id="feeback_alert_success" class="alert alert-primary alert-dismissible fade show"
-                        role="alert" style="text-align: center; margin-top: 2rem;">
-                        <h4 class="alert-heading">Thank You! Your feedback has been recorded.</h4>
-                        <button type="button" class="close" data-dismiss="alert" aria-label="Close">
-                          <span aria-hidden="true">&times;</span>
-                        </button>
-                      </div>
-                      <div id="feeback_alert_error" class="alert alert-primary alert-dismissible fade show" role="alert"
-                        style="text-align: center; margin-top: 2rem;">
-                        <h4 class="alert-heading">Sorry Something went wrong... Try again.</h4>
-                        <button type="button" class="close" data-dismiss="alert" aria-label="Close">
-                          <span aria-hidden="true">&times;</span>
-                        </button>
-                      </div>
-                    </div>
-
-                  </div>
-
-
                 </div>
               </div>
             </div>
@@ -138,17 +87,6 @@
     }
     return cookieValue;
   }
-  function handleLikes() {
-    $('#feedbacktype').val('likes');
-    $('#parentchat')[0].scrollTop = $('#parentchat')[0].scrollHeight;
-
-  }
-
-  function handleDisLikes() {
-    $('#feedbacktype').val('dislikes');
-    $('#parentchat')[0].scrollTop = $('#parentchat')[0].scrollHeight;
-
-  }
 
   $(document).on('submit', '#topic-form', function (e) {
     e.preventDefault();
@@ -175,7 +113,6 @@
       success: function (response) {
         $('#topic').val('');
         imgbot = $('#imgbot').html();
-        conversationId = response.id;
         answer = response.message;
         console.log('response', response.id, response.message);
         prt = $('#topic-response-template').html().replace("@msg@", answer + ' Blog ID ' + response.id);
@@ -186,14 +123,10 @@
         $('#loading_btn').hide();
         $('#feeback_alert_success').hide()
         $('#feeback_alert_error').hide()
-        let publisher_url = `ws://${window.location.host}/ws/create/${response.id}/`;
+        let publisher_url = `ws://${window.location.host}/ws/create/`;
         const socket = new WebSocket(publisher_url);
-
-        // When the connection is established
         socket.onopen = function (event) {
           console.log('WebSocket connection established.');
-
-          // Subscribe to the background_task_channel
           socket.send(JSON.stringify({
             'command': 'subscribe',
             'channel': response.id
@@ -202,7 +135,11 @@
         // When a message is received from the server
         socket.onmessage = function (event) {
           const message = JSON.parse(event.data);
-          console.log('Message received:', message);
+          console.log('Message received:', message.message);
+          message_text = `<p>${message.message}</p>`;
+          $('#chat').append(message_text);
+          $('#parentchat')[0].scrollTop = $('#parentchat')[0].scrollHeight;
+
         };
 
       },

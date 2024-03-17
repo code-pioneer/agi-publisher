@@ -129,13 +129,3 @@ SOCIALACCOUNT_PROVIDERS = {
 LLM_MODEL = env("LLM_MODEL", default=None)
 OPENAI_API_KEY  = env("OPENAI_API_KEY",default=None)
 STREAMING = True
-BLOG_CREATE_CHANNEL_NAME = 'blog_create_channel'
-
-CHANNEL_LAYERS = {
- "default": {
-        "BACKEND": "channels_redis.core.RedisChannelLayer",
-        "CONFIG": {
-            "hosts": [("127.0.0.1", 6379)],
-        },
-    },
-}

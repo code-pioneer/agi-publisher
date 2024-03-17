@@ -1,14 +1,14 @@
 from channels.generic.websocket import AsyncWebsocketConsumer
 import json
-from blog.agi_agent import blog_agent
+from blog.db import get_blog_response_by_request_id
 
 
-class CreateBlogConsumer(AsyncWebsocketConsumer):
+class RetrieveBlogConsumer(AsyncWebsocketConsumer):
     
     async def connect(self):       
         await self.accept()
         # await self.send(text_data=json.dumps({
-        #     'type': 'Publisher connection_established',
+        #     'type': 'Retrieve connection_established',
         #     'message': 'Your are now connected to the server.'
         # }))
 
@@ -16,12 +16,13 @@ class CreateBlogConsumer(AsyncWebsocketConsumer):
         await self.close()
 
     async def receive(self, text_data):
-        print("CreateConsumer: ", text_data)
+        print("Retreive Consumer: ", text_data)
         data = json.loads(text_data)
         try:
-            # Send event to start task
-            await blog_agent(self, 'topic', data['channel'])
-            await self.disconnect(self)
+            response = await get_blog_response_by_request_id(data['channel'].strip())
+            await self.send(text_data=json.dumps({
+                'message': response
+            }))
         except Exception as e:
             print("CreateConsumer error: ", e)
             await self.send(text_data=json.dumps({

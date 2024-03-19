@@ -32,7 +32,7 @@ async def createBlog(answer: str, callbacks: Callbacks) -> str:
         Ignored: 5 points that you discarded."""
 
     )
-    llm = ChatOpenAI(model=LLM_MODEL, temperature=0, streaming=STREAMING)
+    llm = ChatOpenAI(model=LLM_MODEL, temperature=0.9, streaming=STREAMING)
     chain = create_blog_template | llm.with_config(
         {
             "run_name": "Create Blog LLM",

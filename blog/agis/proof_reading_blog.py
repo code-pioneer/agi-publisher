@@ -29,7 +29,7 @@ async def proofreadingBlog(answer: str,callbacks: Callbacks) -> str:
     Feedback:"""
 )
     answer = answer.replace('"', '')
-    llm = ChatOpenAI(model=LLM_MODEL, temperature=0, streaming=STREAMING)
+    llm = ChatOpenAI(model=LLM_MODEL, temperature=0.9, streaming=STREAMING)
     chain = proofreading_blog_template | llm.with_config(
         {
             "run_name": "Proof Reading Blog LLM",

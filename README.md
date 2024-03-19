@@ -32,7 +32,7 @@ pip install -r requirements.txt
    ```
    Copy `sample-dot-env.txt` as `.env`
    Open `.env` and set appropriate values
-    1.  update OpenAI API Key
+    1.  Update OpenAI API Key
     2.  Update Serper API Key
    ```
 
@@ -41,17 +41,17 @@ pip install -r requirements.txt
 python manage.py migrate
 ```
 
-1. Setup admin account
+8. Setup admin account
 ```
 python manage.py createsuperuser
 ```
 
-1. Run Unit Test Case
+9. Run Unit Test Case
 ```
 python manage.py test
 ```
 
-1.  Start server
+10.  Start server
 ```
 python manage.py runserver --insecure
 ```

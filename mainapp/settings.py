@@ -9,8 +9,6 @@ environ.Env.read_env(env_file=f'{BASE_DIR}/.env')
 
 SECRET_KEY = 'django-insecure-9n-#a+j7w6fc9li$q%x%s4+cz&z3q=%8k_6rye%*vlm58!6wzf'
 
-DEBUG = False
-
 ALLOWED_HOSTS = ['*']
 
 INSTALLED_APPS = [
@@ -126,11 +124,13 @@ SOCIALACCOUNT_PROVIDERS = {
     }
 }
 
+DEBUG = env("DEBUG", default=False)
+
 LLM_MODEL = env("LLM_MODEL", default=None)
 OPENAI_API_KEY  = env("OPENAI_API_KEY",default=None)
 STREAMING = True
 
 IMAGE_GEN_MODEL = env("IMAGE_GEN_MODEL", default=None)
-SIZE="1024x1024"
+SIZE="512x512"
 
 SERPER_API_KEY = env("SERPER_API_KEY",default=None)

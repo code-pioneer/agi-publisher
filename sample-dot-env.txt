@@ -3,3 +3,5 @@
 LLM_MODEL=<gpt-3.5-turbo-1106 or any other llm>
 DEBUG=<True>
 OPENAI_API_KEY=<openai api key>
+IMAGE_GEN_MODEL=<dall-e-2>
+SERPER_API_KEY=<serper api key>

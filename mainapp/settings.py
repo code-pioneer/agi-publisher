@@ -129,3 +129,8 @@ SOCIALACCOUNT_PROVIDERS = {
 LLM_MODEL = env("LLM_MODEL", default=None)
 OPENAI_API_KEY  = env("OPENAI_API_KEY",default=None)
 STREAMING = True
+
+IMAGE_GEN_MODEL = env("IMAGE_GEN_MODEL", default=None)
+SIZE="1024x1024"
+
+SERPER_API_KEY = env("SERPER_API_KEY",default=None)

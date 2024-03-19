@@ -23,35 +23,35 @@ source venv/bin/activate
 ```
 pip install --upgrade pip
 pip install -r requirements.txt
-brew install redis
 ```
+4. Sign up for OpenAI API Key: https://platform.openai.com/api-keys
 
-4. Setup database
+5. Sign up for https://serper.dev and get your api key.
+   
+6.  Environment Settings
+   ```
+   Copy `sample-dot-env.txt` as `.env`
+   Open `.env` and set appropriate values
+    1.  update OpenAI API Key
+    2.  Update Serper API Key
+   ```
+
+7. Setup database
 ```
 python manage.py migrate
 ```
 
-5. Setup admin account
+1. Setup admin account
 ```
 python manage.py createsuperuser
 ```
 
-6. Run Unit Test Case
+1. Run Unit Test Case
 ```
 python manage.py test
 ```
 
-7. Start Redis server
-```
-redis-server
-```
-
-8. Start task worker
-```
-python manage.py runworker blog_create_channel
-```
-
-9. Start server
+1.  Start server
 ```
 python manage.py runserver --insecure
 ```

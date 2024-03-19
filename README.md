@@ -53,5 +53,5 @@ python manage.py test
 
 10.  Start server
 ```
-python manage.py runserver --insecure
+python manage.py runserver
 ```

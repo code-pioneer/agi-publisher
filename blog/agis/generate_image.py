@@ -9,7 +9,7 @@ from openai import OpenAI
 
 @tool
 async def generateImage(answer: str, filename:str, callbacks: Callbacks) -> str:
-    """Generate an approriate Image once Blog is created."""
+    """Generate an approriate Image once proofreading is complete."""
     print("inside generateImage")
     #llm = OpenAI(temperature=0.9,streaming=STREAMING,model=IMAGE_GEN_MODEL)
     llm = OpenAI()

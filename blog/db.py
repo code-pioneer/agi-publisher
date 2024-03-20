@@ -61,7 +61,7 @@ async def save_blog_response(blog_id, blog_entries):
             blog_id=blog_id,
             blog_entries=blog_entries
         )
-        print("save_blog_response: ", blog_response_instance)
+        # print("save_blog_response: ", blog_response_instance)
         return blog_response_instance
     except Exception as e:
         print("An error occurred in save_blog_response", e)

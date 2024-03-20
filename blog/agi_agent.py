@@ -23,7 +23,7 @@ async def blog_agent(consumer, topic, id):
     print("Blog Agent")
     blog_instance = await get_blog_by_id(id.strip())
     topic = blog_instance.topic
-    input = f'Your objective is to perform all required tasks as part of this fullfillment. {topic}'
+    input = f'Your objective is to perform all required tasks as part of this fullfillment. Topic: {topic}'
     
     async  def send_message_to_clients(message):    
         await consumer.send(text_data=json.dumps({
@@ -80,7 +80,8 @@ async def blog_agent(consumer, topic, id):
             result[step] = {'message' : f"Digital assistant {tool_profile(event['name'])} has completed the task."}
 
             result[step]['data'] = event['data'].get('output')
-            await save_blog_response(blog_instance, result[step]['data'])
-            await send_message_to_clients(result[step]['data'])
+            if result[step]['data']:
+                await save_blog_response(blog_instance, result[step]['data'])
+                await send_message_to_clients(result[step]['data'])
 
     return {'answer' : result}

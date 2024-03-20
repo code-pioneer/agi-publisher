@@ -4,6 +4,10 @@ from langchain_openai import ChatOpenAI
 from mainapp.settings import LLM_MODEL
 from langchain_core.callbacks import Callbacks
 from mainapp.settings import LLM_MODEL, STREAMING
+    # Check the Blog content to determine the file type.
+    # Use html file extension When Blog content is has HTML tags.
+    # Use MD file extension When Blog content is has markdown text.
+
 
 @tool
 async def generate_filename(result: str, callbacks: Callbacks) -> str:
@@ -13,9 +17,6 @@ async def generate_filename(result: str, callbacks: Callbacks) -> str:
     """You are an AI language model assistant. Your objective is to generate proper file name for a given Blog:
     Come up with file name with in 50 letters.
     Append ramdom number between 1 and  1000 to filename in the format: <filename>_xxxx to avoid overwriting.
-    Check the Blog content to determine the file type.
-    Use html file extension When Blog content is has HTML tags.
-    Use MD file extension When Blog content is has markdown text.
 
     Do not ommit any content.  
 

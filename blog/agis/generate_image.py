@@ -4,12 +4,12 @@ from langchain.agents import tool
 from langchain_core.prompts import PromptTemplate
 from langchain_core.callbacks import Callbacks
 import requests
-from mainapp.settings import IMAGE_GEN_MODEL,SIZE
+from mainapp.settings import IMAGE_GEN_MODEL,SIZE, BASE_DIR
 from openai import OpenAI
 
 @tool
-async def generateImage(answer: str, fileName:str, callbacks: Callbacks) -> str:
-    """After proofreading of blog is completed, generate an approriate image using generated Blog Content."""
+async def generateImage(answer: str, filename:str, callbacks: Callbacks) -> str:
+    """Generate an approriate Image once Blog is created."""
     print("inside generateImage")
     #llm = OpenAI(temperature=0.9,streaming=STREAMING,model=IMAGE_GEN_MODEL)
     llm = OpenAI()
@@ -18,7 +18,7 @@ async def generateImage(answer: str, fileName:str, callbacks: Callbacks) -> str:
     """You are an AI Image Generation model. Your objective is to generate a digital vibrant image for given Blog content:
     Send Image url in the answer
     Blog: {answer}
- 
+    
     Answer: """
     )
     
@@ -35,7 +35,7 @@ async def generateImage(answer: str, fileName:str, callbacks: Callbacks) -> str:
     # Save the generated image
     if result:
         image_url=result.data[0].url
-        return await saveImage(image_url,fileName)
+        return await saveImage(image_url,filename)
 
 def setup():
     return generateImage
@@ -45,13 +45,16 @@ def profile():
 
 async def saveImage(image_url,fileName):
     
-    imageFileName= fileName.replace(".html","_title.png")
-    filename = os.path.basename(f"/blog/content/{imageFileName}.png")
-    print(filename)
+    # imageFileName= fileName.replace(".html","_title.png")
+    filename = f"{fileName}.png"
+    file_path = os.path.join(BASE_DIR, 'blog', 'media', filename) 
+
+    print(file_path)
     # Download the image data
     image_data = requests.get(image_url).content
     # Save the image
-    async with aiofiles.open(filename, 'w') as file:
+    async with aiofiles.open(file_path, 'wb') as file:
+        # str_data = image_data.decode('utf-8')
         await file.write(image_data)
 
-    print(f"Image saved {filename}")
+    print(f"Image saved {file_path}")

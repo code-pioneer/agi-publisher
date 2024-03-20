@@ -1,12 +1,15 @@
 from langchain.agents import tool
 import os
 import aiofiles 
+from mainapp.settings import BASE_DIR
 
 async def write_file(result, filename):
-    desktop_path = os.path.join(os.path.expanduser('~'), 'Desktop') 
+    file_path = os.path.join(BASE_DIR, 'blog', 'media', filename) 
     # timestamp = datetime.now().strftime("%Y%m%d%H%M%S")
     # file_name = f'blog_{timestamp}'
-    file_path = os.path.join(desktop_path, filename)
+    # filename = os.path.basename(f"/blog/content/{filename}")
+
+    # file_path = os.path.join(BASE_DIR, 'content', filename)
     async with aiofiles.open(file_path, 'w') as file:
         await file.write(result)
         

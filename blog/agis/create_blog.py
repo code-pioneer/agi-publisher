@@ -6,11 +6,11 @@ from mainapp.settings import LLM_MODEL, STREAMING
 
 
 @tool
-async def createBlog(answer: str, callbacks: Callbacks) -> str:
+async def createBlog(answer: str, topic: str, callbacks: Callbacks) -> str:
     """Generate a blog from the output of search results."""
     print(f'createBlog')
     create_blog_template = PromptTemplate.from_template(
-    """You are an AI language model assistant. Your objective is to write a structured blog post for a given topic.
+    """You are an AI language model assistant. Your objective is to write a structured blog post using context for a given topic.
     Use the provided guidelines. Blog must have a title.
     
     Guidelines: Start with a compelling hook to grab the reader's attention and briefly introduce the topic's significance. Provide a succinct overview of what the blog post will cover, including the main thesis or argument. Keep it to 100 words.
@@ -21,8 +21,8 @@ async def createBlog(answer: str, callbacks: Callbacks) -> str:
 
     Compile a concise list of sources used in the blog post, providing proper attribution and bibliographic details at the end of the post. 
     
-    Topic: {answer}
-
+    Topic: {topic}
+    Context: {answer}
     Response must be in the following format.
 
     Answer: 
@@ -40,7 +40,7 @@ async def createBlog(answer: str, callbacks: Callbacks) -> str:
             "callbacks": callbacks, 
         }
     )
-    chunks = [chunk async for chunk in chain.astream({"answer": answer})]
+    chunks = [chunk async for chunk in chain.astream({"answer": answer, "topic" : topic})]
     return "".join(chunk.content for chunk in chunks)
 
 def setup():

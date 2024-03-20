@@ -4,7 +4,7 @@ Primary goal of `agi-publisher` is to leverage LLM as team of AGI working togeth
 
 ![Preview](docs/screen-home.png)
 
-## Get Started
+## Get Started by creating your project
 1. Create project
 
 ```

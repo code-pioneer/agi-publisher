@@ -8,8 +8,8 @@ from mainapp.settings import IMAGE_GEN_MODEL,SIZE, BASE_DIR
 from openai import OpenAI
 
 @tool
-async def generateImage(answer: str, filename:str, callbacks: Callbacks) -> str:
-    """Generate an approriate Image once proofreading is complete."""
+async def generateImage(topic: str, filename:str, callbacks: Callbacks) -> str:
+    """Generate an approriate Image before publishing."""
     print("inside generateImage")
     #llm = OpenAI(temperature=0.9,streaming=STREAMING,model=IMAGE_GEN_MODEL)
     llm = OpenAI()
@@ -17,12 +17,12 @@ async def generateImage(answer: str, filename:str, callbacks: Callbacks) -> str:
     image_template = PromptTemplate.from_template(
     """You are an AI Image Generation model. Your objective is to generate a digital vibrant image for given Blog content:
     Send Image url in the answer
-    Blog: {answer}
+    Blog: {topic}
     
     Answer: """
     )
     
-    task = image_template.format(answer=answer)
+    task = image_template.format(topic=topic)
     print('task', task)
     result = llm.images.generate(model=IMAGE_GEN_MODEL,
         prompt=task,
@@ -56,5 +56,5 @@ async def saveImage(image_url,fileName):
     async with aiofiles.open(file_path, 'wb') as file:
         # str_data = image_data.decode('utf-8')
         await file.write(image_data)
-
     print(f"Image saved {file_path}")
+    return {'image_url': file_path}

@@ -31,4 +31,10 @@ def setup():
     return reviseBlog
 
 def profile():
-    return '📑 Blog Editer'
+    profile = {
+        "name": "editor",
+        "profile": "Editor",
+        "task": "Blog Editer",
+        "url": "assets/img/editor.png",
+    }
+    return profile

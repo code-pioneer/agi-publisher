@@ -53,4 +53,10 @@ def setup():
     return publishBlogMD
 
 def profile():
-    return '👩 Markdown assistant'
+    profile = {
+        "name": "publish",
+        "profile": "Publisher",
+        "task": "Markdown Preping",
+        "url": "assets/img/publisher.png",
+    }
+    return profile

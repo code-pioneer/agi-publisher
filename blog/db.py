@@ -20,9 +20,19 @@ async def get_blog_by_user(user):
         def get_blog_response(user):
             return list(BlogRequestModel.objects.filter(user=user))
 
-        queryset = await get_blog_response(user)   
-        blog_list = [blog.id.hex for blog in queryset]
-        return list(blog_list)
+        queryset = await get_blog_response(user)       
+        blog_list = []
+        for blog in queryset:
+            blog_data = {
+                'id': blog.id.hex,
+                'url': blog.blogurl,
+                'imgurl': blog.imgurl,
+                'topic': blog.topic,
+                'status': blog.status,
+                'ts': blog.ts,
+            }
+            blog_list.append(blog_data)
+        return blog_list
     except BlogRequestModel.DoesNotExist:
         return None
    
@@ -77,4 +87,17 @@ async def get_blog_response_by_request_id(request_id):
         blog_list = [blog.blog_entries for blog in queryset]
         return list(blog_list)
     except BlogResponseModel.DoesNotExist:
+        return None
+    
+async def update_blog_request(request_id, status='awaiting', blogurl=None, imgurl=None):
+    try:
+        blog_request_instance = await sync_to_async(BlogRequestModel.objects.get)(pk=request_id)
+        blog_request_instance.status = status
+        if blogurl:
+            blog_request_instance.blogurl = blogurl
+        if imgurl:
+            blog_request_instance.imgurl = imgurl
+        await sync_to_async(blog_request_instance.save)()
+        return blog_request_instance
+    except BlogRequestModel.DoesNotExist:
         return None

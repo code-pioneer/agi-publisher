@@ -41,13 +41,19 @@ def setup():
     return generateImage
 
 def profile():
-    return '🎨 Art Illustrator'
+    profile = {
+        "name": "generateImage",
+        "profile": "Art Illustrator",
+        "task": "Image Generation",
+        "url": "assets/img/artist.png",
+    }
+    return profile
 
 async def saveImage(image_url,fileName):
     
     # imageFileName= fileName.replace(".html","_title.png")
     filename = f"{fileName}.png"
-    file_path = os.path.join(BASE_DIR, 'blog', 'media', filename) 
+    file_path = os.path.join(BASE_DIR, 'home', 'static', 'assets','media', filename) 
 
     print(file_path)
     # Download the image data

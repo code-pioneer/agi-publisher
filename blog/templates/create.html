@@ -1,0 +1,223 @@
+{% extends "common/base_sidebar.html" %}
+{% load static %}
+{% block page_content %}
+
+<div class="card">
+  <div class="card-header">
+    <div class="header-title h3 pl-4"><span class="text-primary-rainbow">Create Blog</span> &nbsp;&nbsp;</div>
+  </div>
+  <div class="card-body">
+    <form id="topic-form">
+      {% csrf_token %}
+      <div class="mb-3">
+        <input id="topic" name="topic" class="form-control me-2" type="text" placeholder="What's on your mind?">
+        <div class="mt-4"></div> <!-- Add spacing here -->
+        <button type="submit" class="btn btn-primary form-control">Submit</button>
+      </div>
+    </form>
+  </div>
+</div>
+<div class="card" id="response-header" style="display: none;">
+  <div class="card-header">
+    <div class="header-title h3 pl-4"><span class="text-primary-rainbow">Digital Workers on task</span> &nbsp;&nbsp;
+    </div>
+  </div>
+  <div class="card-body">
+    <div class="row row-cols-1 row-cols-md-2 row-cols-xl-5 align-items-stretch">
+      <div class="col mb-4">
+        <div class="card">
+          <div class="card-body">
+            <div class="row align-items-center">
+              <div class="col-auto">
+                <a class="avatar avatar-lg">
+                  <img src="{% static 'assets/img/searcher.png' %}" class="avatar-img rounded-circle"
+                    alt="Avatar Image">
+                </a>
+              </div>
+              <div class="col ms-n2">
+                <h4 class="mb-1">Web Searcher</h4>
+                <p class="small text-body-secondary mb-1">Content Gathering</p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="col mb-4">
+        <div class="card">
+          <div class="card-body">
+            <div class="row align-items-center">
+              <div class="col-auto">
+                <a class="avatar avatar-lg">
+                  <img src="{% static 'assets/img/creater.png'%}" class="avatar-img rounded-circle" alt="Avatar Image">
+                </a>
+              </div>
+              <div class="col ms-n2">
+                <h4 class="mb-1">Creator</h4>
+                <p class="small text-body-secondary mb-1">Blog Writing</p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="col mb-4">
+        <div class="card">
+          <div class="card-body">
+            <div class="row align-items-center">
+              <div class="col-auto">
+                <a class="avatar avatar-lg">
+                  <img src="{% static 'assets/img/editor.png' %}" class="avatar-img rounded-circle" alt="Avatar Image">
+                </a>
+              </div>
+              <div class="col ms-n2">
+                <h4 class="mb-1">Editor</h4>
+                <p class="small text-body-secondary mb-1">Proof Reading</p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="col mb-4">
+        <div class="card">
+          <div class="card-body">
+            <div class="row align-items-center">
+              <div class="col-auto">
+                <a class="avatar avatar-lg">
+                  <img src="{% static 'assets/img/artist.png' %}" class="avatar-img rounded-circle" alt="Avatar Image">
+                </a>
+              </div>
+              <div class="col ms-n2">
+                <h4 class="mb-1">Art Illustrator</h4>
+                <p class="small text-body-secondary mb-1">Image Generating</p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="col mb-4">
+        <div class="card">
+          <div class="card-body">
+            <div class="row align-items-center">
+              <div class="col-auto">
+                <a class="avatar avatar-lg">
+                  <img src="{% static 'assets/img/publisher.png' %}" class="avatar-img rounded-circle"
+                    alt="Avatar Image">
+                </a>
+              </div>
+              <div class="col ms-n2">
+                <h4 class="mb-1">Publisher</h4>
+                <p class="small text-body-secondary mb-1">HTML/MarkDown Preping</p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</div>
+<div class="card" id="response-body" style="display: none;">
+  <div class="card-header">
+    <div class="header-title h3 pl-4"><span class="text-primary-rainbow">Progress...</span> &nbsp;&nbsp;</div>
+  </div>
+  <div class="card-body" id="msg" ></div>
+
+</div>
+
+
+{% endblock %}
+
+{% block scripts %}
+<script>
+
+  function getCookie(name) {
+    let cookieValue = null;
+    if (document.cookie && document.cookie !== "") {
+      const cookies = document.cookie.split(";");
+      for (let i = 0; i < cookies.length; i++) {
+        const cookie = cookies[i].trim();
+        if (cookie.substring(0, name.length + 1) === (name + "=")) {
+          cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+          break;
+        }
+      }
+    }
+    return cookieValue;
+  }
+
+  $(document).on('submit', '#topic-form', function (e) {
+    e.preventDefault();
+    topic = $('#topic').val();
+    if (topic == null || topic == '') return;
+    $('#submit-button').hide();
+    $('#response-header').show();
+    $.ajax({
+      type: 'POST',
+      url: "{% url 'create' %}",
+      data: $(this).serialize(),
+      data2: {
+        topic: $('#topic').val(),
+        csrfmidddlewaretoken: $('input[name=csrfmidddlewaretoken]').val()
+      },
+      headers: {
+        "X-Requested-With": "XMLHttpRequest",
+        "X-CSRFToken": getCookie("csrftoken"),
+      },
+      success: function (response) {
+        $('#topic').val('');
+        answer = response.message;
+        console.log('response', response.id, response.message);
+        let publisher_url = `ws://${window.location.host}/ws/create/`;
+        const socket = new WebSocket(publisher_url);
+        socket.onopen = function (event) {
+          console.log('WebSocket connection established.');
+          socket.send(JSON.stringify({
+            'command': 'subscribe',
+            'channel': response.id
+          }));
+        };
+        $('#response-body').show();
+        // When a message is received from the server
+        socket.onmessage = function (event) {
+          const message = JSON.parse(event.data);
+          console.log('Message received:', message.message.profile);
+          profile = message.message.profile.profile;
+          task = message.message.profile.task;
+          data = message.message.message;
+          url = message.message.profile.url;
+          $('#msg').append(`
+              <div class="row align-items-center">
+                  <div class="card">
+                    <div class="card-body">
+                      <div class="row align-items-center">
+                        <div class="col-auto">
+                          <a class="avatar avatar-lg">
+                            <img src="{% static '.' %}`+ url + `" class="avatar-img rounded-circle"
+                              alt="Avatar Image">
+                          </a>
+                        </div>
+                        <div class="col ms-n2">
+                          <h4 class="mb-1">`+ profile + `</h4>
+                          <p class="small text-body-secondary mb-1">`+ task + `</p>
+                        </div>
+                        <div class="col-md-8">
+                          <p class="small text-body-secondary mb-1">`+ data + `</p>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+          </div>`);
+
+
+        };
+
+      },
+      error: function (err) {
+        console.log('error', err);
+      }
+    })
+  })
+
+
+
+</script>
+{% endblock %}

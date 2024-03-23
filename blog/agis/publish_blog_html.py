@@ -46,4 +46,10 @@ def setup():
     return publishBlogHtml
   
 def profile():
-    return '👨 HTML assistant'
+    profile = {
+        "name": "publish",
+        "profile": "Publisher",
+        "task": "HTML Preping",
+        "url": "assets/img/publisher.png",
+    }
+    return profile

@@ -45,4 +45,10 @@ def setup():
     return proofreadingBlog
 
 def profile():
-    return '🔎 ProfReader'
+    profile = {
+        "name": "editor",
+        "profile": "Editor",
+        "task": "Proof Reading",
+        "url": "assets/img/editor.png",
+    }
+    return profile

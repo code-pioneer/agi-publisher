@@ -1,0 +1,36 @@
+{% extends "common/base_sidebar.html" %}
+{% load static %}
+{% block page_content %}
+<div class="card">
+  <div class="card-header">
+    <div class="header-title h3 pl-4"><span class="text-primary-rainbow">My Blogs</span> &nbsp;&nbsp;</div>
+  </div>
+  <div class="card-body">
+    <div class="row row-cols-1 row-cols-md-2 row-cols-xl-4 align-items-stretch">
+      {% for blog in blogs %}
+      <div class="col mb-4">
+        <a href="{% url 'retrieve_by_id' id=blog.id %}" target="_blank">
+          <div class="card" style="background-image: url('{% static blog.imgurl %}')">
+            <div class="card-img-top" style="height: 50px; background-size: cover; background-position: center;"></div>
+            <div class="card-body">
+              <div class="rounded-3">
+                <div class="row p-4">
+              
+                  <div class="col" style="line-height: .67rem;">
+                    <h4 class="mb-2">{{ blog.topic }}</h4>
+                    <span class="tiny">{{ blog.ts }}</span>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </a>
+      </div>
+      {% endfor %}
+    </div>
+  </div>
+</div>
+
+{% block scripts %} 
+{% endblock %}
+{% endblock %}

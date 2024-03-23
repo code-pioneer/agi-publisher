@@ -47,4 +47,10 @@ def setup():
     return createBlog
 
 def profile():
-    return '📝 Creative Blog Writer'
+    profile = {
+        "name": "create",
+        "profile": "Creator",
+        "task": "Blog Writing",
+        "url": "assets/img/creater.png",
+    }
+    return profile

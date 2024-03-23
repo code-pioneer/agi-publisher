@@ -19,4 +19,10 @@ def setup():
     return searchTopic
 
 def profile():
-    return '📝 Google Search assistant'
+    profile = {
+        "name": "search",
+        "profile": "Search",
+        "task": "Google Search",
+        "url": "assets/img/searcher.png",
+    }
+    return profile

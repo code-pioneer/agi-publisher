@@ -25,7 +25,6 @@ def extract(content: str, schema: dict):
 
 
 def scrape_with_playwright(urls, schema):
-    print("urls",urls)
     loader = AsyncChromiumLoader(urls)
     docs = loader.load()
     
@@ -33,20 +32,17 @@ def scrape_with_playwright(urls, schema):
     docs_transformed =  bs_transformer.transform_documents(
         docs, tags_to_extract=["span"]
     )
-    print("Extracting content with LLM")
-
+    
     # Grab the first 1000 tokens of the site
     splitter = RecursiveCharacterTextSplitter.from_tiktoken_encoder(
         chunk_size=1000, chunk_overlap=0
     )
     splits = splitter.split_documents(docs_transformed)
 
- 
     extracted_content=[]
     for item in splits:
         extracted_content.append(extract(schema=schema, content=item.page_content)['text'])
     
-    pprint.pprint(f"extracted_content={extracted_content}")
     return {"content":extracted_content}
 
 @tool
@@ -62,10 +58,7 @@ def searchTopic(topic: str, callbacks: Callbacks) -> str:
     links=[]
     # Print the extracted elements
     for element in organic_elements:
-        print(f"Title: {element['title']}")
-        print(f"Link: {element['link']}")
         links.append(element['link'])
-        print(f"Snippet: {element['snippet']}")
     
     return scrape_with_playwright(links, schema=schema)
 

@@ -167,3 +167,4 @@ application_settings.txt
 config_local.sh
 db.sqlite3
 db/
+temp/

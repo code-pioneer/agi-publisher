@@ -23,6 +23,11 @@ source venv/bin/activate
 ```
 pip install --upgrade pip
 pip install -r requirements.txt
+
+```
+Install playwright package separately
+```
+playwright install
 ```
 4. Sign up for OpenAI API Key: https://platform.openai.com/api-keys
 

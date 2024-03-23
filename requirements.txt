@@ -9,3 +9,6 @@ langchain-openai==0.0.8
 langchainhub==0.1.14
 aiofiles==23.2.1
 channels==3.0.5
+playwright==1.42
+beautifulsoup4==4.12.3
+langchain-text-splitters

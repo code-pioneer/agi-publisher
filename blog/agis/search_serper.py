@@ -1,20 +1,74 @@
 from langchain.agents import tool
-from langchain.agents import AgentType, Tool, initialize_agent
-from langchain_core.prompts import PromptTemplate
 from langchain_community.utilities import GoogleSerperAPIWrapper
-from langchain_openai import OpenAI
 from langchain_core.callbacks import Callbacks
-from mainapp.settings import STREAMING
+from langchain.chains import create_extraction_chain
+from langchain_openai import ChatOpenAI
+from langchain_text_splitters import RecursiveCharacterTextSplitter
+from langchain_community.document_loaders import AsyncChromiumLoader
+from langchain_community.document_transformers import BeautifulSoupTransformer
+from mainapp.settings import LLM_MODEL
+from asgiref.sync import sync_to_async
+import pprint
+
+llm = ChatOpenAI(temperature=0, model=LLM_MODEL)
+
+schema = {
+    "properties": {
+        "news_article_title": {"type": "string"},
+        "news_article_summary": {"type": "string"},
+    },
+    "required": ["news_article_title", "news_article_summary"],
+}
+
+def extract(content: str, schema: dict):
+    return create_extraction_chain(schema=schema, llm=llm).invoke(content)
+
+
+def scrape_with_playwright(urls, schema):
+    print("urls",urls)
+    loader = AsyncChromiumLoader(urls)
+    docs = loader.load()
+    
+    bs_transformer = BeautifulSoupTransformer()
+    docs_transformed =  bs_transformer.transform_documents(
+        docs, tags_to_extract=["span"]
+    )
+    print("Extracting content with LLM")
+
+    # Grab the first 1000 tokens of the site
+    splitter = RecursiveCharacterTextSplitter.from_tiktoken_encoder(
+        chunk_size=1000, chunk_overlap=0
+    )
+    splits = splitter.split_documents(docs_transformed)
+
+ 
+    extracted_content=[]
+    for item in splits:
+        extracted_content.append(extract(schema=schema, content=item.page_content)['text'])
+    
+    pprint.pprint(f"extracted_content={extracted_content}")
+    return {"content":extracted_content}
 
 @tool
-async def searchTopic(topic: str,callbacks: Callbacks) -> str:
+def searchTopic(topic: str, callbacks: Callbacks) -> str:
     """Perform Google Search for a given topic"""
     print(f'searchTopic')
     search = GoogleSerperAPIWrapper()
+    results= search.results(topic)
+        
+    # Extract 'organic' elements
+    organic_elements = results.get("organic", [])
     
-    return search.run(topic)
+    links=[]
+    # Print the extracted elements
+    for element in organic_elements:
+        print(f"Title: {element['title']}")
+        print(f"Link: {element['link']}")
+        links.append(element['link'])
+        print(f"Snippet: {element['snippet']}")
     
-    
+    return scrape_with_playwright(links, schema=schema)
+
 def setup():
     return searchTopic
 

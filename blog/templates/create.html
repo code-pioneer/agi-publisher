@@ -143,13 +143,15 @@
     }
     return cookieValue;
   }
-
   $(document).on('submit', '#topic-form', function (e) {
     e.preventDefault();
+    $('#msg').empty();
+    $('#response-header').hide();
+    $('#response-body').hide();
+
     topic = $('#topic').val();
     if (topic == null || topic == '') return;
     $('#submit-button').hide();
-    $('#response-header').show();
     $.ajax({
       type: 'POST',
       url: "{% url 'create' %}",
@@ -175,6 +177,7 @@
             'channel': response.id
           }));
         };
+        $('#response-header').show();
         $('#response-body').show();
         // When a message is received from the server
         socket.onmessage = function (event) {

@@ -6,7 +6,7 @@ from langchain_openai import ChatOpenAI
 from langchain_text_splitters import RecursiveCharacterTextSplitter
 from langchain_community.document_loaders import AsyncChromiumLoader
 from langchain_community.document_transformers import BeautifulSoupTransformer
-from mainapp.settings import LLM_MODEL
+from mainapp.settings import LLM_MODEL,NUM_OF_SEARCHES
 from asgiref.sync import sync_to_async
 import pprint
 
@@ -49,7 +49,7 @@ def scrape_with_playwright(urls, schema):
 def searchTopic(topic: str, callbacks: Callbacks) -> str:
     """Perform Google Search for a given topic"""
     print(f'searchTopic')
-    search = GoogleSerperAPIWrapper()
+    search = GoogleSerperAPIWrapper(k=NUM_OF_SEARCHES)
     results= search.results(topic)
         
     # Extract 'organic' elements

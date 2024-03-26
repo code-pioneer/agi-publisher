@@ -4,23 +4,17 @@ from langchain_openai import ChatOpenAI
 from mainapp.settings import LLM_MODEL
 from langchain_core.callbacks import Callbacks
 from mainapp.settings import LLM_MODEL, STREAMING
-    # Check the Blog content to determine the file type.
-    # Use html file extension When Blog content is has HTML tags.
-    # Use MD file extension When Blog content is has markdown text.
-
 
 @tool
-async def generate_filename(result: str, callbacks: Callbacks) -> str:
-    """Generate filename once blog is ready to be saved."""
+async def generate_filename(topic: str, callbacks: Callbacks) -> str:
+    """Generate filename for a given topic"""
     print(f'generate_filename')
     save_blog_template = PromptTemplate.from_template(
-    """You are an AI language model assistant. Your objective is to generate proper file name for a given Blog:
+    """You are an AI language model assistant. Your objective is to generate proper file name for a given Topic:
     Come up with file name with in 50 letters.
-    Append ramdom number between 1 and  1000 to filename in the format: <filename>_xxxx to avoid overwriting.
-
-    Do not ommit any content.  
-
-    Blog: {blog}
+    Append timestamp of Hours, Minutes, Seconds in the format: <filename>_"%H%M%S" to avoid overwriting.
+    
+    Topic: {topic}
 
     Answer: 
     Reasoning: Reasoning behind the filename and file extension.
@@ -35,11 +29,17 @@ async def generate_filename(result: str, callbacks: Callbacks) -> str:
             "callbacks": callbacks, 
         }
     )
-    chunks = [chunk async for chunk in chain.astream({"blog": result})]
+    chunks = [chunk async for chunk in chain.astream({"topic": topic})]
     return "".join(chunk.content for chunk in chunks)
 
 def setup():
     return generate_filename
 
 def profile():
-    return ''
+    profile = {
+        "name": "publish",
+        "profile": "Publisher",
+        "task": "Blog Naming",
+        "url": "assets/img/publisher.png",
+    }
+    return profile

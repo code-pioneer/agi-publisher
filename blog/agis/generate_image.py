@@ -8,8 +8,8 @@ from mainapp.settings import IMAGE_GEN_MODEL,SIZE, BASE_DIR
 from openai import OpenAI
 
 @tool
-async def generateImage(topic: str, filename:str, callbacks: Callbacks) -> str:
-    """Generate an approriate Image before publishing."""
+async def generateImage(topic: str, Filename:str, callbacks: Callbacks) -> str:
+    """Generate an approriate Image once filename is generated."""
     print("inside generateImage")
     #llm = OpenAI(temperature=0.9,streaming=STREAMING,model=IMAGE_GEN_MODEL)
     llm = OpenAI()
@@ -35,7 +35,7 @@ async def generateImage(topic: str, filename:str, callbacks: Callbacks) -> str:
     # Save the generated image
     if result:
         image_url=result.data[0].url
-        return await saveImage(image_url,filename)
+        return await saveImage(image_url,Filename)
 
 def setup():
     return generateImage
@@ -62,5 +62,9 @@ async def saveImage(image_url,fileName):
     async with aiofiles.open(file_path, 'wb') as file:
         # str_data = image_data.decode('utf-8')
         await file.write(image_data)
+    index = file_path.find('/assets')
+    if index != -1:
+        file_path = file_path[index:]
+
     print(f"Image saved {file_path}")
     return {'image_url': file_path}

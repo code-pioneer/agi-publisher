@@ -137,4 +137,4 @@ SERPER_API_KEY = env("SERPER_API_KEY",default=None)
 
 STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
 
-NUM_OF_SEARCHES= env("NUM_OF_SEARCHES",default=3)
+NUM_OF_SEARCHES= env("NUM_OF_SEARCHES",default="3")

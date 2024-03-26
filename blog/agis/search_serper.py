@@ -25,20 +25,21 @@ def extract(content: str, schema: dict):
 
 
 def scrape_with_playwright(urls, schema):
+   
     loader = AsyncChromiumLoader(urls)
     docs = loader.load()
-    
+   
     bs_transformer = BeautifulSoupTransformer()
     docs_transformed =  bs_transformer.transform_documents(
         docs, tags_to_extract=["span"]
     )
     
-    # Grab the first 1000 tokens of the site
+    # Grab the first 2000 tokens of the site
     splitter = RecursiveCharacterTextSplitter.from_tiktoken_encoder(
-        chunk_size=1000, chunk_overlap=0
+        chunk_size=2000, chunk_overlap=0
     )
     splits = splitter.split_documents(docs_transformed)
-
+    
     extracted_content=[]
     for item in splits:
         extracted_content.append(extract(schema=schema, content=item.page_content)['text'])

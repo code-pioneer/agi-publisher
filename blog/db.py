@@ -89,7 +89,7 @@ async def get_blog_response_by_request_id(request_id):
     except BlogResponseModel.DoesNotExist:
         return None
     
-async def update_blog_request(request_id, status='awaiting', blogurl=None, imgurl=None):
+async def update_blog_request(request_id, status='awaiting', blogurl=None, imgurl=None, topic=None):
     try:
         blog_request_instance = await sync_to_async(BlogRequestModel.objects.get)(pk=request_id)
         blog_request_instance.status = status
@@ -97,6 +97,8 @@ async def update_blog_request(request_id, status='awaiting', blogurl=None, imgur
             blog_request_instance.blogurl = blogurl
         if imgurl:
             blog_request_instance.imgurl = imgurl
+        if topic:
+            blog_request_instance.topic = topic
         await sync_to_async(blog_request_instance.save)()
         return blog_request_instance
     except BlogRequestModel.DoesNotExist:

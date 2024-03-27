@@ -5,9 +5,9 @@ from langchain_core.callbacks import Callbacks
 from mainapp.settings import LLM_MODEL, STREAMING
 
 @tool
-async def publishBlogHtml(blog: str, image_url: str, callbacks: Callbacks) -> str:
+async def publish_blog_html(blog: str, image_url: str, callbacks: Callbacks) -> str:
     """When the blog is ready to be published, convert it to HTML format."""
-    print(f'publishBlogHtml')
+    print(f'publish_blog_html')
 
     html_blog_template = PromptTemplate.from_template(
     """You are an AI language model assistant. Your objective is to convert given Blog in to HTML text for Blog publication:
@@ -43,7 +43,7 @@ async def publishBlogHtml(blog: str, image_url: str, callbacks: Callbacks) -> st
     return "".join(chunk.content for chunk in chunks)
 
 def setup():
-    return publishBlogHtml
+    return publish_blog_html
   
 def profile():
     profile = {

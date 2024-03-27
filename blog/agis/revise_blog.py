@@ -5,9 +5,9 @@ from langchain_core.callbacks import Callbacks
 from mainapp.settings import LLM_MODEL, STREAMING
 
 @tool
-async def reviseBlog(blog: str, feedback: str, callbacks: Callbacks) -> str:
+async def revise_blog(blog: str, feedback: str, callbacks: Callbacks) -> str:
     """Revise the blog when proofreading is complete and revisions are needed."""
-    print(f'reviseBlog - {feedback}')
+    print(f'revise_blog - {feedback}')
     revise_blog_template = PromptTemplate.from_template(
     """You are an AI language model assistant. Your objective is to review profreading feedback and revise the given blog post.
         
@@ -28,7 +28,7 @@ async def reviseBlog(blog: str, feedback: str, callbacks: Callbacks) -> str:
     return "".join(chunk.content for chunk in chunks)
 
 def setup():
-    return reviseBlog
+    return revise_blog
 
 def profile():
     profile = {

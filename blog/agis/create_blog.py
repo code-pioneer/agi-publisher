@@ -6,7 +6,7 @@ from mainapp.settings import LLM_MODEL, STREAMING
 
 
 @tool
-async def createBlog(content: str, topic: str, callbacks: Callbacks) -> str:
+async def create_blog(content: str, topic: str, callbacks: Callbacks) -> str:
     """Generate a blog from the output of search results."""
     print(f'createBlog')
     create_blog_template = PromptTemplate.from_template(
@@ -44,7 +44,7 @@ async def createBlog(content: str, topic: str, callbacks: Callbacks) -> str:
     return "".join(chunk.content for chunk in chunks)
 
 def setup():
-    return createBlog
+    return create_blog
 
 def profile():
     profile = {

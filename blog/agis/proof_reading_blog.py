@@ -5,9 +5,9 @@ from langchain_core.callbacks import Callbacks
 from mainapp.settings import LLM_MODEL, STREAMING
 
 @tool
-async def proofreadingBlog(answer: str,callbacks: Callbacks) -> str:
+async def proof_reading_blog(answer: str,callbacks: Callbacks) -> str:
     """Proofread the blog once it's generated."""
-    print(f'proofreadingBlog')
+    print(f'proof_reading_blog')
 
     proofreading_blog_template = PromptTemplate.from_template(
     """You are an AI language model Blog Proofreading assistant. 
@@ -42,7 +42,7 @@ async def proofreadingBlog(answer: str,callbacks: Callbacks) -> str:
 
 
 def setup():
-    return proofreadingBlog
+    return proof_reading_blog
 
 def profile():
     profile = {

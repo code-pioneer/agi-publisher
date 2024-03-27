@@ -5,9 +5,9 @@ from langchain_core.callbacks import Callbacks
 from mainapp.settings import LLM_MODEL, STREAMING
 
 @tool
-async def publishBlogMD(blog: str, image_url: str,callbacks: Callbacks) -> str:
+async def publish_blog_md(blog: str, image_url: str,callbacks: Callbacks) -> str:
     """When the blog is ready to be published, convert it to Markdown format."""
-    print(f'publishBlogMD')
+    print(f'publish_blog_md')
 
     md_blog_template = PromptTemplate.from_template(
     """You are an AI language model assistant. Your objective is to convert given Blog in to Mark down text for Blog publication:
@@ -50,7 +50,7 @@ async def publishBlogMD(blog: str, image_url: str,callbacks: Callbacks) -> str:
     return "".join(chunk.content for chunk in chunks)
 
 def setup():
-    return publishBlogMD
+    return publish_blog_md
 
 def profile():
     profile = {

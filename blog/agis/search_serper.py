@@ -47,9 +47,9 @@ def scrape_with_playwright(urls, schema):
     return {"content":extracted_content}
 
 @tool
-def searchTopic(topic: str, callbacks: Callbacks) -> str:
+def search_serper(topic: str, callbacks: Callbacks) -> str:
     """Perform Google Search for a given topic"""
-    print(f'searchTopic')
+    print(f'search_serper')
     search = GoogleSerperAPIWrapper(k=NUM_OF_SEARCHES)
     results= search.results(topic)
         
@@ -64,7 +64,7 @@ def searchTopic(topic: str, callbacks: Callbacks) -> str:
     return scrape_with_playwright(links, schema=schema)
 
 def setup():
-    return searchTopic
+    return search_serper
 
 def profile():
     profile = {

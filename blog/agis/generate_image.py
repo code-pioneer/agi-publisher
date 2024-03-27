@@ -8,9 +8,9 @@ from mainapp.settings import IMAGE_GEN_MODEL,SIZE, BASE_DIR
 from openai import OpenAI
 
 @tool
-async def generateImage(topic: str, Filename:str, callbacks: Callbacks) -> str:
+async def generate_image(topic: str, Filename:str, callbacks: Callbacks) -> str:
     """Generate an approriate Image once filename is generated."""
-    print("inside generateImage")
+    print("inside generate_image")
     #llm = OpenAI(temperature=0.9,streaming=STREAMING,model=IMAGE_GEN_MODEL)
     llm = OpenAI()
     
@@ -38,7 +38,7 @@ async def generateImage(topic: str, Filename:str, callbacks: Callbacks) -> str:
         return await saveImage(image_url,Filename)
 
 def setup():
-    return generateImage
+    return generate_image
 
 def profile():
     profile = {

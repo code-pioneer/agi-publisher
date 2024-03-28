@@ -98,7 +98,7 @@ menuitems = [
                     "badge":False,
                     "badgetext":"3",
                     "badgetype":"success",
-                    "logo": 'assets/img/chat.png',
+                    "logo": 'assets/img/contactus.png',
                     "tags":[]
                 },  
                 {   "uri":"/blog/myblogs/",
@@ -112,7 +112,7 @@ menuitems = [
                     "badge":False,
                     "badgetext":"3",
                     "badgetype":"success",
-                    "logo": 'assets/img/chat.png',
+                    "logo": 'assets/img/documentation.png',
                     "tags":[]
                 },                                   
 ] 

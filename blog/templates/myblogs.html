@@ -10,7 +10,7 @@
       {% for blog in blogs %}
       <div class="col mb-4">
         <a href="{% url 'retrieve_by_id' id=blog.id %}" target="_blank">
-          <div class="card" style="background-image: url('{% static blog.imgurl %}')">
+          <div class="card" style="background-image: url('{% static blog.imgurl %}'); background-size: cover; background-position: center;">
             <div class="card-img-top" style="height: 50px; background-size: cover; background-position: center;"></div>
             <div class="card-body">
               <div class="rounded-3">

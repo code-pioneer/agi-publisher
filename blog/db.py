@@ -18,7 +18,7 @@ async def get_blog_by_user(user):
     try:
         @sync_to_async
         def get_blog_response(user):
-            return list(BlogRequestModel.objects.filter(user=user))
+            return list(BlogRequestModel.objects.filter(user=user, status='published'))
 
         queryset = await get_blog_response(user)       
         blog_list = []

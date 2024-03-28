@@ -11,11 +11,10 @@ async def publish_blog_html(blog: str, image_url: str, callbacks: Callbacks) -> 
 
     html_blog_template = PromptTemplate.from_template(
     """You are an AI language model assistant. Your objective is to convert given Blog in to HTML text for Blog publication:
-    Do not ommit any content. 
-    Avoid using href. 
     Important: Remove "Thoughts", "Infuence", "Ignored" from the blog content.
+    
     Important: Include Image url in top of blog content and align to center.
-    important: Use the following format for image tag: <img src="{image_url}" alt="image">
+    important: Use the following format for image tag: <img src="/static{image_url}" alt="image">
     Important: Use Heading tags for Title and Subtitles.
     Important: Use Paragraph tags for content.
     Important: Use List tags for list items.

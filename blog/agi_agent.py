@@ -33,13 +33,6 @@ async def blog_agent(consumer, topic, id):
         })) 
 
     result={}     
-    step = 0
-    message = {"profile": tool_profile('organizer'), "message": tool_profile('organizer').get('start_message')}
-    await send_message_to_clients(message)
-    result[step] = f"🚀 Blog Generation Started! 🚀" 
-    await save_blog_response(blog_instance, result[step])
-    message = {"profile": tool_profile('organizer'),"message": result[step]}
-    await send_message_to_clients(message)
 
     agent_executor = await init_agent()
     async for event in agent_executor.astream_events({"input": input},version="v1",):
@@ -48,46 +41,33 @@ async def blog_agent(consumer, topic, id):
             if (
                 event["name"] == "Agent"
             ):  
-                step+=1
-                result[step] = f"Digital assists {tools_profile}' are assigned for your task."
-                await save_blog_response(blog_instance, result[step])
+                message = {"profile": tool_profile('organizer'), "message": tool_profile('organizer').get('start_message')}
+                await save_blog_response(blog_instance, message)
+                await send_message_to_clients(message)
         elif kind == "on_chain_end":
             if (
                 event["name"] == "Agent"
             ):  
-                step+=1
-                result[step] = f"🎉 Blog Generation Completed! 🎉"
-                await save_blog_response(blog_instance, result[step])
-                message2 = {"profile": tool_profile('organizer'),"message": "🎉 Blog Generation Completed! 🎉"}
-                result[step] = {"message": "🎉 Blog Generation Completed! 🎉"}
-                result[step]['data'] = event['data'].get('output')['output']
-                await save_blog_response(blog_instance, result[step]['data'])
-                message1 = {"profile": tool_profile('organizer'),"message": result[step]['data']}
-                await send_message_to_clients(message1)
-                await send_message_to_clients(message2)
+                message = {"profile": tool_profile('organizer'),"message": tool_profile('organizer').get('end_message')}
+                await save_blog_response(blog_instance, message)
+                await send_message_to_clients(message)
+                await save_blog_response(blog_instance, event['data'].get('output')['output'])
 
         if kind == "on_chat_model_stream":
             content = event["data"]["chunk"].content
             if content:
                 print(content, end="|")
         elif kind == "on_tool_start":
-            step+=1
-            result[step] = f"Digital assistant {tool_profile(event['name'])} is assigned for your task."
-            await save_blog_response(blog_instance, result[step])
             message = {"profile": tool_profile(event['name']), "message": tool_profile(event['name']).get('start_message')}
-
+            await save_blog_response(blog_instance, message)
             await send_message_to_clients(message)
         elif kind == "on_tool_end":
-            step+=1
-            result[step] = f"Digital assistant {tool_profile(event['name'])} has completed the task."
-            await save_blog_response(blog_instance, result[step])
-            message2 = {"profile": tool_profile(event['name']), "message": tool_profile(event['name']).get('end_message')}
-            result[step] = {'message' : f"Digital assistant {tool_profile(event['name'])} has completed the task."}
-            result[step]['data'] = event['data'].get('output')
+            message = {"profile": tool_profile(event['name']), "message": tool_profile(event['name']).get('end_message')}
+            await save_blog_response(blog_instance, message)
+            await send_message_to_clients(message)
 
-            if result[step]['data']:
-                await save_blog_response(blog_instance, result[step]['data'])
-                message1 = {"profile": tool_profile(event['name']), "message": event['data'].get('output')}
-                await send_message_to_clients(message1)
-            await send_message_to_clients(message2)
+            if event['data'].get('output'):
+                await save_blog_response(blog_instance, event['data'].get('output'))
+                # message1 = {"profile": tool_profile(event['name']), "message": event['data'].get('output')}
+                # await send_message_to_clients(message1)
     return {'answer' : result}

@@ -11,10 +11,9 @@ async def publish_blog_md(blog: str, image_url: str,callbacks: Callbacks) -> str
 
     md_blog_template = PromptTemplate.from_template(
     """You are an AI language model assistant. Your objective is to convert given Blog in to Mark down text for Blog publication:
-    Do not ommit any content.  
-    Do not include save_to_file in html href.
 
     Important: Remove "Thoughts", "Infuence", "Ignored" from the blog content.
+    
     Important: Include Image url in top of blog content.
     Important: Make sure image size properly fits the blog content.
     Important: Use the following format for image tag: ![image]({image_url})

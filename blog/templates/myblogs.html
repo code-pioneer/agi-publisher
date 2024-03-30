@@ -10,17 +10,15 @@
       {% for blog in blogs %}
       <div class="col mb-4">
         <a href="{% url 'retrieve_by_id' id=blog.id %}" target="_blank">
-          <div class="card" style="background-image: url('{% static blog.imgurl %}'); background-size: cover; background-position: center;">
-            <div class="card-img-top" style="height: 50px; background-size: cover; background-position: center;"></div>
-            <div class="card-body">
-              <div class="rounded-3">
-                <div class="row p-4">
+          <div class="card card-fill">
+            <img class="card-img-top" src="{% static blog.imgurl %}"></img>
+            <div class="card-body shadow-sm">
+                <div class="row p-1">
               
                   <div class="col" style="line-height: .67rem;">
-                    <h4 class="mb-2">{{ blog.topic }}</h4>
-                    <span class="tiny">{{ blog.ts }}</span>
+                    <span class="tiny"><i class="bi bi-clock"></i> {{ blog.ts }}</span>
+                    <p><h4 class="mb-2 text-primary-rainbow">{{ blog.topic }}</h4></p>                
                   </div>
-                </div>
               </div>
             </div>
           </div>

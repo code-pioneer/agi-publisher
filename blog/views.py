@@ -32,7 +32,7 @@ async def get_create_blogs(request):
 async def myblogs(request):
     print("view myblogs")
     try:
-        items = menu.get_navbar('MyBlogs')
+        items = menu.get_navbar('My Blogs')
         items['form'] = BlogRequestForm()
         async_get_is_authenticated = sync_to_async(lambda: request.user.is_authenticated)  
         user_is_authenticated = await async_get_is_authenticated()

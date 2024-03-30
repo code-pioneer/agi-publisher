@@ -102,7 +102,7 @@ menuitems = [
                     "tags":[]
                 },  
                 {   "uri":"/blog/myblogs/",
-                    "menu":"MyBlogs",
+                    "menu":"My Blogs",
                     "header":"Creativify",
                     "subheader":"Autonomous digital content creators",
                     "desc":"Short description of Homepage",

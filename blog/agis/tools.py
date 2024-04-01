@@ -1,4 +1,4 @@
-from blog.agis import create_blog, generate_filename, generate_image, proof_reading_blog, revise_blog, publish_blog_html, publish_blog_md, save_to_file, search_serper
+from blog.agis import create_blog, generate_filename, generate_image, generate_social_post, proof_reading_blog, revise_blog, publish_blog_html, publish_blog_md, save_to_file, search_serper
 
 def agent_tools():
     tools = []
@@ -11,6 +11,7 @@ def agent_tools():
     tools.append(generate_filename.setup())
     tools.append(generate_image.setup())
     tools.append(search_serper.setup())
+    tools.append(generate_social_post.setup())
     return tools
 
 def tools_profiles():
@@ -108,5 +109,13 @@ profile = {
         "url": "assets/img/Designer.png",
         "start_message": "Embarking on the orchestration of our blog creation process. Let's synchronize our efforts, streamline tasks, and bring our collective vision to life!",
         "end_message": "Mission accomplished! Through effective orchestration, we've successfully navigated the blog creation process, culminating in a cohesive and engaging final product. Cheers to teamwork and creativity!",
+        },
+    "generate_post_content" : {
+        "name": "social",
+        "profile": "Social",
+        "task": "Social Post Content",
+        "url": "assets/img/social-avatar.png",
+        "start_message": "Time to engage our audience! Beginning the process of crafting captivating social media posts to share our latest blog content and spark conversations.",
+        "end_message": "Posting complete! Our social media channels are now buzzing with excitement as we share our latest blog content. Ready to interact with our audience and witness the impact of our work!",
         },
 }

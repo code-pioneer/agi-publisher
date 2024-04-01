@@ -23,8 +23,8 @@
     </div>
   </div>
   <div class="card-body">
-    <div class="row row-cols-1 row-cols-md-2 row-cols-xl-5 align-items-stretch">
-      <div class="col mb-4">
+    <div class="row row-cols-1 row-cols-md-2 row-cols-xl-6 align-items-stretch">
+      <div class="col mb-3">
         <div class="card">
           <div class="card-body">
             <div class="row align-items-center">
@@ -36,13 +36,12 @@
               </div>
               <div class="col ms-n2">
                 <h4 class="mb-1">Web Searcher</h4>
-                <p class="small text-body-secondary mb-1">Content Gathering</p>
               </div>
             </div>
           </div>
         </div>
       </div>
-      <div class="col mb-4">
+      <div class="col mb-3">
         <div class="card">
           <div class="card-body">
             <div class="row align-items-center">
@@ -53,13 +52,12 @@
               </div>
               <div class="col ms-n2">
                 <h4 class="mb-1">Creator</h4>
-                <p class="small text-body-secondary mb-1">Blog Writing</p>
               </div>
             </div>
           </div>
         </div>
       </div>
-      <div class="col mb-4">
+      <div class="col mb-3">
         <div class="card">
           <div class="card-body">
             <div class="row align-items-center">
@@ -70,13 +68,12 @@
               </div>
               <div class="col ms-n2">
                 <h4 class="mb-1">Editor</h4>
-                <p class="small text-body-secondary mb-1">Proof Reading</p>
               </div>
             </div>
           </div>
         </div>
       </div>
-      <div class="col mb-4">
+      <div class="col mb-3">
         <div class="card">
           <div class="card-body">
             <div class="row align-items-center">
@@ -87,13 +84,12 @@
               </div>
               <div class="col ms-n2">
                 <h4 class="mb-1">Art Illustrator</h4>
-                <p class="small text-body-secondary mb-1">Image Generating</p>
               </div>
             </div>
           </div>
         </div>
       </div>
-      <div class="col mb-4">
+      <div class="col mb-3">
         <div class="card">
           <div class="card-body">
             <div class="row align-items-center">
@@ -105,13 +101,26 @@
               </div>
               <div class="col ms-n2">
                 <h4 class="mb-1">Publisher</h4>
-                <p class="small text-body-secondary mb-1">HTML/MarkDown Preping</p>
               </div>
             </div>
           </div>
         </div>
       </div>
-
+      <div class="col mb-3">
+        <div class="card">
+          <div class="card-body">
+            <div class="row align-items-center">
+              <div class="col-auto">
+                <a class="avatar avatar-lg">
+                  <img src="{% static 'assets/img/social-avatar.png' %}" class="avatar-img rounded-circle"
+                    alt="Avatar Image">
+                </a>
+                <h4 class="mb-1">Influencer</h4>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
     </div>
   </div>
 </div>
@@ -192,17 +201,17 @@
                   <div class="card">
                     <div class="card-body">
                       <div class="row align-items-center">
-                        <div class="col-auto">
+                        <div class="col-md-1">
                           <a class="avatar avatar-lg">
                             <img src="{% static '.' %}`+ url + `" class="avatar-img rounded-circle"
                               alt="Avatar Image">
                           </a>
                         </div>
-                        <div class="col ms-n2">
+                        <div class="col-md-2">
                           <h4 class="mb-1">`+ profile + `</h4>
                           <p class="small text-body-secondary mb-1">`+ task + `</p>
                         </div>
-                        <div class="col-md-8">
+                        <div class="col-md-9">
                           <p class="small text-body-secondary mb-1">`+ data + `</p>
                         </div>
                       </div>

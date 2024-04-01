@@ -3,9 +3,9 @@ from pathlib import Path
 import environ
 
 BASE_DIR = Path(__file__).resolve().parent.parent
-
 env = environ.Env()
-environ.Env.read_env(env_file=f'{BASE_DIR}/.env')
+#environ.Env.read_env(env_file=f'{BASE_DIR}/.env')
+environ.Env.read_env(env_file=os.path.join(BASE_DIR, '.env'),overwrite=True)
 
 SECRET_KEY = 'django-insecure-9n-#a+j7w6fc9li$q%x%s4+cz&z3q=%8k_6rye%*vlm58!6wzf'
 
@@ -134,7 +134,6 @@ IMAGE_GEN_MODEL = env("IMAGE_GEN_MODEL", default=None)
 SIZE="512x512"
 
 SERPER_API_KEY = env("SERPER_API_KEY",default=None)
-
 STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
 
 NUM_OF_SEARCHES= env("NUM_OF_SEARCHES",default="3")

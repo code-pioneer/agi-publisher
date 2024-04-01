@@ -18,5 +18,5 @@ class BlogRequestModel(models.Model):
 class BlogResponseModel(models.Model):
     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
     blog_id = models.ForeignKey(BlogRequestModel, on_delete=models.CASCADE)
-    blog_entries = models.TextField(default='')
+    blog_entries = models.JSONField(default=dict)
     ts = models.DateTimeField(auto_now=True)

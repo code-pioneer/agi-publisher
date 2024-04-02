@@ -31,7 +31,7 @@ profile = {
 
     "create_blog" : {      
         "name": "create",
-        "profile": "Creator",
+        "profile": "Content Craftsman",
         "task": "Blog Writing",
         "url": "assets/img/creater.png",
         "start_message": "Armed with inspiration from our Google search, it's time to kickstart the blog creation process. Let's turn these ideas into engaging content!",
@@ -96,7 +96,7 @@ profile = {
         },
     "search_serper" : {
         "name": "search",
-        "profile": "Search",
+        "profile": "Researcher",
         "task": "Google Search",
         "url": "assets/img/searcher.png",
         "start_message": "Time to gather some inspiration! Initiating a Google search to find engaging content for our blog writing journey.",
@@ -112,7 +112,7 @@ profile = {
         },
     "generate_social_post" : {
         "name": "social",
-        "profile": "Social",
+        "profile": "Influencer",
         "task": "Social Post Content",
         "url": "assets/img/social-avatar.png",
         "start_message": "Time to engage our audience! Beginning the process of crafting captivating social media posts to share our latest blog content and spark conversations.",

@@ -134,14 +134,19 @@
 </div>
 <div class="card" id="response-body" style="display: none;">
   <div class="card-header">
-    
-    <div class="header-title h3 pl-4">
-      <span class="text-primary-rainbow">Status...</span>
-      &nbsp;&nbsp;
-      <span class="text-primary-rainbow">Progress...</span> &nbsp;&nbsp;
+    <div class="header-title h3 pl-4"><span class="text-primary-rainbow spinner-grow-sm" id="status">
+        <div class="spinner-grow text-primary" role="status">
+          <span class="visually-hidden">Loading...</span>
+        </div>
+        <div class="spinner-grow text-info" role="status">
+          <span class="visually-hidden">Loading...</span>
+        </div>
+        <div class="spinner-grow text-success" role="status">
+          <span class="visually-hidden">Loading...</span>
+        </div>
+      </span> &nbsp;&nbsp;</div>
     </div>
-  </div>
-  <div class="card-body" id="msg" ></div>
+  <div class="card-body" id="msg"></div>
 
 </div>
 
@@ -209,6 +214,10 @@
           task = message.message.profile.task;
           data = message.message.message;
           url = message.message.profile.url;
+          if (data == 'DONE') {
+            $('#status').empty();
+
+          }else{
           $('#msg').append(`
               <div class="row align-items-center">
                   <div class="card">
@@ -233,7 +242,7 @@
           </div>`);
 
 
-        };
+        }};
 
       },
       error: function (err) {

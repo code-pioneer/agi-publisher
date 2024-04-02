@@ -53,6 +53,10 @@ async def blog_agent(consumer, topic, id):
                 message_data= {"profile": tool_profile('organizer'),"messageData": event['data'].get('output')['output']}
                 await send_message_to_clients(message)
                 await save_blog_response(blog_instance, message_data)
+                message = {"profile": tool_profile('organizer'),"message": 'DONE'}
+                await send_message_to_clients(message)
+
+
 
         if kind == "on_chat_model_stream":
             content = event["data"]["chunk"].content

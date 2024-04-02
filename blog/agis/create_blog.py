@@ -10,7 +10,9 @@ async def create_blog(content: str, topic: str, callbacks: Callbacks) -> str:
     """Generate a blog from the output of search results."""
     print(f'createBlog')
     create_blog_template = PromptTemplate.from_template(
-    """You are an AI language model assistant. Your objective is to write a structured blog post using context for a given topic.
+    """You are an AI language model assistant. Your objective is to write a structured blog post on the topic {topic}. 
+    Use the relevant context provided to create a compelling and informative blog post. Do not limit yourself to the context; feel free to add your insights and examples to enrich the content.
+
     Use the provided guidelines. Blog must have a title.
     
     Guidelines: Start with a compelling hook to grab the reader's attention and briefly introduce the topic's significance. Provide a succinct overview of what the blog post will cover, including the main thesis or argument.

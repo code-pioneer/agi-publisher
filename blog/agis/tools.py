@@ -110,7 +110,7 @@ profile = {
         "start_message": "Embarking on the orchestration of our blog creation process. Let's synchronize our efforts, streamline tasks, and bring our collective vision to life!",
         "end_message": "Mission accomplished! Through effective orchestration, we've successfully navigated the blog creation process, culminating in a cohesive and engaging final product. Cheers to teamwork and creativity!",
         },
-    "generate_post_content" : {
+    "generate_social_post" : {
         "name": "social",
         "profile": "Social",
         "task": "Social Post Content",

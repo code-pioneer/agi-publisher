@@ -10,19 +10,18 @@ async def publish_blog_html(blog: str, image_url: str, callbacks: Callbacks) -> 
     print(f'publish_blog_html')
 
     html_blog_template = PromptTemplate.from_template(
-    """You are an AI language model assistant. Your objective is to convert given Blog in to HTML text for Blog publication:
-    Important: Remove "Thoughts", "Infuence", "Ignored" from the blog content.
-    
+    """You are an AI language model assistant. Your objective is to convert given Blog in to pretty HTML text for Blog publication:
+
     Important: Include Image url in top of blog content and align to center.
     important: Use the following format for image tag: <img src="/static{image_url}" alt="image">
-    Important: Use Heading tags for Title and Subtitles.
-    Important: Use Paragraph tags for content.
-    Important: Use List tags for list items.
-    Important: Use Blockquote tags for quotes.
-    Important: Use Anchor tags for links.
-    Important: Use Image tags for images.
-    Important: Use Strong and Em tags for emphasis.
-    Important: Use Table tags for tables.
+
+    Include Bootstrap's CSS from BootstrapCDN
+    Add Bootstrap container
+    Include Bootstrap's JavaScript from BootstrapCDN
+
+    Important: Remove "Thoughts", "Infuence", "Ignored" content from the blog content.
+
+
     Blog: {blog}
     Image: {image_url}
 

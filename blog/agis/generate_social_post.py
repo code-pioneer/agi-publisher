@@ -5,8 +5,8 @@ from langchain_core.callbacks import Callbacks
 from mainapp.settings import LLM_MODEL, STREAMING
 
 @tool
-async def generate_post_content(blog: str, image_url: str, callbacks: Callbacks) -> str:
-    """Generate social post content after save_to_file task is executed."""
+async def generate_social_post(blog: str, image_url: str, callbacks: Callbacks) -> str:
+    """Generate social post content."""
     print(f'generatePostContent')
 
     post_template = PromptTemplate.from_template(
@@ -25,7 +25,7 @@ async def generate_post_content(blog: str, image_url: str, callbacks: Callbacks)
     llm = ChatOpenAI(model=LLM_MODEL, temperature=0.9, streaming=STREAMING)
     chain = post_template | llm.with_config(
         {
-            "run_name": "Generate Post Content",
+            "run_name": "Generate Social Post",
             "tags": ["tool_llm"],
             "callbacks": callbacks, 
         }
@@ -34,7 +34,7 @@ async def generate_post_content(blog: str, image_url: str, callbacks: Callbacks)
     return "".join(chunk.content for chunk in chunks)
 
 def setup():
-    return generate_post_content
+    return generate_social_post
   
 def profile():
     profile = {

@@ -25,7 +25,7 @@ async def blog_agent(consumer, topic, id):
     print("Blog Agent")
     blog_instance = await get_blog_by_id(id.strip())
     topic = blog_instance.topic
-    input = f'Your objective is to perform all required tasks as part of this fullfillment. Topic: {topic}. ID: { blog_instance.id}'
+    input = f'Your objective is to perform all required tasks as part of this fullfillment including generating social post in the end. Topic: {topic}. ID: { blog_instance.id}'
     
     async  def send_message_to_clients(message):    
         await consumer.send(text_data=json.dumps({

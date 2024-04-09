@@ -23,6 +23,8 @@ async def publish_blog_html(blog: str, image_url: str, callbacks: Callbacks) -> 
     Add paragraph tags for content.
 
     Important: Remove "Thoughts", "Infuence", "Ignored" content from the blog content.
+    Important: DO NOT Remove "SEO Tags" content from the blog content. Add # to each SEO Tags to increase visibility.
+    Important: Add paragraph heading 'SEO TAGS' to the SEO Tags section.
 
 
     Blog: {blog}

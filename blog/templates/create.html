@@ -10,14 +10,23 @@
     <form id="topic-form">
       {% csrf_token %}
       <div class="mb-3">
-        <input id="topic" name="topic" class="form-control me-2" type="text" placeholder="What's on your mind?">
+        <div class="btn-group" role="group" aria-label="Basic checkbox toggle button group">
+          <input type="checkbox" class="btn-check" id="in_depth_checkbox" name="in_depth_checkbox" autocomplete="off">
+          <label class="btn btn-outline-primary" for="in_depth_checkbox">In-depth Blog</label>
+        
+          <input type="checkbox" class="btn-check" id="seo_checkbox" name="seo_checkbox" autocomplete="off">
+          <label class="btn btn-outline-primary" for="seo_checkbox">SEO</label>
+        
+        </div>
+        <div class="mt-4"></div> <!-- Add spacing here -->
+        <input id="topic" name="topic" class="form-control me-2 border-primary" type="text" placeholder="What's on your mind?">
         <div class="mt-4"></div> <!-- Add spacing here -->
         <button type="submit" class="btn btn-primary form-control">Submit</button>
       </div>
     </form>
   </div>
 </div>
-<div class="card" id="response-header" style="display: none1;">
+<div class="card" id="response-header" style="display: none;">
   <div class="card-header">
     <div class="header-title h3 pl-4"><span class="text-primary-rainbow">Digital Workers on task</span> &nbsp;&nbsp;
     </div>
@@ -134,7 +143,7 @@
 </div>
 <div class="card" id="response-body" style="display: none;">
   <div class="card-header">
-    <div class="header-title h3 pl-4"><span class="text-primary-rainbow spinner-grow-sm" id="status">
+    <div class="header-title h3 pl-4"><span class="text-primary-rainbow spinner-grow-sm" id="loading-btn-header">
         <div class="spinner-grow text-primary" role="status">
           <span class="visually-hidden">Loading...</span>
         </div>
@@ -145,8 +154,21 @@
           <span class="visually-hidden">Loading...</span>
         </div>
       </span> &nbsp;&nbsp;</div>
-    </div>
+  </div>
   <div class="card-body" id="msg"></div>
+  <div class="card-footer">
+    <div class="header-title h3 pl-4"><span class="text-primary-rainbow spinner-grow-sm" id="loading-btn-footer">
+        <div class="spinner-grow text-primary" role="status">
+          <span class="visually-hidden">Loading...</span>
+        </div>
+        <div class="spinner-grow text-info" role="status">
+          <span class="visually-hidden">Loading...</span>
+        </div>
+        <div class="spinner-grow text-success" role="status">
+          <span class="visually-hidden">Loading...</span>
+        </div>
+      </span> &nbsp;&nbsp;</div>
+  </div>
 
 </div>
 
@@ -185,6 +207,9 @@
       data: $(this).serialize(),
       data2: {
         topic: $('#topic').val(),
+        in_depth_checkbox: $('#in_depth_checkbox').val(),
+        seo_checkbox: $('#seo_checkbox').val(),
+        
         csrfmidddlewaretoken: $('input[name=csrfmidddlewaretoken]').val()
       },
       headers: {
@@ -193,6 +218,8 @@
       },
       success: function (response) {
         $('#topic').val('');
+        $('#checkbox1').prop('checked', false);
+        $('#checkbox2').prop('checked', false);
         answer = response.message;
         console.log('response', response.id, response.message);
         let publisher_url = `ws://${window.location.host}/ws/create/`;
@@ -215,8 +242,8 @@
           data = message.message.message;
           url = message.message.profile.url;
           if (data == 'DONE') {
-            $('#status').empty();
-
+            $('#loading-btn-header').empty();
+            $('#loading-btn-footer').empty();
           }else{
           $('#msg').append(`
               <div class="row align-items-center">

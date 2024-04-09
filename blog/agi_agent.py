@@ -25,6 +25,9 @@ async def blog_agent(consumer, topic, id):
     print("Blog Agent")
     blog_instance = await get_blog_by_id(id.strip())
     topic = blog_instance.topic
+    seo = blog_instance.seo_checkbox
+    in_depth = blog_instance.in_depth_checkbox
+    params = {"seo": seo, "in_depth": in_depth}
     input = f'''Your objective is to perform all required tasks as part of this fullfillment including generating social post in the end. 
     Follow following order while fullfilling the task:
     1. Generate Filename for the blog content.
@@ -36,7 +39,7 @@ async def blog_agent(consumer, topic, id):
     7. Save the final blog post result
     8. Generate Social Post content.
     
-    Topic: {topic}. ID: { blog_instance.id}'''
+    Topic: {topic}. BLOG_PARAMS: {json.dumps(params)} ID: { blog_instance.id}'''
     
     async  def send_message_to_clients(message):    
         await consumer.send(text_data=json.dumps({

@@ -29,6 +29,8 @@ async def get_blog_by_user(user):
                 'imgurl': blog.imgurl,
                 'topic': blog.topic,
                 'status': blog.status,
+                'seo_checkbox': blog.seo_checkbox,
+                'in_depth_checkbox': blog.in_depth_checkbox,
                 'ts': blog.ts,
             }
             blog_list.append(blog_data)
@@ -48,14 +50,18 @@ async def get_blog_by_status(status):
     except BlogRequestModel.DoesNotExist:
         return None
     
-async def save_blog_request(topic, status, user):
+async def save_blog_request(topic, status, user, blogurl=None, imgurl=None, seo_checkbox=False, in_depth_checkbox=False):
     try:
         create_blog_request = sync_to_async(BlogRequestModel.objects.create)
         
         blog_request_instance = await create_blog_request(
             topic=topic,
             status=status,
-            user=user
+            user=user,
+            blogurl=blogurl,
+            imgurl=imgurl,
+            seo_checkbox=seo_checkbox,
+            in_depth_checkbox=in_depth_checkbox
         )
         print("save_blog_request: ", blog_request_instance)
         return blog_request_instance

@@ -51,10 +51,19 @@ async def myblogs(request):
 async def create(request):
     print("view create")
     form = BlogRequestForm(request.POST)
+    print('request.POST: ', request.POST)
     print("form: ", form)
     try:
         if form.is_valid():
             topic = request.POST.get("topic")
+            if 'in_depth_checkbox' in request.POST:
+                in_depth_checkbox = True
+            else:
+                in_depth_checkbox = False
+            if 'seo_checkbox' in request.POST:
+                seo_checkbox = True
+            else:
+                seo_checkbox = False                
             print("topic: ", topic)
             async_get_is_authenticated = sync_to_async(lambda: request.user.is_authenticated)  
             user_is_authenticated = await async_get_is_authenticated()
@@ -62,7 +71,7 @@ async def create(request):
                 return redirect('/accounts/login/')
             async_get_username = sync_to_async(lambda: request.user.username)    
             username = await async_get_username()
-            blog_instance = await save_blog_request(topic, status='awaiting', user=username)
+            blog_instance = await save_blog_request(topic, status='awaiting', user=username, seo_checkbox=seo_checkbox, in_depth_checkbox=in_depth_checkbox )
             print("blog_instance: ", blog_instance)
             return JsonResponse({'message': 'Task triggered successfully', 'id': blog_instance.id})
         else:

@@ -9,7 +9,9 @@ class BlogRequestModel(models.Model):
     imgurl = models.CharField(max_length=255, null=True)
     user = models.CharField(max_length=40, default='')
     ts = models.DateTimeField(auto_now=True)
-
+    seo_checkbox = models.BooleanField(default=False)
+    in_depth_checkbox = models.BooleanField(default=False)
+    
     def get_related_blog_response(self):
         blog_response_model = BlogResponseModel.objects.filter(blog_id=self).order_by('-created_ts')
         return blog_response_model

@@ -11,8 +11,9 @@ async def publish_blog_html(blog: str, image_url: str, callbacks: Callbacks) -> 
 
     html_blog_template = PromptTemplate.from_template(
     """You are an AI language model assistant. Your objective is to convert given Blog in to pretty HTML5 text for Blog publication:
-
-    Important: Include Image url in top of blog content and align to center.
+    
+    Important: Blog Title must be at top of the page and align to center.
+    Important: Include Image url in top of blog content, after title and align to center.
     important: Use the following format for image tag: <img src="/static{image_url}" alt="image" style="display: block;margin: 0 auto;margin-bottom: 20px;">
 
     Include Bootstrap's CSS from BootstrapCDN

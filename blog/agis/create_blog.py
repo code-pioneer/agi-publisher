@@ -13,10 +13,11 @@ async def create_blog(content: str, topic: str, blog_params: str, callbacks: Cal
     create_blog_template = PromptTemplate.from_template(
     """You are an AI language model assistant. Your objective is to write a structured blog post on the topic {topic}. 
     Use the relevant context provided to create a compelling and informative blog post. Do not limit yourself to the context; feel free to add your insights and examples to enrich the content.
-    Blog size must be based on {size}.
-    Use the provided guidelines. Blog must have a title.
+    Blog size must be based on this guidelines - {size}.
+    Use the provided guidelines. 
     
-    Guidelines: Start with a compelling hook to grab the reader's attention and briefly introduce the topic's significance. Provide a succinct overview of what the blog post will cover, including the main thesis or argument.
+    Guidelines: Add an appropriate Blog title as the Blog heading.
+    Start with a compelling hook to grab the reader's attention and briefly introduce the topic's significance. Provide a succinct overview of what the blog post will cover, including the main thesis or argument.
     
     Divide the body into three paragraphs, each focusing on a specific aspect or subtopic related to the main theme. Use topic sentences to introduce main ideas and support them with evidence or examples. Ensure smooth transitions between paragraphs to maintain coherence.
 
@@ -24,19 +25,18 @@ async def create_blog(content: str, topic: str, blog_params: str, callbacks: Cal
 
     Compile a concise list of sources used in the blog post, providing proper attribution and bibliographic details at the end of the post. 
     
-    Refrain from using titles like Introduction, Conclusion, body, paragraph numbers.
-
-    Blog Size: {size}
+    Refrain from using titles such as Introduction, Conclusion, body, paragraph numbers.
+    Blog Size Guidelines: {size}
     Topic: {topic}
     Context: {content}
     Search_engine_optimization: {seoText}
     Response must be in the following format.
 
     Answer: 
-        Blog:
+        Blog:  
         SEO Tags:
-        Thoughts: Include 5 keywords that highlights your thoughts and reasoning while coming up with this blog content.
-        Infuence: 5 points that infuenced your thoughts.
+        Thoughts: Include 5 keywords that highlight your thoughts and reasoning while coming up with this blog content.
+        Influence: 5 points that influenced your thoughts.
         Ignored: 5 points that you discarded."""
 
     )

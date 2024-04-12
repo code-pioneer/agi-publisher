@@ -7,6 +7,7 @@ from mainapp.settings import BASE_DIR
 from .forms import PartialContactusForm
 from .models import Contactus
 from . import menu
+from django.shortcuts import redirect
 
 home_template              = 'index.html'
 aboutus_template           = 'common/aboutus.html'
@@ -16,7 +17,8 @@ contactus_thanks_template  = 'contactus_thanks.html'
 profile_template           = 'profile.html'
 
 def homepage(request):
-    return render(request, home_template, menu.get_navbar('Home'))
+    return redirect('myblogs')
+    # return render(request, home_template, menu.get_navbar('Home'))
 
 def aboutus(request):
     return render(request, aboutus_template, menu.get_navbar('About Us'))

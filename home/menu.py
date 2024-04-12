@@ -3,34 +3,8 @@ seo_description = "Hire digital content creators, aka AGI workers, to generate c
 seo_keywords = "Autonomous Content creator, AGI, Opensource"
 
 menuitems = [ 
-                {   "uri":"/",
-                    "menu":"Home",
-                    "header":"Creativify",
-                    "subheader":"Autonomous digital content creators",
-                    "desc":"Short description of Homepage",
-                    "pub":"Active since 8/2/2023",
-                    "icon": "bi-house-door",
-                    "primary": True,
-                    "badge":False,
-                    "badgetext":"3",
-                    "badgetype":"success",
-                    "logo": 'assets/img/home.png',
-                    "tags":[]
-                },  
-                {   "uri":"/theme/",
-                    "menu":"Theme",
-                    "header":"Theme Documentation",
-                    "subheader":"Creativify",
-                    "desc":"Nest theme documentation",
-                    "pub":"Active since 8/2/2023",
-                    "icon": "bi-filetype-html",
-                    "primary": True,
-                    "badge":False,
-                    "badgetext":"3",
-                    "badgetype":"success",
-                    "logo": 'assets/img/documentation.png',
-                    "tags":[]
-                },
+  
+
                 {   "uri":"/profile/",
                     "menu":"Profile",
                     "header":"Profile",
@@ -87,6 +61,20 @@ menuitems = [
                     "logo": 'assets/img/disclaimer.png',
                     "tags":[]
                 },
+                {   "uri":"/blog/myblogs/",
+                    "menu":"My Blogs",
+                    "header":"Creativify",
+                    "subheader":"Autonomous digital content creators",
+                    "desc":"Short description of Homepage",
+                    "pub":"Active since 8/2/2023",
+                    "icon": "bi-book",
+                    "primary": True,
+                    "badge":False,
+                    "badgetext":"3",
+                    "badgetype":"success",
+                    "logo": 'assets/img/documentation.png',
+                    "tags":[]
+                }, 
                 {   "uri":"/blog/",
                     "menu":"Create",
                     "header":"Creativify",
@@ -101,20 +89,7 @@ menuitems = [
                     "logo": 'assets/img/contactus.png',
                     "tags":[]
                 },  
-                {   "uri":"/blog/myblogs/",
-                    "menu":"My Blogs",
-                    "header":"Creativify",
-                    "subheader":"Autonomous digital content creators",
-                    "desc":"Short description of Homepage",
-                    "pub":"Active since 8/2/2023",
-                    "icon": "bi-book",
-                    "primary": True,
-                    "badge":False,
-                    "badgetext":"3",
-                    "badgetype":"success",
-                    "logo": 'assets/img/documentation.png',
-                    "tags":[]
-                },                                   
+                                  
 ] 
     
 def get_navbar(menukey):

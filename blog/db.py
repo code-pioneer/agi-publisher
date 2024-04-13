@@ -50,7 +50,7 @@ async def get_blog_by_status(status):
     except BlogRequestModel.DoesNotExist:
         return None
     
-async def save_blog_request(topic, status, user, blogurl=None, imgurl=None, seo_checkbox=False, in_depth_checkbox=False):
+async def save_blog_request(topic, status, user, blogurl=None, imgurl=None, seo_checkbox=False, in_depth_checkbox=False, theme='descriptive'):
     try:
         create_blog_request = sync_to_async(BlogRequestModel.objects.create)
         
@@ -61,7 +61,8 @@ async def save_blog_request(topic, status, user, blogurl=None, imgurl=None, seo_
             blogurl=blogurl,
             imgurl=imgurl,
             seo_checkbox=seo_checkbox,
-            in_depth_checkbox=in_depth_checkbox
+            in_depth_checkbox=in_depth_checkbox,
+            theme=theme
         )
         print("save_blog_request: ", blog_request_instance)
         return blog_request_instance

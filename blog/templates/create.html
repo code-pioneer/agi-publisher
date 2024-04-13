@@ -16,7 +16,18 @@
         
           <input type="checkbox" class="btn-check" id="seo_checkbox" name="seo_checkbox" autocomplete="off">
           <label class="btn btn-outline-primary" for="seo_checkbox">SEO</label>
-        
+          <div class="btn-group" role="group">
+            <button type="button" class="btn btn-outline-primary dropdown-toggle" id="theme" name="theme" data-bs-toggle="dropdown" aria-expanded="false">
+              Theme
+            </button>
+            <input type="hidden" id="selectedtheme" name="selectedtheme" value="">
+            <ul class="dropdown-menu">
+              {% for value, label in form.fields.theme.choices %}
+              
+              <li><a class="dropdown-item" href="#" onclick="selectOption('{{ label }}', '{{ value }}')">{{label}}</a></li>
+              {% endfor %}
+            </ul>
+          </div>
         </div>
         <div class="mt-4"></div> <!-- Add spacing here -->
         <input id="topic" name="topic" class="form-control me-2 border-primary" type="text" placeholder="What's on your mind?">
@@ -177,7 +188,14 @@
 
 {% block scripts %}
 <script>
+function selectOption(key,value) {
+  document.getElementById('theme').classList.remove('btn-outline-primary');
+  document.getElementById('theme').classList.add('btn-primary');
+  document.getElementById('theme').innerText = key;
+  document.getElementById('selectedtheme').innerText = value;
 
+  
+}
   function getCookie(name) {
     let cookieValue = null;
     if (document.cookie && document.cookie !== "") {
@@ -199,17 +217,21 @@
     $('#response-body').hide();
 
     topic = $('#topic').val();
-    if (topic == null || topic == '') return;
+    var theme = $('#selectedtheme').text()  
+    console.log('theme', theme);    
+    if (topic === null || topic === '') {return;}
+    if (theme === null || theme === '') {
+      theme = 'descriptive';
+    }
     $('#submit-button').hide();
     $.ajax({
       type: 'POST',
       url: "{% url 'create' %}",
-      data: $(this).serialize(),
-      data2: {
+      data: {
         topic: $('#topic').val(),
         in_depth_checkbox: $('#in_depth_checkbox').val(),
         seo_checkbox: $('#seo_checkbox').val(),
-        
+        theme: theme,
         csrfmidddlewaretoken: $('input[name=csrfmidddlewaretoken]').val()
       },
       headers: {
@@ -220,6 +242,8 @@
         $('#topic').val('');
         $('#checkbox1').prop('checked', false);
         $('#checkbox2').prop('checked', false);
+        $('#theme').val('Theme');
+
         answer = response.message;
         console.log('response', response.id, response.message);
         let publisher_url = `ws://${window.location.host}/ws/create/`;

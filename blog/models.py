@@ -11,6 +11,15 @@ class BlogRequestModel(models.Model):
     ts = models.DateTimeField(auto_now=True)
     seo_checkbox = models.BooleanField(default=False)
     in_depth_checkbox = models.BooleanField(default=False)
+    theme_choices = [
+        ('narrative', 'Narrative'),
+        ('persuasive', 'Persuasive'),
+        ('humor', 'Humor'),
+        ('informative', 'Informative'),
+        ('descriptive', 'Descriptive'),
+        ('expository', 'Expository'),
+    ]
+    theme = models.CharField(max_length=20, null=True, choices=theme_choices, default='descriptive')
     
     def get_related_blog_response(self):
         blog_response_model = BlogResponseModel.objects.filter(blog_id=self).order_by('-created_ts')

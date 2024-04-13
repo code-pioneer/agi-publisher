@@ -27,7 +27,8 @@ async def blog_agent(consumer, topic, id):
     topic = blog_instance.topic
     seo = blog_instance.seo_checkbox
     in_depth = blog_instance.in_depth_checkbox
-    params = {"seo": seo, "in_depth": in_depth}
+    theme = blog_instance.theme
+    params = {"seo": seo, "in_depth": in_depth, "theme": theme}
     input = f'''Your objective is to perform all required tasks as part of this fullfillment including generating social post in the end. 
     Follow following order while fullfilling the task:
     1. Generate Filename for the blog content.

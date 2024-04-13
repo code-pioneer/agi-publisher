@@ -51,11 +51,11 @@ async def myblogs(request):
 async def create(request):
     print("view create")
     form = BlogRequestForm(request.POST)
-    print('request.POST: ', request.POST)
-    print("form: ", form)
     try:
         if form.is_valid():
             topic = request.POST.get("topic")
+            theme = request.POST.get("theme")
+
             if 'in_depth_checkbox' in request.POST:
                 in_depth_checkbox = True
             else:
@@ -64,15 +64,14 @@ async def create(request):
                 seo_checkbox = True
             else:
                 seo_checkbox = False                
-            print("topic: ", topic)
+
             async_get_is_authenticated = sync_to_async(lambda: request.user.is_authenticated)  
             user_is_authenticated = await async_get_is_authenticated()
             if not user_is_authenticated:
                 return redirect('/accounts/login/')
             async_get_username = sync_to_async(lambda: request.user.username)    
             username = await async_get_username()
-            blog_instance = await save_blog_request(topic, status='awaiting', user=username, seo_checkbox=seo_checkbox, in_depth_checkbox=in_depth_checkbox )
-            print("blog_instance: ", blog_instance)
+            blog_instance = await save_blog_request(topic, status='awaiting', user=username, seo_checkbox=seo_checkbox, in_depth_checkbox=in_depth_checkbox, theme=theme)
             return JsonResponse({'message': 'Task triggered successfully', 'id': blog_instance.id})
         else:
             message = {'answer': '''Apologies, I am not equipped to handle this particular task. Please consider another query or topic for assistance.'''}

@@ -11,8 +11,8 @@ async def create_blog(content: str, topic: str, blog_params: str, callbacks: Cal
     """Generate a blog from the output of search results."""
     print(f'createBlog')
     create_blog_template = PromptTemplate.from_template(
-    """You are an AI language model assistant. Your objective is to write a structured blog post on the topic {topic}. 
-    Use the relevant context provided to create a compelling and informative blog post. Do not limit yourself to the context; feel free to add your insights and examples to enrich the content.
+    """You are an AI language model assistant. Your objective is to write a {theme} blog post on the topic {topic}. 
+    Use the relevant context provided to create a {theme} blog post. Do not limit yourself to the context; feel free to add your insights and examples to enrich the content.
     Blog size must be based on this guidelines - {size}.
     Use the provided guidelines. 
     
@@ -29,6 +29,7 @@ async def create_blog(content: str, topic: str, blog_params: str, callbacks: Cal
     Blog Size Guidelines: {size}
     Topic: {topic}
     Context: {content}
+    Theme: {theme}
     Search_engine_optimization: {seoText}
     Response must be in the following format.
 
@@ -44,6 +45,7 @@ async def create_blog(content: str, topic: str, blog_params: str, callbacks: Cal
     blog_params_json = json.loads(blog_params)
     seo = blog_params_json.get("seo", False)
     in_depth = blog_params_json.get("in_depth", False)
+    theme = blog_params_json.get("theme", "descriptive")
     if in_depth:
         size = f'Make sure that Blog is in-depth. Provide detailed information and insights. The blog should be a minimum of 2000 words and a maximum of 3000 words.'
     else:
@@ -52,8 +54,18 @@ async def create_blog(content: str, topic: str, blog_params: str, callbacks: Cal
         seoText = f'Make sure to generate SEO tags for the blog to improve search engine visibility.'
     else:
         seoText = f'No need to generate SEO tags.'
-    print(f'seoText: {seoText}')
-    print(f'size: {size}')
+    if theme == 'humor':
+        theme = f'humor-style '
+    elif theme == 'persuasive-style':
+        theme = f'persuasive '
+    elif theme == 'informative':
+        theme = f'informative-style '
+    elif theme == 'narrative':
+        theme = f'narrative-style '
+    elif theme == 'descriptive':
+        theme = f'descriptive-style '
+    elif theme == 'expository':
+        theme = f'expository-style '
 
     llm = ChatOpenAI(model=LLM_MODEL, temperature=0.9, streaming=STREAMING)
     chain = create_blog_template | llm.with_config(
@@ -63,7 +75,7 @@ async def create_blog(content: str, topic: str, blog_params: str, callbacks: Cal
             "callbacks": callbacks, 
         }
     )
-    chunks = [chunk async for chunk in chain.astream({"content": content, "topic" : topic, 'size': size, 'seoText': seoText})]
+    chunks = [chunk async for chunk in chain.astream({"content": content, "topic" : topic, 'size': size, 'seoText': seoText, 'theme': theme})]
     return "".join(chunk.content for chunk in chunks)
 
 def setup():

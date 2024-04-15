@@ -12,12 +12,12 @@ class BlogRequestModel(models.Model):
     seo_checkbox = models.BooleanField(default=False)
     in_depth_checkbox = models.BooleanField(default=False)
     theme_choices = [
-        ('narrative', 'Narrative'),
-        ('persuasive', 'Persuasive'),
+        ('descriptive', 'Descriptive'),
+        ('expository', 'Expository'),        
         ('humor', 'Humor'),
         ('informative', 'Informative'),
-        ('descriptive', 'Descriptive'),
-        ('expository', 'Expository'),
+        ('narrative', 'Narrative'),
+        ('persuasive', 'Persuasive')
     ]
     theme = models.CharField(max_length=20, null=True, choices=theme_choices, default='descriptive')
     

@@ -131,7 +131,7 @@ OPENAI_API_KEY  = env("OPENAI_API_KEY",default=None)
 STREAMING = True
 
 IMAGE_GEN_MODEL = env("IMAGE_GEN_MODEL", default=None)
-SIZE="512x512"
+SIZE = env("IMAGE_SIZE", default="1024x1024")
 
 SERPER_API_KEY = env("SERPER_API_KEY",default=None)
 STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')

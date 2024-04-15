@@ -5,3 +5,4 @@ DEBUG=<True>
 OPENAI_API_KEY=<openai api key>
 IMAGE_GEN_MODEL=<dall-e-2>
 SERPER_API_KEY=<serper api key>
+IMAGE_SIZE=<1024x1024>

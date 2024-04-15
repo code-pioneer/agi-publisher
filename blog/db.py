@@ -110,3 +110,12 @@ async def update_blog_request(request_id, status='awaiting', blogurl=None, imgur
         return blog_request_instance
     except BlogRequestModel.DoesNotExist:
         return None
+
+async def get_blog_entries_by_id(id):
+    try:
+        return await sync_to_async(
+            BlogResponseModel.objects.filter(blog_id_id=id, 
+                                             blog_entries__event='output',
+                                             blog_entries__profile__name='Influencer').values('blog_entries__messageData').get)()
+    except BlogResponseModel.DoesNotExist:
+        return None

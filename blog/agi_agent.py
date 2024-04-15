@@ -87,7 +87,7 @@ async def blog_agent(consumer, topic, id):
             await send_message_to_clients(message)
 
             if event['data'].get('output'):
-                message = {"profile": tool_profile(event['name']), "messageData": event['data'].get('output')}
+                message = {"profile": tool_profile(event['name']),"event":"output", "messageData": event['data'].get('output')}
                 await save_blog_response(blog_instance, message)
                 # message1 = {"profile": tool_profile(event['name']), "message": event['data'].get('output')}
                 # await send_message_to_clients(message1)

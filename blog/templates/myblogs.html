@@ -3,26 +3,28 @@
 {% block page_content %}
 <div class="card">
   <div class="card-header">
-    <div class="header-title h3 pl-4"><span class="text-primary-rainbow">My Blogs</span> &nbsp;&nbsp;</div>
+    <div class="header-title h3 pl-4"><span class="text-primary-rainbow">My Articles</span> &nbsp;&nbsp;</div>
   </div>
   <div class="card-body">
     <div class="row row-cols-1 row-cols-md-2 row-cols-xl-4 align-items-stretch">
       {% for blog in blogs %}
       <div class="col mb-4">
+        <div class="card card-fill">
         <a href="{% url 'retrieve_by_id' id=blog.id %}" target="_blank">
-          <div class="card card-fill">
             <img class="card-img-top" src="{% static blog.imgurl %}"></img>
             <div class="card-body shadow-sm">
                 <div class="row p-1">
-              
-                  <div class="col" style="line-height: .67rem;">
+                  <div class="col">
                     <span class="tiny text-body-secondary"><i class="bi bi-clock"></i> {{ blog.ts }}</span>
-                    <p><h4 class="mb-2">{{ blog.topic }}</h4></p>                
-                  </div>
+                    <p style="line-height: .60rem;"><h4 class="mb-2">{{ blog.topic }}</h4></p>  
+                   </div>
               </div>
             </div>
-          </div>
         </a>
+        <div class="row align-item-center">
+          <div class="col my-auto"></div>
+          <div class="col-auto my-auto"> <a href="{% url 'retrieve_entries_by_id' id=blog.id %}"><i class="bi bi-twitter avatar"></i> </a> </div>              
+      </div>
       </div>
       {% endfor %}
     </div>

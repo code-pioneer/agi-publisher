@@ -1,3 +1,4 @@
+import json
 from django.shortcuts import render, redirect
 from django.contrib.auth.decorators import login_required
 from django.http import HttpResponse, JsonResponse, HttpResponseServerError
@@ -5,13 +6,13 @@ from django.views.decorators.http import require_POST, require_GET
 from asgiref.sync import sync_to_async
 from .forms import BlogRequestForm
 from home import menu
-from .db import save_blog_request, get_blog_by_user, get_blog_by_id
+from .db import save_blog_request, get_blog_by_user, get_blog_by_id,get_blog_entries_by_id
 
 
 
 blog_template   = 'create.html'
 myblogs_template = 'myblogs.html'
-
+social_content_template= 'socialcontent.html'
     
 @require_GET
 async def get_create_blogs(request):
@@ -32,7 +33,7 @@ async def get_create_blogs(request):
 async def myblogs(request):
     print("view myblogs")
     try:
-        items = menu.get_navbar('My Blogs')
+        items = menu.get_navbar('My Articles')
         items['form'] = BlogRequestForm()
         async_get_is_authenticated = sync_to_async(lambda: request.user.is_authenticated)  
         user_is_authenticated = await async_get_is_authenticated()
@@ -109,3 +110,25 @@ async def retrieve_by_id(request, id):
         print("An error occured in chat post view", e)
         return HttpResponseServerError('Humm... Something went wrong... Try later')
  
+@require_GET
+async def retrieve_entries_by_id(request, id):
+    print("view retrieve_entries_by_id")
+    try:
+        items = menu.get_navbar('My Blogs')
+        items['form'] = BlogRequestForm()
+        
+        async_get_is_authenticated = sync_to_async(lambda: request.user.is_authenticated)  
+        user_is_authenticated = await async_get_is_authenticated()
+        if not user_is_authenticated:
+            return redirect('/accounts/login/')
+
+        social_content = await get_blog_entries_by_id(id=id)
+        content_list = social_content['blog_entries__messageData'].split("\n\n")
+        items['content_list'] =content_list
+        
+        blog = await get_blog_by_id(id=id)
+        items['blog']= blog
+        return render(request, social_content_template, items)
+    except Exception as e:
+        print("An error occured in retrieve_entries_by_id view", e)
+        return HttpResponseServerError('Humm... Something went wrong... Try later')

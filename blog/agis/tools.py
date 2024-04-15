@@ -30,7 +30,7 @@ def tool_profile(tool_name):
 profile = {
 
     "create_blog" : {      
-        "name": "create",
+        "name": "Content Craftsman",
         "profile": "Content Craftsman",
         "task": "Blog Writing",
         "url": "assets/img/creater.png",
@@ -38,7 +38,7 @@ profile = {
         "end_message": "Blog creation complete! Drawing from our search results, we've crafted compelling content ready to captivate our audience. Ready to share our insights with the world!",
         },
     "proof_reading_blog" : {
-        "name": "editor",
+        "name": "Editor",
         "profile": "Editor",
         "task": "Proof Reading",
         "url": "assets/img/editor.png",
@@ -46,7 +46,7 @@ profile = {
         "end_message": "Proofreading and editing complete! Our blog content is now refined and polished, ready to make a lasting impression on our readers. Let's hit publish and share our masterpiece with the world!",
         },
     "revise_blog" : {
-        "name": "editor",
+        "name": "Editor",
         "profile": "Editor",
         "task": "Blog Editer",
         "url": "assets/img/editor.png",
@@ -54,7 +54,7 @@ profile = {
         "end_message": "Revision complete! Our blog has undergone meticulous scrutiny, resulting in enhanced clarity and coherence. Ready to showcase our refined work to the world!",
         },
     "publish_blog_html" : {
-        "name": "publish",
+        "name": "Publisher",
         "profile": "Publisher",
         "task": "HTML Preping",
         "url": "assets/img/publisher.png",
@@ -62,7 +62,7 @@ profile = {
         "end_message": "HTML preparation complete! Our content is now formatted and optimized for online publishing. It's time to hit the 'publish' button and share our creation with the world!",
         },
     "publish_blog_md" : {
-          "name": "publish",
+        "name": "Publisher",
         "profile": "Publisher",
         "task": "Markdown Preping",
         "url": "assets/img/publisher.png",
@@ -71,7 +71,7 @@ profile = {
 
         },
     "save_to_file" : {
-        "name": "publish",
+        "name": "Publisher",
         "profile": "Publisher",
         "task": "File Saving",
         "url": "assets/img/publisher.png",
@@ -79,7 +79,7 @@ profile = {
         "end_message": "Blog content successfully saved! Our work is now safely stored, ready for future reference or any necessary revisions. Time to celebrate this milestone!",
         },
     "generate_filename" : {
-        "name": "publish",
+        "name": "Publisher",
         "profile": "Publisher",
         "task": "Blog Naming",
         "url": "assets/img/publisher.png",
@@ -87,7 +87,7 @@ profile = {
         "end_message": "All set! Created Catchy title for the blog post",
         },
     "generate_image" : {
-        "name": "generateImage",
+        "name": "Art Illustrator",
         "profile": "Art Illustrator",
         "task": "Image Generation",
         "url": "assets/img/artist.png",
@@ -95,7 +95,7 @@ profile = {
         "end_message": "Finished! Completed image to complement the blog post title",
         },
     "search_serper" : {
-        "name": "search",
+        "name": "Researcher",
         "profile": "Researcher",
         "task": "Google Search",
         "url": "assets/img/searcher.png",
@@ -103,7 +103,7 @@ profile = {
         "end_message": "Mission accomplished! We've found some valuable content to fuel our blog writing journey.",
         },
     "organizer" : {
-        "name": "organizer",
+        "name": "Organizer",
         "profile": "Organizer",
         "task": "Orchestration",
         "url": "assets/img/Designer.png",
@@ -111,7 +111,7 @@ profile = {
         "end_message": "Mission accomplished! Through effective orchestration, we've successfully navigated the blog creation process, culminating in a cohesive and engaging final product. Cheers to teamwork and creativity!",
         },
     "generate_social_post" : {
-        "name": "social",
+        "name": "Influencer",
         "profile": "Influencer",
         "task": "Social Post Content",
         "url": "assets/img/social-avatar.png",

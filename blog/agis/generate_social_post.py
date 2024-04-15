@@ -10,11 +10,12 @@ async def generate_social_post(blog: str, image_url: str, callbacks: Callbacks) 
     print(f'generatePostContent')
 
     post_template = PromptTemplate.from_template(
-    """You are an AI language model assistant. Your objective is to create an Eloquent tweet from the blog content.:
+    """You are an AI language model assistant. Your objective is to create SEO friendly 5 tweets from the blog content.:
     Do not ommit any content. 
     Important: Remove "Thoughts", "Infuence", "Ignored" from the blog content.
-    Important: Include Image url in bottom of tweet content and align to center.
-   
+    Important: Feel free to include emojis and icons.
+    Important: Consider tweets are for "Millennials", "Gen Z", and "Gen Alpha"
+    Important: DO Not add numbers like 1, 2, 3 to the generated tweets in answer
     Blog: {blog}
     Image: {image_url}
 

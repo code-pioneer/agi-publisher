@@ -1,9 +1,15 @@
 {% extends "common/base_sidebar.html" %}
 {% load static %}
 {% block page_content %}
+
 <div class="card">
   <div class="card-header">
-    <div class="header-title h3 pl-4"><span class="text-primary-rainbow">Influencer Content</span> &nbsp;&nbsp;</div>
+    <nav aria-label="breadcrumb">
+      <ol class="breadcrumb">
+        <li class="breadcrumb-item"><a href="/blog/myblogs/">My Articles</a></li>
+        <li class="breadcrumb-item active" aria-current="page">Influencer Content</li>
+      </ol>
+    </nav>
   </div>
   <div class="card-body">
 
@@ -15,10 +21,10 @@
             <div class="row">
               <div class="col">
                 <img src="{% static 'assets/img/social-avatar.png' %}" class="avatar-img rounded-circle avatar-sm"
-                  alt="Avatar Image"> <b> {{ user.username | title}}</b>
+                  alt="Avatar Image"> <b> {{ user.first_name | title}} {{ user.last_name | title}} </b> <b> @{{ user.username | title}}</b>
                 <span class="tiny text-body-secondary"><i class="bi bi-clock"></i> {{ blog.ts }}</span>
                 <p>
-                <h4 class="mb-2">{{ content }}</h4>
+                <div class="mb-2">{{ content }}</div>
                 </p>
               </div>
               <img class="card-img-top" src="{% static blog.imgurl %}"></img>

@@ -114,7 +114,7 @@ async def retrieve_by_id(request, id):
 async def retrieve_entries_by_id(request, id):
     print("view retrieve_entries_by_id")
     try:
-        items = menu.get_navbar('My Blogs')
+        items = menu.get_navbar('My Articles')
         items['form'] = BlogRequestForm()
         
         async_get_is_authenticated = sync_to_async(lambda: request.user.is_authenticated)  

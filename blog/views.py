@@ -9,11 +9,25 @@ from home import menu
 from .db import save_blog_request, get_blog_by_user, get_blog_by_id,get_blog_entries_by_id
 
 
-
+team_template = 'team.html'
 blog_template   = 'create.html'
 myblogs_template = 'myblogs.html'
 social_content_template= 'socialcontent.html'
     
+@require_GET
+async def get_team(request):
+    print("view get_team")
+    try:
+        items = menu.get_navbar('Team')
+        async_get_is_authenticated = sync_to_async(lambda: request.user.is_authenticated)  
+        user_is_authenticated = await async_get_is_authenticated()
+        if not user_is_authenticated:
+            return redirect('/accounts/login/')
+        return render(request, team_template, items)
+    except Exception as e:
+        print("An error occured in chat view", e)
+        return HttpResponseServerError('Humm... Something went wrong... Try later')
+
 @require_GET
 async def get_create_blogs(request):
     print("view get_user_blogs")

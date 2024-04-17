@@ -4,7 +4,6 @@ seo_keywords = "Autonomous Content creator, AGI, Opensource"
 
 menuitems = [ 
   
-
                 {   "uri":"/profile/",
                     "menu":"Profile",
                     "header":"Profile",
@@ -75,6 +74,20 @@ menuitems = [
                     "logo": 'assets/img/documentation.png',
                     "tags":[]
                 }, 
+                {   "uri":"/blog/team/",
+                    "menu":"Team",
+                    "header":"Meet the Crew",
+                    "subheader":"Creativify",
+                    "desc":"AI Agents",
+                    "pub":"Active since 8/2/2023",
+                    "icon": "bi-robot",
+                    "primary": True,
+                    "badge":False,
+                    "badgetext":"3",
+                    "badgetype":"success",
+                    "logo": 'assets/img/profile.png',
+                    "tags":[]
+                },                  
                 {   "uri":"/blog/",
                     "menu":"Create",
                     "header":"Creativify",

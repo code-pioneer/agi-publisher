@@ -15,7 +15,7 @@ async def generate_image(topic: str, Filename:str, callbacks: Callbacks) -> str:
     llm = OpenAI()
     
     image_template = PromptTemplate.from_template(
-    """You are an AI Image Generation model. Your objective is to generate a digital vibrant image for given Blog content:
+    """You are an AI Image Generation model. Your objective is to generate a digital vibrant modern image for given Blog content:
     Send Image url in the answer
     Blog: {topic}
     

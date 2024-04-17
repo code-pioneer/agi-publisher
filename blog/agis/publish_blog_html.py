@@ -14,7 +14,7 @@ async def publish_blog_html(blog: str, image_url: str, callbacks: Callbacks) -> 
     
     Important: Blog Title must be at top of the page and align to center.
     Important: Include Image url in top of blog content, after title and align to center.
-    important: Use the following format for image tag: <img src="/static{image_url}" alt="image" style="display: block;margin: 0 auto;margin-bottom: 20px;">
+    important: Add image tag: <img src="{image_url}" alt="image" style="display: block;margin: 0 auto;margin-bottom: 20px;width: 50%"">
 
     Include Bootstrap's CSS from BootstrapCDN
     Add Bootstrap container
@@ -25,7 +25,7 @@ async def publish_blog_html(blog: str, image_url: str, callbacks: Callbacks) -> 
 
     Important: Remove "Thoughts", "Infuence", "Ignored" content from the blog content.
     Important: DO NOT Remove "SEO Tags" content from the blog content. Add # to each SEO Tags to increase visibility.
-    Important: Add paragraph heading 'SEO TAGS' to the SEO Tags section.
+    Important: Add paragraph heading 'SEO TAGS' to the SEO Tags section if exists.
 
 
     Blog: {blog}
@@ -43,6 +43,7 @@ async def publish_blog_html(blog: str, image_url: str, callbacks: Callbacks) -> 
             "callbacks": callbacks, 
         }
     )
+    image_url = f'/static{image_url}'
     chunks = [chunk async for chunk in chain.astream({"blog": blog, "image_url" : image_url})]
     return "".join(chunk.content for chunk in chunks)
 

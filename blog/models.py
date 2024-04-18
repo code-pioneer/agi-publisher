@@ -3,7 +3,7 @@ import uuid
 
 class BlogRequestModel(models.Model):
     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
-    topic = models.CharField(max_length=120, default='')
+    topic = models.CharField(max_length=500, default='')
     status = models.CharField(max_length=40, default='')
     blogurl = models.CharField(max_length=255, null=True)
     imgurl = models.CharField(max_length=255, null=True)

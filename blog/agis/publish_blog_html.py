@@ -77,10 +77,9 @@ async def publish_blog_html(blog: str, image_url: str, id: str, callbacks: Callb
     image_url = f'/static{image_url}'
     blog_instance = await get_blog_by_id(id.strip())
     user = blog_instance.user
-    blog_ts = blog_instance.ts
-    formatted_timestamp = datetime.strptime(blog_ts, "%Y-%m-%d %H:%M:%S.%f%z").strftime("%Y-%m-%d %H:%M")
+    blog_ts = blog_instance.ts.strftime("%Y-%m-%d %H:%M")
 
-    chunks = [chunk async for chunk in chain.astream({"blog": blog, "image_url" : image_url, 'user': user, 'blog_ts': formatted_timestamp})]
+    chunks = [chunk async for chunk in chain.astream({"blog": blog, "image_url" : image_url, 'user': user, 'blog_ts': blog_ts})]
     return "".join(chunk.content for chunk in chunks)
 
 def setup():

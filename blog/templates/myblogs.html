@@ -18,7 +18,9 @@
                   </a>
                 
                   <ul class="dropdown-menu" style="min-width: auto !important;">
+                    <li><a class="dropdown-item" href="{% url 'retrieve_by_id' id=blog.id %}" target="_blank">View</a></li>
                     <li><a class="dropdown-item" href="{% url 'delete_by_id' id=blog.id %}">Delete</a></li>
+
                   </ul>
                 </div>
               </div>

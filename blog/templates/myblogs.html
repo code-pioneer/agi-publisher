@@ -13,9 +13,14 @@
             <a href="{% url 'retrieve_by_id' id=blog.id %}" target="_blank">
               <div style="position: relative;">
                 <img class="card-img-top" src="{% static blog.imgurl %}">
-                <a href="{% url 'delete_by_id' id=blog.id %}" >
-                <i class="bi bi-three-dots-vertical" style="position: absolute; top: 0; right: 0; color: white; background-color: rgba(0, 0, 0, 0); padding: 5px;"></i>
-                </a>
+                <div class="dropdown" style="position: absolute; top: 0; right: 0; color: white; background-color: rgba(0, 0, 0, 0); padding: 5px;">
+                  <a class="bi bi-three-dots-vertical" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false" >
+                  </a>
+                
+                  <ul class="dropdown-menu" style="min-width: auto !important;">
+                    <li><a class="dropdown-item" href="{% url 'delete_by_id' id=blog.id %}">Delete</a></li>
+                  </ul>
+                </div>
               </div>
             </a>
             <div class="card-body shadow-sm">

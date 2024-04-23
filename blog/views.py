@@ -6,7 +6,7 @@ from django.views.decorators.http import require_POST, require_GET
 from asgiref.sync import sync_to_async
 from .forms import BlogRequestForm
 from home import menu
-from .db import save_blog_request, get_blog_by_user, get_blog_by_id,get_blog_entries_by_id
+from .db import save_blog_request, get_blog_by_user, get_blog_by_id,get_blog_entries_by_id, delete_blog_request
 
 
 team_template = 'team.html'
@@ -143,6 +143,27 @@ async def retrieve_entries_by_id(request, id):
         blog = await get_blog_by_id(id=id)
         items['blog']= blog
         return render(request, social_content_template, items)
+    except Exception as e:
+        print("An error occured in retrieve_entries_by_id view", e)
+        return HttpResponseServerError('Humm... Something went wrong... Try later')
+    
+
+@require_GET
+async def delete_by_id(request, id):
+    print("view retrieve_by_id")
+    try:
+        items = menu.get_navbar('My Articles')
+        items['form'] = BlogRequestForm()
+        
+        async_get_is_authenticated = sync_to_async(lambda: request.user.is_authenticated)  
+        user_is_authenticated = await async_get_is_authenticated()
+        if not user_is_authenticated:
+            return redirect('/accounts/login/')
+
+        await delete_blog_request(id=id)
+        return redirect('/blog/myblogs/')
+
+        
     except Exception as e:
         print("An error occured in retrieve_entries_by_id view", e)
         return HttpResponseServerError('Humm... Something went wrong... Try later')

@@ -8,4 +8,6 @@ urlpatterns = [
     path('create', views.create, name="create"),
     path('myblogs/<str:id>/', views.retrieve_by_id, name="retrieve_by_id"),
     path('mysocial/<str:id>/', views.retrieve_entries_by_id, name="retrieve_entries_by_id"),
+    path('delete/<str:id>/', views.delete_by_id, name="delete_by_id"),
+
 ]

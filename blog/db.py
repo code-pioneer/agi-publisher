@@ -119,3 +119,11 @@ async def get_blog_entries_by_id(id):
                                              blog_entries__profile__name='Influencer').values('blog_entries__messageData').get)()
     except BlogResponseModel.DoesNotExist:
         return None
+    
+async def delete_blog_request(id):
+    try:
+        blog_request_instance = await sync_to_async(BlogRequestModel.objects.get)(pk=id)
+        await sync_to_async(blog_request_instance.delete)()
+        return True
+    except BlogRequestModel.DoesNotExist:
+        return False

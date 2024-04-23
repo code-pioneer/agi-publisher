@@ -28,7 +28,7 @@ async def publish_blog_html(blog: str, image_url: str, id: str, callbacks: Callb
     Blog Title must be at top of the page and align to center.
 
     Below Title, add below div to include card for user profile.
-        <div class="row" style="text-align: center;>
+        <div class="row" style="text-align: center; padding: 30px">
             <div class="col">
                 <img src="/static/assets/img/social-avatar.png" class="avatar-img rounded-circle avatar-sm"
                     alt="Avatar Image"> <b> {user} </b>

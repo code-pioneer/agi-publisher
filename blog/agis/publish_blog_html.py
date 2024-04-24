@@ -23,7 +23,7 @@ async def publish_blog_html(blog: str, image_url: str, id: str, callbacks: Callb
         </head>
     use below div to include for main content.
 
-        <div class="container text-bg-light" id="main-content" style="padding: 50px">  
+        <div class="container" id="main-content" style="padding: 50px; border-left:1px solid #eee;  border-right:1px solid #eee;">  
 
     Blog Title must be at top of the page and align to center.
 
@@ -47,11 +47,19 @@ async def publish_blog_html(blog: str, image_url: str, id: str, callbacks: Callb
     Important: Add h4 heading 'SEO TAGS' to the SEO Tags section if exists.
     <h4>SEO TAGS</h4>
     Important: Use below format to list each SEO Tags to increase visibility and enclose each SEO Tags in badges.
-
-
+        
+        <span class="badge bg-light text-dark">#seo tags</span>
+        
+    Important: Add below <p> tag
         <p>
-            <span class="badge text-bg-secondary">#seo tags</span>
-        </p>
+                <h4>CREDITS</h4>
+                <span class="badge bg-light text-dark">AI as Web Researh Consultant</span>
+                <span class="badge bg-light text-dark">AI as Content Craftsman</span>
+                <span class="badge bg-light text-dark">AI as Editor</span>
+                <span class="badge bg-light text-dark">AI as Art Illustrator</span>
+                <span class="badge bg-light text-dark">AI as Publisher</span>
+                <span class="badge bg-light text-dark">AI as Social Influencer</span>
+        </p> 
 
     Add following script tags before closing body tag.
         <script src="/static/assets/js/jquery-3.7.1.min.js"></script>

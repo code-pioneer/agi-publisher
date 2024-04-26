@@ -24,14 +24,24 @@
                   alt="Avatar Image"> <b> {{ user.first_name | title}} {{ user.last_name | title}} </b> <b> @{{ user.username | title}}</b>
                 <span class="tiny text-body-secondary"><i class="bi bi-clock"></i> {{ blog.ts }}</span>
                 <p>
-                <div class="mb-2">{{ content }}</div>
+                <div class="mb-2">{{ content.details }}</div>
+                {% for hashtag in content.hashtags %}
+                <div class="mb-2">{{ hashtag }}</div>
+                {% endfor %}
+
                 </p>
               </div>
-              <img class="card-img-top" src="{% static blog.imgurl %}"></img>
+              <!-- <img class="card-img-top" src="{% static blog.imgurl %}"></img> -->
+              
             </div>
-            <div class="row">
-              <div class="col-sm-10 text-end">SHARE</div>
-              <div class="col-sm-1 "> <a href="#"><i class="bi bi-twitter avatar"></i> </a> </div>
+            <div class="row mt-3 mb-3">
+              <div class="col-sm-12 d-flex justify-content-center align-items-center">
+                  <button class="btn btn-outline-primary btn-sm "> 
+                    SUBMIT
+                    <i class="bi bi-twitter avatar-sm"></i>
+
+                </button>
+              </div>
             </div>
           </div>
         </div>

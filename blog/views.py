@@ -138,7 +138,19 @@ async def retrieve_entries_by_id(request, id):
 
         social_content = await get_blog_entries_by_id(id=id)
         content_list = social_content['blog_entries__messageData'].split("\n\n")
-        items['content_list'] =content_list
+        tweet_list = []
+        for i in range(len(content_list)):
+            parts_dict = {}
+            if not content_list[i].startswith('Answer:') and not content_list[i].startswith('('):
+                parts = content_list[i].split('#')
+                for i in range(len(parts)):
+                    if i == 0:
+                        parts_dict["details"] = parts[i]
+                    else:
+                        parts_dict["hashtags"] = ['#' + part.strip() for part in parts[i:] if part.strip()]  
+                        break
+                tweet_list.append(parts_dict)            
+        items['content_list'] =tweet_list
         
         blog = await get_blog_by_id(id=id)
         items['blog']= blog

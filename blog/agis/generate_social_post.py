@@ -15,7 +15,8 @@ async def generate_social_post(blog: str, image_url: str, callbacks: Callbacks) 
     Important: Remove "Thoughts", "Infuence", "Ignored" from the blog content.
     Important: Feel free to include emojis and icons.
     Important: Consider tweets are for "Millennials", "Gen Z", and "Gen Alpha"
-    Important: DO Not add numbers like 1, 2, 3 to the generated tweets in answer
+    Important: DO Not number like 1, 2, 3 to the generated tweets
+    Important: refain from indexing the tweets.
     Blog: {blog}
     Image: {image_url}
 

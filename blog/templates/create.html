@@ -154,17 +154,25 @@
 </div>
 <div class="card" id="response-body" style="display: none;">
   <div class="card-header">
-    <div class="header-title h3 pl-4"><span class="text-primary-rainbow spinner-grow-sm" id="loading-btn-header">
-        <div class="spinner-grow text-primary" role="status">
-          <span class="visually-hidden">Loading...</span>
-        </div>
-        <div class="spinner-grow text-info" role="status">
-          <span class="visually-hidden">Loading...</span>
-        </div>
-        <div class="spinner-grow text-success" role="status">
-          <span class="visually-hidden">Loading...</span>
-        </div>
-      </span> &nbsp;&nbsp;</div>
+    <div class="row align-items-center">
+      <div class="col-auto pr-1">
+        <span class="text-primary-rainbow spinner-grow-sm" id="loading-btn-header">
+          <div class="spinner-grow text-primary" role="status">
+            <span class="visually-hidden">Loading...</span>
+          </div>
+          <div class="spinner-grow text-info" role="status">
+            <span class="visually-hidden">Loading...</span>
+          </div>
+          <div class="spinner-grow text-success" role="status">
+            <span class="visually-hidden">Loading...</span>
+          </div>
+        </span> &nbsp;&nbsp;
+      </div>
+      <div class="col px-2">
+        <h4 class="mb-1 text-primary-rainbow" id="displaytopic" value="">Influencer</h4>
+      </div>
+    </div>
+  
   </div>
   <div class="card-body" id="msg"></div>
   <div class="card-footer">
@@ -217,9 +225,11 @@ function selectOption(key,value) {
     $('#response-body').hide();
 
     topic = $('#topic').val();
-    var theme = $('#selectedtheme').text()  
-    console.log('theme', theme);    
-    if (topic === null || topic === '') {return;}
+
+    $('#displaytopic').text(topic);
+    var theme = $('#selectedtheme').text()
+    console.log('theme', theme);
+    if (topic === null || topic === '') { return; }
     if (theme === null || theme === '') {
       theme = 'descriptive';
     }

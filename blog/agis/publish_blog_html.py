@@ -23,13 +23,13 @@ async def publish_blog_html(blog: str, image_url: str, id: str, callbacks: Callb
         </head>
     use below div to include for main content.
 
-        <div class="container" id="main-content" style="padding: 50px; border-left:1px solid #eee;  border-right:1px solid #eee;">  
+        <div class="container" id="main-content" style="padding: 50px 75px; border-left:1px solid #eee;  border-right:1px solid #eee;">  
 
     Blog Title must be at top of the page and align to center.
 
     Below Title, add below div to include card for user profile.
         <div class="row" style="text-align: center; padding: 30px">
-            <div class="col">
+            <div class="col" style="border-top:1px solid #eee;border-bottom:1px solid #eee; padding:5rem;>
                 <img src="/static/assets/img/social-avatar.png" class="avatar-img rounded-circle avatar-sm"
                     alt="Avatar Image"> <b> {user} </b>
                     <span class="tiny text-body-secondary"><i class="bi bi-clock"></i> {blog_ts}</span>

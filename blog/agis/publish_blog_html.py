@@ -38,18 +38,9 @@ async def publish_blog_html(blog: str, image_url: str, id: str, callbacks: Callb
                 
 
     Include Image url after title & user profile and align to center.
-    Add below div to include image tag.
-          <div class="card-body" style="margin-top: 20px;">
-            <div class="card">
-              <img src="/static/assets/img/cover-1.jpg" alt="..." class="card-img-top">
-              <div class="card-body text-center card-profile-lift">
-                <div class="avatar avatar-xl card-avatar card-avatar-top">
-                  <img src={image_url}"" alt="" class="avatar-img rounded-circle border border-4 border-card">
-                </div>  
-              </div>
-            </div>
-        </div>
-    Add a disclaimer below the image in small font: <p style="text-align: center;"> AI Generated Image </p>
+    Add image tag: <img src="{image_url}" alt="image" style="display: block;margin: 0 auto;margin-top: 20px;margin-bottom: 20px;width: 50%""
+    
+    Add a disclaimer below the image in small font: <p class='tiny' style="text-align: center;"> AI Generated Image </p>
     Add paragraph tags for content.
 
     Important: Remove "Thoughts", "Infuence", "Ignored" content from the blog content.

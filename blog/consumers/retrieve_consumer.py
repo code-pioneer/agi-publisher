@@ -1,6 +1,8 @@
 from channels.generic.websocket import AsyncWebsocketConsumer
 import json
 from blog.db import get_blog_response_by_request_id
+from datetime import datetime
+import asyncio
 
 
 class RetrieveBlogConsumer(AsyncWebsocketConsumer):
@@ -19,13 +21,26 @@ class RetrieveBlogConsumer(AsyncWebsocketConsumer):
         print("Retreive Consumer: ", text_data)
         data = json.loads(text_data)
         try:
-            response = await get_blog_response_by_request_id(data['channel'].strip())
-            await self.send(text_data=json.dumps({
-                'message': response
-            }))
+            latest_ts = datetime.min 
+            all_blog_entries = []
+        
+            while True:
+                blog_entries, latest_ts = await get_blog_response_by_request_id(data['channel'].strip(), latest_ts)
+                all_blog_entries.extend(blog_entries)
+                
+                if blog_entries:
+                    for response in blog_entries:
+                        if response.get('message'):
+                            print(f"New blog entries: {response}")
+                            await self.send(text_data=json.dumps({'message': response }))
+                            if response.get('message') == 'DONE':
+                                print(f"End of blog entries: {response}")
+                                return
+                await asyncio.sleep(5)  # Wait for 5 seconds before checking for new entries
+           
         except Exception as e:
             print("CreateConsumer error: ", e)
             await self.send(text_data=json.dumps({
                 'error': str(e)
-            }))
-        
+            }))        
+            

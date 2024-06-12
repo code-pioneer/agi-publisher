@@ -7,6 +7,8 @@ from asgiref.sync import sync_to_async
 from .forms import BlogRequestForm
 from home import menu
 from .db import save_blog_request, get_blog_by_user, get_blog_by_id,get_blog_entries_by_id, delete_blog_request
+from blog.agi_agent import blog_agent
+import asyncio
 
 
 team_template = 'team.html'
@@ -87,6 +89,7 @@ async def create(request):
             async_get_username = sync_to_async(lambda: request.user.username)    
             username = await async_get_username()
             blog_instance = await save_blog_request(topic, status='awaiting', user=username, seo_checkbox=seo_checkbox, in_depth_checkbox=in_depth_checkbox, theme=theme)
+            asyncio.create_task(blog_agent(topic, blog_instance.id))
             return JsonResponse({'message': 'Task triggered successfully', 'id': blog_instance.id})
         else:
             message = {'answer': '''Apologies, I am not equipped to handle this particular task. Please consider another query or topic for assistance.'''}

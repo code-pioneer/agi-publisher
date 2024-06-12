@@ -84,17 +84,19 @@ async def save_blog_response(blog_id, blog_entries):
         print("An error occurred in save_blog_response", e)
         return None
        
-async def get_blog_response_by_request_id(request_id):
+async def get_blog_response_by_request_id(request_id, since_ts):
     try:
         @sync_to_async
-        def get_blog_response(request_id):
-            return list(BlogResponseModel.objects.filter(blog_id=request_id).order_by('ts'))
+        def get_blog_response(request_id, since_ts):
+            return list(BlogResponseModel.objects.filter(blog_id=request_id, ts__gt=since_ts).order_by('ts'))
 
-        queryset = await get_blog_response(request_id)   
+        queryset = await get_blog_response(request_id, since_ts)   
         blog_list = [blog.blog_entries for blog in queryset]
-        return list(blog_list)
+        return blog_list, (queryset[-1].ts if queryset else since_ts)
     except BlogResponseModel.DoesNotExist:
-        return None
+        return [], since_ts
+
+
     
 async def update_blog_request(request_id, status='awaiting', blogurl=None, imgurl=None, topic=None):
     try:

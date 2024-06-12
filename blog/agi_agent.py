@@ -21,9 +21,9 @@ async def init_agent():
     agent = create_openai_tools_agent(llm, tools, prompt)
     return AgentExecutor(agent=agent, tools=tools, verbose=True, handle_parsing_errors=True).with_config({"run_name":"Agent"})
 
-async def blog_agent(consumer, topic, id):
+async def blog_agent(topic, id):
     print("Blog Agent")
-    blog_instance = await get_blog_by_id(id.strip())
+    blog_instance = await get_blog_by_id(id)
     topic = blog_instance.topic
     seo = blog_instance.seo_checkbox
     in_depth = blog_instance.in_depth_checkbox
@@ -42,10 +42,14 @@ async def blog_agent(consumer, topic, id):
     
     Topic: {topic}. BLOG_PARAMS: {json.dumps(params)} ID: { blog_instance.id}'''
     
-    async  def send_message_to_clients(message):    
-        await consumer.send(text_data=json.dumps({
-                'message': message
-        })) 
+    # async  def send_message_to_clients(message):  
+    #     try:  
+    #         await consumer.send(text_data=json.dumps({
+    #                 'message': message
+    #         }))
+    #     except Exception as e:
+    #         print("CreateConsumer connection in agent : ", e)
+        
 
     result={}     
 
@@ -58,7 +62,7 @@ async def blog_agent(consumer, topic, id):
             ):  
                 message = {"profile": tool_profile('organizer'), "message": tool_profile('organizer').get('start_message')}
                 await save_blog_response(blog_instance, message)
-                await send_message_to_clients(message)
+                # await send_message_to_clients(message)
         elif kind == "on_chain_end":
             if (
                 event["name"] == "Agent"
@@ -66,10 +70,12 @@ async def blog_agent(consumer, topic, id):
                 message = {"profile": tool_profile('organizer'),"message": tool_profile('organizer').get('end_message')}
                 await save_blog_response(blog_instance, message)
                 message_data= {"profile": tool_profile('organizer'),"messageData": event['data'].get('output')['output']}
-                await send_message_to_clients(message)
+                # await send_message_to_clients(message)
                 await save_blog_response(blog_instance, message_data)
                 message = {"profile": tool_profile('organizer'),"message": 'DONE'}
-                await send_message_to_clients(message)
+                # await send_message_to_clients(message)
+                await save_blog_response(blog_instance, message)
+
 
 
 
@@ -80,11 +86,11 @@ async def blog_agent(consumer, topic, id):
         elif kind == "on_tool_start":
             message = {"profile": tool_profile(event['name']), "message": tool_profile(event['name']).get('start_message')}
             await save_blog_response(blog_instance, message)
-            await send_message_to_clients(message)
+            # await send_message_to_clients(message)
         elif kind == "on_tool_end":
             message = {"profile": tool_profile(event['name']), "message": tool_profile(event['name']).get('end_message')}
             await save_blog_response(blog_instance, message)
-            await send_message_to_clients(message)
+            # await send_message_to_clients(message)
 
             if event['data'].get('output'):
                 message = {"profile": tool_profile(event['name']),"event":"output", "messageData": event['data'].get('output')}

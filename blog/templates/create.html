@@ -256,7 +256,7 @@ function selectOption(key,value) {
 
         answer = response.message;
         console.log('response', response.id, response.message);
-        let publisher_url = `ws://${window.location.host}/ws/create/`;
+        let publisher_url = `ws://${window.location.host}/ws/retrieve/`;
         const socket = new WebSocket(publisher_url);
         socket.onopen = function (event) {
           console.log('WebSocket connection established.');
@@ -276,34 +276,33 @@ function selectOption(key,value) {
           data = message.message.message;
           url = message.message.profile.url;
           if (data == 'DONE') {
-            $('#loading-btn-header').empty();
-            $('#loading-btn-footer').empty();
-          }else{
-          $('#msg').append(`
-              <div class="row align-items-center">
-                  <div class="card">
-                    <div class="card-body">
-                      <div class="row align-items-center">
-                        <div class="col-xl-1 col-lg-2">
-                          <a class="avatar avatar-lg">
-                            <img src="{% static '.' %}`+ url + `" class="avatar-img rounded-circle"
-                              alt="Avatar Image">
-                          </a>
-                        </div>
-                        <div class="col-xl-2 col-lg-2">
-                          <h4 class="mb-1">`+ profile + `</h4>
-                          <p class="small text-body-secondary mb-1">`+ task + `</p>
-                        </div>
-                        <div class="col-xl-9 col-lg-8">
-                          <p class="small text-body-secondary mb-1">`+ data + `</p>
-                        </div>
+              $('#loading-btn-header').empty();
+              $('#loading-btn-footer').empty();
+          } else if (data !== undefined && data !== null) { // Check if data is not undefined or null
+              $('#msg').append(`
+                  <div class="row align-items-center">
+                      <div class="card">
+                          <div class="card-body">
+                              <div class="row align-items-center">
+                                  <div class="col-xl-1 col-lg-2">
+                                      <a class="avatar avatar-lg">
+                                          <img src="{% static '.' %}${url}" class="avatar-img rounded-circle" alt="Avatar Image">
+                                      </a>
+                                  </div>
+                                  <div class="col-xl-2 col-lg-2">
+                                      <h4 class="mb-1">${profile}</h4>
+                                      <p class="small text-body-secondary mb-1">${task}</p>
+                                  </div>
+                                  <div class="col-xl-9 col-lg-8">
+                                      <p class="small text-body-secondary mb-1">${data}</p>
+                                  </div>
+                              </div>
+                          </div>
                       </div>
-                    </div>
-                  </div>
-          </div>`);
+                  </div>`);
+          }
 
-
-        }};
+      };
 
       },
       error: function (err) {

@@ -26,6 +26,7 @@ INSTALLED_APPS = [
     'allauth.socialaccount.providers.google',
     'home',
     'blog',
+    'videos'
 ]
 
 MIDDLEWARE = [
@@ -137,3 +138,5 @@ SERPER_API_KEY = env("SERPER_API_KEY",default=None)
 STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
 
 NUM_OF_SEARCHES= env("NUM_OF_SEARCHES",default="3")
+SHORT_VIDEO_SIZE= int(env("SHORT_VIDEO_SIZE",default="60"))
+LONG_VIDEO_SIZE= int(env("LONG_VIDEO_SIZE",default="300"))

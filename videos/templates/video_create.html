@@ -4,7 +4,7 @@
 
 <div class="card">
   <div class="card-header">
-    <div class="header-title h3 pl-4"><span class="text-primary-rainbow">Create Article</span> &nbsp;&nbsp;</div>
+    <div class="header-title h3 pl-4"><span class="text-primary-rainbow">Create Video</span> &nbsp;&nbsp;</div>
   </div>
   <div class="card-body">
     <form id="topic-form">
@@ -12,7 +12,7 @@
       <div class="mb-3">
         <div class="btn-group" role="group" aria-label="Basic checkbox toggle button group">
           <input type="checkbox" class="btn-check" id="in_depth_checkbox" name="in_depth_checkbox" autocomplete="off">
-          <label class="btn btn-outline-primary" for="in_depth_checkbox">In-depth Article</label>
+          <label class="btn btn-outline-primary" for="in_depth_checkbox">Long</label>
         
           <input type="checkbox" class="btn-check" id="seo_checkbox" name="seo_checkbox" autocomplete="off">
           <label class="btn btn-outline-primary" for="seo_checkbox">SEO</label>
@@ -89,8 +89,8 @@
                 </a>
               </div>
               <div class="col px-2">
-                <h4 class="mb-1">Editor</h4>
-                <span class='tiny'>Primary responsible to ensuring quality and accuracy</span>
+                <h4 class="mb-1">Video Illustrator</h4>
+                <span class='tiny'>Primary responsible to produce audio and video contents</span>
               </div>
             </div>
           </div>
@@ -227,6 +227,10 @@ function selectOption(key,value) {
     topic = $('#topic').val();
 
     $('#displaytopic').text(topic);
+    in_depth_checkbox = $('#in_depth_checkbox').is(':checked');
+
+    console.log('in_depth_checkbox', in_depth_checkbox);
+
     var theme = $('#selectedtheme').text()
     console.log('theme', theme);
     if (topic === null || topic === '') { return; }
@@ -236,7 +240,7 @@ function selectOption(key,value) {
     $('#submit-button').hide();
     $.ajax({
       type: 'POST',
-      url: "{% url 'create' %}",
+      url: "{% url 'create_video' %}",
       data: {
         topic: $('#topic').val(),
         in_depth_checkbox: $('#in_depth_checkbox').is(':checked'),
@@ -256,7 +260,7 @@ function selectOption(key,value) {
 
         answer = response.message;
         console.log('response', response.id, response.message);
-        let publisher_url = `ws://${window.location.host}/ws/retrieve/`;
+        let publisher_url = `ws://${window.location.host}/ws/video_retrieve/`;
         const socket = new WebSocket(publisher_url);
         socket.onopen = function (event) {
           console.log('WebSocket connection established.');

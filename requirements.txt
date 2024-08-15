@@ -13,3 +13,6 @@ playwright==1.42
 beautifulsoup4==4.12.3
 langchain-text-splitters==0.2.2
 langchain-community==0.2.11
+pydub==0.25.1
+gTTS==2.5.2
+moviepy==1.0.3

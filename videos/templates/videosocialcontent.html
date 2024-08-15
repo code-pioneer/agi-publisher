@@ -1,0 +1,56 @@
+{% extends "common/base_sidebar.html" %}
+{% load static %}
+{% block page_content %}
+
+<div class="card">
+  <div class="card-header">
+    <nav aria-label="breadcrumb">
+      <ol class="breadcrumb">
+        <li class="breadcrumb-item"><a href="/videos/myvideos/">My Videos</a></li>
+        <li class="breadcrumb-item active" aria-current="page">Influencer Content</li>
+      </ol>
+    </nav>
+  </div>
+  <div class="card-body">
+
+    <div class="row row-cols-1 row-cols-md-2 row-cols-xl-3 align-items-stretch">
+      {% for content in content_list %}
+      <div class="col mb-4">
+        <div class="card card-fill">
+          <div class="card-body shadow-sm">
+            <div class="row">
+              <div class="col">
+                <img src="{% static 'assets/img/social-avatar.png' %}" class="avatar-img rounded-circle avatar-sm"
+                  alt="Avatar Image"> <b> {{ user.first_name | title}} {{ user.last_name | title}} </b> <b> @{{ user.username | title}}</b>
+                <span class="tiny text-body-secondary"><i class="bi bi-clock"></i> {{ video.ts }}</span>
+                <p>
+                <div class="mb-2">{{ content.details }}</div>
+                {% for hashtag in content.hashtags %}
+                <div class="mb-2"> <span class="badge bg-light text-dark"> {{ hashtag }}</span></div>
+                {% endfor %}
+
+                </p>
+              </div>
+              <!-- <img class="card-img-top" src="{% static blog.imgurl %}"></img> -->
+              
+            </div>
+            <div class="row mt-3 mb-3">
+              <div class="col-sm-12 d-flex justify-content-center align-items-center">
+                  <button class="btn btn-outline-primary btn-sm "> 
+                    SUBMIT
+                    <i class="bi bi-twitter avatar-sm"></i>
+
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      {% endfor %}
+    </div>
+  </div>
+</div>
+
+{% block scripts %}
+{% endblock %}
+{% endblock %}

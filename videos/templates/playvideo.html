@@ -1,0 +1,51 @@
+{% extends "common/base_sidebar.html" %}
+{% load static %}
+{% block page_content %}
+<div class="card">
+  <div class="card-header">
+    <div class="header-title h3 pl-4"><span class="text-primary-rainbow">My Videos</span> &nbsp;&nbsp;</div>
+  </div>
+  <div class="card-body">
+    <div class="row row-cols-1 row-cols-md-2 align-items-stretch">
+        <div class="card card-fill">
+
+            <!-- 16:9 aspect ratio -->
+            <div class="ratio ratio-16x9">
+              <iframe src="{% static video.videourl %}" allowfullscreen></iframe>
+            </div>
+            <div class="dropdown dropend"
+              style="position: absolute; top: 0; right: 0; color: white; background-color: rgba(0, 0, 0, 0); padding: 5px;">
+              <a class="bi bi-three-dots-vertical" href="#" role="button" data-bs-toggle="dropdown"
+                aria-expanded="false">
+              </a>
+
+              <ul class="dropdown-menu" style="min-width: auto !important;">
+                <li><a class="dropdown-item" href="{% url 'delete_by_id' id=video.id %}">Delete</a></li>
+
+              </ul>
+            </div>
+          </a>
+          <div class="card-body shadow-sm">
+            <div class="row p-1">
+              <div class="col">
+                <span class="tiny text-body-secondary"><i class="bi bi-clock"></i> {{ video.ts }}</span>
+                <p style="line-height: .60rem;">
+                <h4 class="mb-2">{{ video.topic }}</h4>
+                </p>
+              </div>
+              <div class="col-auto mt-4">
+                <a href="{% url 'retrieve_entries_by_id' id=video.id %}" style="text-align: right;"><i
+                    class="bi bi-twitter avatar"></i> </a>
+
+              </div>
+            </div>
+          </div>
+        </div>
+
+    </div>
+  </div>
+</div>
+
+{% block scripts %}
+{% endblock %}
+{% endblock %}

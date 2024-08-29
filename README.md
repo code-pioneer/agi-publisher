@@ -25,9 +25,12 @@ pip install --upgrade pip
 pip install -r requirements.txt
 
 ```
-Install playwright package separately
+Install playwright ffmpeg imagemagick packages separately
 ```
 playwright install
+ffmpeg install
+imagemagick install
+
 ```
 4. Sign up for OpenAI API Key: https://platform.openai.com/api-keys
 

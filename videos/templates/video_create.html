@@ -175,7 +175,7 @@
   
   </div>
   <div class="card-body" id="msg"></div>
-  <div class="card-footer">
+  <!-- <div class="card-footer">
     <div class="header-title h3 pl-4"><span class="text-primary-rainbow spinner-grow-sm" id="loading-btn-footer">
         <div class="spinner-grow text-primary" role="status">
           <span class="visually-hidden">Loading...</span>
@@ -187,7 +187,7 @@
           <span class="visually-hidden">Loading...</span>
         </div>
       </span> &nbsp;&nbsp;</div>
-  </div>
+  </div> -->
 
 </div>
 
@@ -283,7 +283,7 @@ function selectOption(key,value) {
               $('#loading-btn-header').empty();
               $('#loading-btn-footer').empty();
           } else if (data !== undefined && data !== null) { // Check if data is not undefined or null
-              $('#msg').append(`
+              $('#msg').html(`
                   <div class="row align-items-center">
                       <div class="card">
                           <div class="card-body">

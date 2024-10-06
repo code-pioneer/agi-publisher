@@ -1,20 +1,11 @@
-import os
-import aiofiles
-from langchain.agents import tool
-from langchain_core.prompts import PromptTemplate
-from langchain_core.callbacks import Callbacks
-import requests
-from mainapp.settings import IMAGE_GEN_MODEL,SIZE, BASE_DIR, LONG_VIDEO_SIZE, SHORT_VIDEO_SIZE
 from openai import OpenAI
 from moviepy.editor import ImageClip, TextClip, CompositeVideoClip, AudioFileClip, ColorClip
-from gtts import gTTS
-from pydub import AudioSegment
-import json
+from pathlib import Path
+# from generate_video import create_video
+import os
 import random
-
-
-
-
+BASE_DIR = Path(__file__).resolve().parent.parent.parent
+print(BASE_DIR)
 def audio_to_text(audio_path):
     audio_file = open(audio_path, "rb")
     client = OpenAI()
@@ -47,7 +38,7 @@ def audio_to_text(audio_path):
     return text_clips
 
 def add_textclips_bg(text_clips, image_clip, duration):
-    padding = 20
+    padding = 50
     # Get the width of the image for background width
     image_width, image_height = image_clip.size
 
@@ -84,7 +75,7 @@ def generate_voice_over(transcript, filename):
 
     return audio_path
 
-async def create_video(transcript, filename):
+def create_video(transcript, filename):
 
     processed_video_name = f"{filename}.mp4"
     image_name = f"{filename}.png"
@@ -116,24 +107,6 @@ async def create_video(transcript, filename):
 
     return {'video_url':processed_video_path}
 
-    
-@tool
-async def generate_video(transcript: str, blog_params: str, image_url: str, Filename: str, callbacks: Callbacks) -> str:
-    """Convert image to a video using generated image and transcript."""
-    print("inside generate_video")
-    return await create_video(transcript=transcript, filename=Filename)
-    
-
-
-def setup():
-    return generate_video
-
-def profile():
-    profile = {
-        "name": "Generate Video",
-        "profile": "Video Illustrator",
-        "task": "Video Generation",
-        "url": "assets/img/artist.png",
-    }
-    return profile
-
+if __name__ == "__main__":
+    create_video("Today is a wonderful day to build something people love!","aaa_bank_financial_report_135020")
+    # audio_to_text()

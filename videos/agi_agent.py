@@ -25,10 +25,9 @@ async def video_agent(topic, id):
     print("Video Agent")
     blog_instance = await get_video_by_id(id)
     topic = blog_instance.topic
-    seo = blog_instance.seo_checkbox
-    in_depth = blog_instance.in_depth_checkbox
+    in_depth = blog_instance.long_video
     theme = blog_instance.theme
-    params = {"seo": seo, "in_depth": in_depth, "theme": theme}
+    params = {"in_depth": in_depth, "theme": theme}
     input = f'''Your objective is to perform all required tasks as part of this fullfillment including generating social post in the end. 
     Follow following order while fullfilling the task:
     1. Generate Filename for the topic.

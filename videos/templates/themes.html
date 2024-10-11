@@ -1,0 +1,95 @@
+{% extends "common/base_sidebar.html" %}
+{% load static %}
+{% block page_content %}
+<style>
+  .col {
+      cursor: pointer; /* Changes the cursor to a pointer when hovering over the card */
+
+  }
+  .selected-card {
+      border: 3px solid #011122; /* Highlight selected card with a blue border */
+      box-shadow: 0 0 0 1px #007bff; /* Creates a 3px blue shadow around the card */
+    }
+</style>
+<div class="card">
+  <div class="card-header">
+    <div class="header-title h3 pl-4"><span class="text-primary-rainbow">Create Video</span> &nbsp;&nbsp;</div>
+  </div>
+  <div class="card-body">
+    <form id="theme-form" method="POST" action="{% url 'save_theme' %}">
+      {% csrf_token %}
+
+    <p class="text-primary-rainbow h3">Pick your video theme</p>
+    <div class="row row-cols-1 row-cols-md-2 row-cols-xl-3 align-items-stretch">
+      {% for theme in themes %}
+      <div class="col mb-4" data-theme-id="{{ theme.theme_id }}" onclick="selectTheme(this)">
+          <div class="card card-fill">
+              <div style="position: relative;">
+                <img class="card-img-top" src="{% static theme.url %}">
+              </div>
+            <div class="card-body shadow-sm">
+              <div class="row p-1">
+                <div class="col">
+                  <p style="line-height: .60rem;">
+                    <h4 class="mb-2">{{ theme.name }}</h4>
+                  </p>
+                  <span class="tiny text-body-secondary">{{ theme.description }}</span>
+
+                </div>
+         
+              </div>
+            </div>
+            <input type="radio" name="theme_id" value="{{ theme.theme_id }}" class="theme-radio" style="display:none;">
+
+          </div>
+        
+      </div>
+      {% endfor %}
+    </div>
+    <!-- Next button, initially hidden -->
+    <div class="mt-4 d-flex justify-content-end">
+        <button type="submit" id="next-button" class="btn btn-primary" style="display:none;">Next</button>
+    </div>
+  </form>
+
+  </div>
+</div>
+
+{% block scripts %}
+<script>
+  // Function to select a theme
+  function selectTheme(card) {
+      // Remove 'selected' class from all cards
+      document.querySelectorAll('.col').forEach(function(c) {
+        c.classList.remove('selected-card');
+        });
+
+      // Add 'selected' class to the clicked card
+      card.classList.add('selected-card');
+
+      // Select the hidden radio input
+      card.querySelector('.theme-radio').checked = true;
+
+      // Show the 'Next' button
+      document.getElementById('next-button').style.display = 'inline-block';
+  }
+
+  function getCookie(name) {
+    let cookieValue = null;
+    if (document.cookie && document.cookie !== "") {
+      const cookies = document.cookie.split(";");
+      for (let i = 0; i < cookies.length; i++) {
+        const cookie = cookies[i].trim();
+        if (cookie.substring(0, name.length + 1) === (name + "=")) {
+          cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+          break;
+        }
+      }
+    }
+    return cookieValue;
+  }
+
+
+</script>
+{% endblock %}
+{% endblock %}

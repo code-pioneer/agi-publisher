@@ -1,7 +1,7 @@
 import json
 from django.shortcuts import render, redirect
 from django.contrib.auth.decorators import login_required
-from django.http import HttpResponse, JsonResponse, HttpResponseServerError
+from django.http import HttpResponse, JsonResponse, HttpResponseServerError, HttpResponseBadRequest
 from django.views.decorators.http import require_POST, require_GET
 from asgiref.sync import sync_to_async
 from .forms import VideoRequestForm
@@ -9,6 +9,7 @@ from home import menu
 from .db import save_video_request, get_video_by_user, get_video_by_id,get_video_entries_by_id, delete_video_request
 from videos.agi_agent import video_agent
 import asyncio
+from . agis.themes import themes
 
 
 team_template = 'videoteam.html'
@@ -16,6 +17,8 @@ video_template   = 'video_create.html'
 myvideos_template = 'myvideos.html'
 social_content_template= 'videosocialcontent.html'
 playvideo_template = 'playvideo.html'
+themes_template = 'themes.html'
+
 
     
 @require_GET
@@ -31,13 +34,50 @@ async def get_team(request):
     except Exception as e:
         print("An error occured in chat view", e)
         return HttpResponseServerError('Humm... Something went wrong... Try later')
-
 @require_GET
-async def get_create_videos(request):
-    print("view get_create_videos")
+async def get_themes(request):
+    print("view get_themes")
     try:
         items = menu.get_navbar('Create Videos')
         items['form'] = VideoRequestForm()
+        items['themes'] = themes
+        async_get_is_authenticated = sync_to_async(lambda: request.user.is_authenticated)  
+        user_is_authenticated = await async_get_is_authenticated()
+        if not user_is_authenticated:
+            return redirect('/accounts/login/')
+        return render(request, themes_template, items)
+    except Exception as e:
+        print("An error occured in chat view", e)
+        return HttpResponseServerError('Humm... Something went wrong... Try later')
+    
+@require_POST
+async def save_theme(request):
+    print("view save_theme")
+
+    try:
+        selected_theme = request.POST.get('theme_id')
+
+        # Validate the selected theme against the list of available themes
+        valid_themes = [theme['theme_id'] for theme in themes]
+
+        if selected_theme not in valid_themes:
+            return HttpResponseBadRequest("Invalid theme selection")
+
+        # Redirect to the next page (select topic and video length)
+        return redirect('select_topic', theme_id=selected_theme)
+
+    except Exception as e:
+        print("An error occured in chat post view", e)
+        return HttpResponseServerError('Humm... Something went wrong... Try later')
+
+@require_GET
+async def select_topic(request, theme_id):
+    print("view select_topic")
+    try:
+        items = menu.get_navbar('Create Videos')
+        items['form'] = VideoRequestForm()
+        selected_theme = next((theme for theme in themes if theme['theme_id'] == theme_id), None)
+        items['selected_theme'] = selected_theme
         async_get_is_authenticated = sync_to_async(lambda: request.user.is_authenticated)  
         user_is_authenticated = await async_get_is_authenticated()
         if not user_is_authenticated:
@@ -95,15 +135,14 @@ async def create(request):
         if form.is_valid():            
             topic = request.POST.get("topic")
             theme = request.POST.get("theme")
-            in_depth_checkbox = request.POST.get('in_depth_checkbox') == 'true'
-            seo_checkbox = request.POST.get('seo_checkbox') == 'true'              
+            long_video = request.POST.get('long_video') == 'true'
             async_get_is_authenticated = sync_to_async(lambda: request.user.is_authenticated)  
             user_is_authenticated = await async_get_is_authenticated()
             if not user_is_authenticated:
                 return redirect('/accounts/login/')
             async_get_username = sync_to_async(lambda: request.user.username)    
             username = await async_get_username()
-            video_instance = await save_video_request(topic, status='awaiting', user=username, seo_checkbox=seo_checkbox, in_depth_checkbox=in_depth_checkbox, theme=theme)
+            video_instance = await save_video_request(topic, status='awaiting', user=username, long_video=long_video, theme=theme)
             asyncio.create_task(video_agent(topic, video_instance.id))
             return JsonResponse({'message': 'Task triggered successfully', 'id': video_instance.id})
         else:

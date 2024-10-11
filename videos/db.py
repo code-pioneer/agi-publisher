@@ -28,8 +28,7 @@ async def get_video_by_user(user):
                 'imgurl': video.imgurl,
                 'topic': video.topic,
                 'status': video.status,
-                'seo_checkbox': video.seo_checkbox,
-                'in_depth_checkbox': video.in_depth_checkbox,
+                'long_video': video.long_video,
                 'ts': video.ts,
             }
             video_list.append(video_data)
@@ -49,7 +48,7 @@ async def get_video_by_status(status):
     except VideoRequestModel.DoesNotExist:
         return None
     
-async def save_video_request(topic, status, user, videourl=None, imgurl=None, seo_checkbox=False, in_depth_checkbox=False, theme='descriptive'):
+async def save_video_request(topic, status, user, videourl=None, imgurl=None, long_video=False, theme='descriptive'):
     try:
         create_video_request = sync_to_async(VideoRequestModel.objects.create)
         
@@ -59,8 +58,7 @@ async def save_video_request(topic, status, user, videourl=None, imgurl=None, se
             user=user,
             videourl=videourl,
             imgurl=imgurl,
-            seo_checkbox=seo_checkbox,
-            in_depth_checkbox=in_depth_checkbox,
+            long_video=long_video,
             theme=theme
         )
         print("save_video_request: ", video_request_instance)

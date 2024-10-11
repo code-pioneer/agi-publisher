@@ -43,7 +43,6 @@ Empire State Building, New York City, iconic landmarks, skyscraper, Great Depres
     )
     print(f'BLOG_PARAMS: {blog_params}')
     blog_params_json = json.loads(blog_params)
-    seo = blog_params_json.get("seo", False)
     in_depth = blog_params_json.get("in_depth", False)
     if in_depth:
         size = f'long {LONG_VIDEO_SIZE} seconds with text scrolling speed of 25.0 pixels per second'
@@ -51,10 +50,7 @@ Empire State Building, New York City, iconic landmarks, skyscraper, Great Depres
     else:
         size = f'short {SHORT_VIDEO_SIZE} seconds with text scrolling speed of 25.0 pixels per second.'
         words = 130
-    if seo:
-        seoText = f'Make sure to generate SEO tags for the video to improve search engine visibility.'
-    else:
-        seoText = f'No need to generate SEO tags.'
+    seoText = f'Make sure to generate SEO tags for the video to improve search engine visibility.'
 
     llm = ChatOpenAI(model=LLM_MODEL, temperature=0.9, streaming=STREAMING)
     chain = create_blog_template | llm.with_config(

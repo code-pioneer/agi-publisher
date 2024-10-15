@@ -4,6 +4,8 @@ from langchain_openai import ChatOpenAI
 from langchain_core.callbacks import Callbacks
 from mainapp.settings import LLM_MODEL, STREAMING, SHORT_VIDEO_SIZE, LONG_VIDEO_SIZE
 import json
+from . themes import themes
+
 
 
 @tool
@@ -13,12 +15,9 @@ async def generate_transcript(content: str, topic: str, blog_params: str, callba
     create_blog_template = PromptTemplate.from_template(
     """
     Imagine you're creating a script for a {size} video on {topic}. Keep the script with in {words} words.
-    The goal is to quickly grab the audience's attention and deliver key information in a concise, engaging, and memorable way. 
-    The video should be structured with a brief introduction, a few quick points, and a strong conclusion
-    Please write the transcript in a punchy, conversational style, as if speaking directly to the viewer. 
-    Focus on keeping the language simple and impactful, with clear transitions and a call to action if needed.
+    Please strictly follow the below provided theme while creating the script.
+    Theme: {theme}
     
-    Search_engine_optimization: {seoText}
     Response must be in the following format as show in the example.
 
     Example:
@@ -52,6 +51,18 @@ Empire State Building, New York City, iconic landmarks, skyscraper, Great Depres
         words = 130
     seoText = f'Make sure to generate SEO tags for the video to improve search engine visibility.'
 
+    theme_id = blog_params_json.get("theme", False)
+    if theme_id:
+        selected_theme = next((theme for theme in themes if theme['theme_id'] == theme_id), None)
+        theme_prompt = selected_theme["prompt"]
+    else:
+        selected_theme = next((theme for theme in themes if theme['theme_id'] == "build"), None)
+        theme_prompt = selected_theme["prompt"]
+
+
+
+
+
     llm = ChatOpenAI(model=LLM_MODEL, temperature=0.9, streaming=STREAMING)
     chain = create_blog_template | llm.with_config(
         {
@@ -60,7 +71,7 @@ Empire State Building, New York City, iconic landmarks, skyscraper, Great Depres
             "callbacks": callbacks, 
         }
     )
-    chunks = [chunk async for chunk in chain.astream({"content": content, "topic" : topic, 'size': size, "words": words,'seoText': seoText})]
+    chunks = [chunk async for chunk in chain.astream({"content": content, "topic" : topic, 'size': size, "theme": theme_prompt, "words": words,'seoText': seoText})]
     return "".join(chunk.content for chunk in chunks)
 
 def setup():

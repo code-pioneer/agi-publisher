@@ -7,6 +7,7 @@ from videos.db import save_video_response, get_video_by_id
 import json
 
 
+
 tools = agent_tools()
 tools_profile_list = tools_profiles()
 profile_list = ""
@@ -23,10 +24,10 @@ async def init_agent():
 
 async def video_agent(topic, id):
     print("Video Agent")
-    blog_instance = await get_video_by_id(id)
-    topic = blog_instance.topic
-    in_depth = blog_instance.long_video
-    theme = blog_instance.theme
+    video_instance = await get_video_by_id(id)
+    topic = video_instance.topic
+    in_depth = video_instance.long_video
+    theme = video_instance.theme
     params = {"in_depth": in_depth, "theme": theme}
     input = f'''Your objective is to perform all required tasks as part of this fullfillment including generating social post in the end. 
     Follow following order while fullfilling the task:
@@ -37,7 +38,7 @@ async def video_agent(topic, id):
     4. Save the Video transcript result
     5. Generate Social Post content.
     
-    Topic: {topic}. BLOG_PARAMS: {json.dumps(params)} ID: { blog_instance.id}'''
+    Topic: {topic}. BLOG_PARAMS: {json.dumps(params)} ID: { video_instance.id}'''
     
     # async  def send_message_to_clients(message):  
     #     try:  
@@ -58,20 +59,20 @@ async def video_agent(topic, id):
                 event["name"] == "Agent"
             ):  
                 message = {"profile": tool_profile('organizer'), "message": tool_profile('organizer').get('start_message')}
-                await save_video_response(blog_instance, message)
+                await save_video_response(video_instance, message)
                 # await send_message_to_clients(message)
         elif kind == "on_chain_end":
             if (
                 event["name"] == "Agent"
             ):  
                 message = {"profile": tool_profile('organizer'),"message": tool_profile('organizer').get('end_message')}
-                await save_video_response(blog_instance, message)
+                await save_video_response(video_instance, message)
                 message_data= {"profile": tool_profile('organizer'),"messageData": event['data'].get('output')['output']}
                 # await send_message_to_clients(message)
-                await save_video_response(blog_instance, message_data)
+                await save_video_response(video_instance, message_data)
                 message = {"profile": tool_profile('organizer'),"message": 'DONE'}
                 # await send_message_to_clients(message)
-                await save_video_response(blog_instance, message)
+                await save_video_response(video_instance, message)
 
 
 
@@ -82,16 +83,16 @@ async def video_agent(topic, id):
                 print(content, end="|")
         elif kind == "on_tool_start":
             message = {"profile": tool_profile(event['name']), "message": tool_profile(event['name']).get('start_message')}
-            await save_video_response(blog_instance, message)
+            await save_video_response(video_instance, message)
             # await send_message_to_clients(message)
         elif kind == "on_tool_end":
             message = {"profile": tool_profile(event['name']), "message": tool_profile(event['name']).get('end_message')}
-            await save_video_response(blog_instance, message)
+            await save_video_response(video_instance, message)
             # await send_message_to_clients(message)
 
             if event['data'].get('output'):
                 message = {"profile": tool_profile(event['name']),"event":"output", "messageData": event['data'].get('output')}
-                await save_video_response(blog_instance, message)
+                await save_video_response(video_instance, message)
                 # message1 = {"profile": tool_profile(event['name']), "message": event['data'].get('output')}
                 # await send_message_to_clients(message1)
     return {'answer' : result}

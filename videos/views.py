@@ -134,7 +134,7 @@ async def create(request):
     try:
         if form.is_valid():            
             topic = request.POST.get("topic")
-            theme = request.POST.get("theme")
+            theme_id = request.POST.get("theme")
             long_video = request.POST.get('long_video') == 'true'
             async_get_is_authenticated = sync_to_async(lambda: request.user.is_authenticated)  
             user_is_authenticated = await async_get_is_authenticated()
@@ -142,7 +142,7 @@ async def create(request):
                 return redirect('/accounts/login/')
             async_get_username = sync_to_async(lambda: request.user.username)    
             username = await async_get_username()
-            video_instance = await save_video_request(topic, status='awaiting', user=username, long_video=long_video, theme=theme)
+            video_instance = await save_video_request(topic, status='awaiting', user=username, long_video=long_video, theme=theme_id)
             asyncio.create_task(video_agent(topic, video_instance.id))
             return JsonResponse({'message': 'Task triggered successfully', 'id': video_instance.id})
         else:

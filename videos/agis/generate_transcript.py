@@ -34,9 +34,6 @@ So, next time you're in the Big Apple, make sure to check out the Empire State B
 
 Thanks for watching, and don't forget to hit that like button and subscribe for more fun facts about iconic landmarks!
 
-SEO Tags:
-Empire State Building, New York City, iconic landmarks, skyscraper, Great Depression, movies, TV shows, tourism, travel, breathtaking views, Big Apple.
-
     """
 
     )

@@ -4,13 +4,13 @@ from django.contrib.auth.decorators import login_required
 from django.http import HttpResponse, JsonResponse, HttpResponseServerError, HttpResponseBadRequest
 from django.views.decorators.http import require_POST, require_GET
 from asgiref.sync import sync_to_async
-from .forms import VideoRequestForm
+from .forms import VideoRequestForm, VideoTaskForm
 from home import menu
-from .db import save_video_request, get_video_by_user, get_video_by_id,get_video_entries_by_id, delete_video_request
+from .db import save_video_request, get_video_by_user, get_video_by_id,get_video_entries_by_id, delete_video_request, save_video_task, get_task_by_id
 from videos.agi_agent import video_agent
 import asyncio
 from . agis.themes import themes
-
+from . agis.tasks import tasks
 
 team_template = 'videoteam.html'
 video_template   = 'video_create.html'
@@ -78,6 +78,10 @@ async def select_topic(request, theme_id):
         items['form'] = VideoRequestForm()
         selected_theme = next((theme for theme in themes if theme['theme_id'] == theme_id), None)
         items['selected_theme'] = selected_theme
+        if selected_theme["theme_id"] == 'build':
+            items['form_type'] = 'transcript_form'
+        else:
+            items['form_type'] = 'default_form'
         async_get_is_authenticated = sync_to_async(lambda: request.user.is_authenticated)  
         user_is_authenticated = await async_get_is_authenticated()
         if not user_is_authenticated:
@@ -86,7 +90,49 @@ async def select_topic(request, theme_id):
     except Exception as e:
         print("An error occured in chat view", e)
         return HttpResponseServerError('Humm... Something went wrong... Try later')
-    
+
+@require_POST
+async def select_task(request):
+    print("view select_task")
+    try:
+        video_id = request.POST.get('video_id')
+        task_id = request.POST.get('task_id')
+
+        items = menu.get_navbar('Create Videos')
+        items['form'] = VideoRequestForm()
+        video_instance = await get_video_by_id(id=video_id)
+        task_instance = await get_task_by_id(id=task_id)
+
+        if task_instance.task_name in tasks:
+            # Get the index of the item
+            index = tasks.index(task_instance.task_name)
+                
+            # Check if there is a next item in the list
+            if index + 1 < len(tasks):
+                next_task = tasks[index + 1]
+            else:
+                pass
+        else:
+            pass
+        items['video'] = video_instance
+        selected_theme = next((theme for theme in themes if theme['theme_id'] == video_instance.theme), None)
+
+        items['selected_theme'] = selected_theme
+        if next_task == 'image':
+            items['form_type'] = 'image_form'
+        elif next_task == 'video':
+            items['form_type'] = 'video_form'
+        elif next_task == 'publish':
+            items['form_type'] = 'publish_form'
+        items['task_name'] = next_task
+        async_get_is_authenticated = sync_to_async(lambda: request.user.is_authenticated)  
+        user_is_authenticated = await async_get_is_authenticated()
+        if not user_is_authenticated:
+            return redirect('/accounts/login/')
+        return render(request, video_template, items)
+    except Exception as e:
+        print("An error occured in chat view", e)
+        return HttpResponseServerError('Humm... Something went wrong... Try later')  
 @require_GET
 async def myvideos(request):
     print("view myvideos")
@@ -100,7 +146,6 @@ async def myvideos(request):
         async_get_username = sync_to_async(lambda: request.user.username)  
         username = await async_get_username()
         items['videos'] = await get_video_by_user(user=username)
-        print("items['videos']: ", items['videos'])
         return render(request, myvideos_template, items)
     except Exception as e:
         print("An error occured in chat view", e)
@@ -118,7 +163,6 @@ async def playvideo(request, id):
             return redirect('/accounts/login/')
         async_get_username = sync_to_async(lambda: request.user.username)  
         items['video'] = await get_video_by_id(id=id)
-        print("items['video']: ", items['video'])
         return render(request, playvideo_template, items)
     except Exception as e:
         print("An error occured in chat view", e)
@@ -128,9 +172,6 @@ async def playvideo(request, id):
 async def create(request):
     print("view create")
     form = VideoRequestForm(request.POST)
-    print('form ', request.POST)
-    print('form ', form)
-
     try:
         if form.is_valid():            
             topic = request.POST.get("topic")
@@ -143,8 +184,18 @@ async def create(request):
             async_get_username = sync_to_async(lambda: request.user.username)    
             username = await async_get_username()
             video_instance = await save_video_request(topic, status='awaiting', user=username, long_video=long_video, theme=theme_id)
-            asyncio.create_task(video_agent(topic, video_instance.id))
-            return JsonResponse({'message': 'Task triggered successfully', 'id': video_instance.id})
+
+            if theme_id == 'build':
+                interactive_mode = True
+                task_name= tasks[0]
+                video_task_instance = await save_video_task(video_id=video_instance, task_name=task_name, status='pending')
+                task_id = video_task_instance.id
+            else:
+                interactive_mode = False
+                task_name=None
+                task_id=None
+            asyncio.create_task(video_agent(topic=topic,id=video_instance.id, interactive_mode=interactive_mode,task_name=task_name, task_id=task_id))
+            return JsonResponse({'message': 'Task triggered successfully', 'id': video_instance.id, 'task_id': task_id})
         else:
             message = {'answer': '''Apologies, I am not equipped to handle this particular task. Please consider another query or topic for assistance.'''}
             return JsonResponse(message)
@@ -152,6 +203,42 @@ async def create(request):
         print("An error occured in chat post view", e)
         return HttpResponseServerError('Humm... Something went wrong... Try later')
 
+@require_POST
+async def process_task(request):
+    print("view process_task")
+    
+    post_data = request.POST.copy()
+    if 'video_id' in post_data:
+        del post_data['video_id']
+
+    form = VideoTaskForm(post_data)
+
+    try:
+        if form.is_valid():            
+            task_name = request.POST.get("task_name")
+            video_id = request.POST.get("video_id")
+            video_instance = await get_video_by_id(id=video_id)
+
+            async_get_is_authenticated = sync_to_async(lambda: request.user.is_authenticated)  
+            user_is_authenticated = await async_get_is_authenticated()
+            if not user_is_authenticated:
+                return redirect('/accounts/login/')
+            async_get_username = sync_to_async(lambda: request.user.username)    
+            username = await async_get_username()
+
+            interactive_mode = True
+            if task_name in tasks:
+                video_task_instance = await save_video_task(video_id=video_instance, task_name=task_name, status='pending')
+                task_id = video_task_instance.id
+  
+                asyncio.create_task(video_agent(topic=video_instance.topic,id=video_instance.id, interactive_mode=interactive_mode,task_name=task_name, task_id=task_id))
+                return JsonResponse({'message': 'Task triggered successfully', 'id': video_instance.id, 'task_id': task_id})
+        else:
+            message = {'answer': '''Apologies, I am not equipped to handle this particular task. Please consider another query or topic for assistance.'''}
+            return JsonResponse(message)
+    except Exception as e:
+        print("An error occured in chat post view", e)
+        return HttpResponseServerError('Humm... Something went wrong... Try later')
 @require_GET
 async def retrieve_by_id(request, id):
     print("view retrieve_by_id")

@@ -11,5 +11,6 @@ urlpatterns = [
     path('myvideos/<str:id>/', views.playvideo, name="playvideo"),
     path('mysocial/<str:id>/', views.retrieve_socials_by_id, name="retrieve_video_socials_by_id"),
     path('delete/<str:id>/', views.delete_by_id, name="delete_video_by_id"),
-
+    path('task', views.process_task, name="process_task"),
+    path('select_task/', views.select_task, name="select_task"),
 ]

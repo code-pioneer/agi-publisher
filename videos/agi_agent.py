@@ -3,9 +3,8 @@ from langchain_openai import ChatOpenAI
 from langchain import hub
 from mainapp.settings import LLM_MODEL
 from videos.agis.tools import agent_tools, tool_profile, tools_profiles
-from videos.db import save_video_response, get_video_by_id
+from videos.db import save_video_response, get_video_by_id, update_video_request
 import json
-
 
 
 tools = agent_tools()
@@ -22,32 +21,61 @@ async def init_agent():
     agent = create_openai_tools_agent(llm, tools, prompt)
     return AgentExecutor(agent=agent, tools=tools, verbose=True, handle_parsing_errors=True).with_config({"run_name":"Agent"})
 
-async def video_agent(topic, id):
+async def video_agent(topic, id, interactive_mode, task_name, task_id):
     print("Video Agent")
     video_instance = await get_video_by_id(id)
     topic = video_instance.topic
-    in_depth = video_instance.long_video
+    long_video = video_instance.long_video
     theme = video_instance.theme
-    params = {"in_depth": in_depth, "theme": theme}
-    input = f'''Your objective is to perform all required tasks as part of this fullfillment including generating social post in the end. 
-    Follow following order while fullfilling the task:
-    1. Generate Filename for the topic.
-    2. Generate an approriate Image.
-    3. Generate transcript for video creation.
-    4. Generate Video using image and transcript.
-    4. Save the Video transcript result
-    5. Generate Social Post content.
-    
-    Topic: {topic}. BLOG_PARAMS: {json.dumps(params)} ID: { video_instance.id}'''
-    
-    # async  def send_message_to_clients(message):  
-    #     try:  
-    #         await consumer.send(text_data=json.dumps({
-    #                 'message': message
-    #         }))
-    #     except Exception as e:
-    #         print("CreateConsumer connection in agent : ", e)
-        
+    params = {"long_video": long_video, "theme": theme}
+    if interactive_mode:
+        if task_name == 'prep':
+            input = f'''Your objective is to perform following tasks. 
+            1. Generate Filename for the topic. 
+            2. Update Database with Filename            
+            Topic: {topic}. VIDEO_PARAMS: {json.dumps(params)} ID: { video_instance.id} task_id: { task_id} 
+            '''
+        elif task_name == 'image':
+           input = f'''Your objective is to perform following tasks, Do not use any other tools. 
+            1. Generate an approriate Image.   
+            2. Once image is ready,update Database with image_url.        
+            Topic: {topic}. VIDEO_PARAMS: {json.dumps(params)} ID: { video_instance.id} Filename: {video_instance.video_name} task_id: {task_id} video_url: ''  '''
+        elif task_name == 'transcript':
+            input = f'''Your objective is to perform following tasks, Do not use any other tools.
+            1. Generate Filename for the topic. 
+            2. Generate transcript for video creation on a given topic.  
+            3. Once transcript is ready, update Database with filename and transcript.        
+            Topic: {topic}. VIDEO_PARAMS: {json.dumps(params)} ID: { video_instance.id} task_id: { task_id}  '''
+        elif task_name == 'video':
+            input = f'''Your objective is to perform following tasks, Do not use any other tools. 
+            1. Generate Video using image and transcript.  
+            2. Once video is ready, update Database with video_url.        
+            Topic: {topic}. VIDEO_PARAMS: {json.dumps(params)} ID: { video_instance.id} Filename: {video_instance.video_name}
+            image_url: {video_instance.imgurl} transcript: {video_instance.transcript} task_id: { task_id} 
+            '''
+        elif task_name == 'publish':
+            input = f'''Your objective is to perform following tasks, Do not use any other tools. 
+            1. Save the final video and transcript result once video is ready
+            2. Generate social post content
+            3. Once social post is ready, update Database        
+
+            Topic: {topic}. VIDEO_PARAMS: {json.dumps(params)} ID: { video_instance.id} Filename: {video_instance.video_name}
+            image_url: {video_instance.imgurl} transcript: {video_instance.transcript} video_url: {video_instance.videourl} task_id: { task_id} 
+            '''
+        else:
+            pass
+    else:
+        input = f'''Your objective is to perform all required tasks as part of this fullfillment including generating social post in the end. 
+            Follow following order while fullfilling the task:
+            1. Generate Filename for the topic.
+            2. Generate an approriate Image.
+            3. Generate transcript for video creation.
+            4. Generate Video using image and transcript.
+            4. Save the Video transcript result
+            5. Generate Social Post content.
+            
+            Topic: {topic}. VIDEO_PARAMS: {json.dumps(params)} ID: { video_instance.id}'''
+            
 
     result={}     
 

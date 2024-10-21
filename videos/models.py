@@ -11,6 +11,9 @@ class VideoRequestModel(models.Model):
     ts = models.DateTimeField(auto_now=True)
     long_video = models.BooleanField(default=False)
     theme = models.CharField(max_length=100)
+    video_name = models.CharField(max_length=100,null=True)
+    transcript = models.TextField(max_length=5000, null=True)
+
     
     def get_related_video_response(self):
         video_response_model = VideoResponseModel.objects.filter(video_id=self).order_by('-created_ts')
@@ -23,11 +26,10 @@ class VideoResponseModel(models.Model):
     video_entries = models.JSONField(default=dict)
     ts = models.DateTimeField(auto_now=True)
 
-
-class VideoThemeModel(models.Model):
-    name = models.CharField(max_length=100)
-    description = models.TextField()
-    image = models.ImageField(upload_to='theme_images/', null=True, blank=True)
-
-    def __str__(self):
-        return self.name
+    
+class VideoTaskModel(models.Model):
+    id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
+    video_id = models.ForeignKey(VideoRequestModel, on_delete=models.CASCADE)
+    task_name = models.CharField(max_length=50,null=False)
+    status = models.CharField(max_length=40, null=True)
+    ts = models.DateTimeField(auto_now=True)

@@ -118,7 +118,7 @@ async def create_video(transcript, filename):
 
     
 @tool
-async def generate_video(transcript: str, blog_params: str, image_url: str, Filename: str, callbacks: Callbacks) -> str:
+async def generate_video(transcript: str, video_params: str, image_url: str, Filename: str, callbacks: Callbacks) -> str:
     """Convert image to a video using generated image and transcript."""
     print("inside generate_video")
     return await create_video(transcript=transcript, filename=Filename)

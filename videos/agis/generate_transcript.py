@@ -9,7 +9,7 @@ from . themes import themes
 
 
 @tool
-async def generate_transcript(content: str, topic: str, blog_params: str, callbacks: Callbacks) -> str:
+async def generate_transcript(content: str, topic: str, video_params: str, callbacks: Callbacks) -> str:
     """Generate transcript for video production"""
     print(f'generate_transcript')
     create_blog_template = PromptTemplate.from_template(
@@ -37,10 +37,10 @@ Thanks for watching, and don't forget to hit that like button and subscribe for 
     """
 
     )
-    print(f'BLOG_PARAMS: {blog_params}')
-    blog_params_json = json.loads(blog_params)
-    in_depth = blog_params_json.get("in_depth", False)
-    if in_depth:
+    print(f'VIDEO_PARAMS: {video_params}')
+    video_params_json = json.loads(video_params)
+    long_video = video_params_json.get("long_video", False)
+    if long_video:
         size = f'long {LONG_VIDEO_SIZE} seconds with text scrolling speed of 25.0 pixels per second'
         words = 650
     else:
@@ -48,7 +48,7 @@ Thanks for watching, and don't forget to hit that like button and subscribe for 
         words = 130
     seoText = f'Make sure to generate SEO tags for the video to improve search engine visibility.'
 
-    theme_id = blog_params_json.get("theme", False)
+    theme_id = video_params_json.get("theme", False)
     if theme_id:
         selected_theme = next((theme for theme in themes if theme['theme_id'] == theme_id), None)
         theme_prompt = selected_theme["prompt"]

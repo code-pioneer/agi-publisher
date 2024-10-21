@@ -1,9 +1,10 @@
-from videos.agis import generate_filename, generate_image, generate_social_post, generate_transcript, save_to_file, search_serper, generate_video
+from videos.agis import generate_filename, generate_image, generate_social_post, generate_transcript,save_to_file, search_serper, generate_video, save_to_db
 
 def agent_tools():
     tools = []
     tools.append(generate_transcript.setup())
     tools.append(save_to_file.setup())
+    tools.append(save_to_db.setup())
     tools.append(generate_filename.setup())
     tools.append(generate_image.setup())
     tools.append(generate_video.setup())
@@ -39,6 +40,14 @@ profile = {
         "name": "Publisher",
         "profile": "Publisher",
         "task": "File Saving",
+        "url": "assets/img/publisher.png",
+        "start_message": "Taking the important step of saving our video content. Let's ensure our hard work is securely stored for future reference and potential updates.",
+        "end_message": "Video content successfully saved! Our work is now safely stored, ready for future reference or any necessary revisions. Time to celebrate this milestone!",
+        },
+    "save_to_db" : {
+        "name": "Recorder",
+        "profile": "Recorder",
+        "task": "Data Saving",
         "url": "assets/img/publisher.png",
         "start_message": "Taking the important step of saving our video content. Let's ensure our hard work is securely stored for future reference and potential updates.",
         "end_message": "Video content successfully saved! Our work is now safely stored, ready for future reference or any necessary revisions. Time to celebrate this milestone!",

@@ -1,6 +1,46 @@
-from .models import VideoRequestModel, VideoResponseModel
+from .models import VideoRequestModel, VideoResponseModel, VideoTaskModel
 from asgiref.sync import sync_to_async
 
+async def get_task_by_id(id):
+    try:
+        return await sync_to_async(VideoTaskModel.objects.get)(pk=id)
+    except VideoTaskModel.DoesNotExist:
+        return None
+
+# Define the synchronous function for filtering
+def filter_task_sync(id):
+    return VideoTaskModel.objects.filter(pk=id).first()  # Use `.first()` to get the first match or None
+
+async def get_task_by_id(id):
+    # Call the synchronous function in the async context
+    task = await sync_to_async(filter_task_sync)(id)
+    return task 
+    
+async def save_video_task(video_id, task_name, status):
+    try:
+        create_video_task = sync_to_async(VideoTaskModel.objects.create)
+            
+        video_task_instance = await create_video_task(
+            video_id=video_id,
+            task_name=task_name,
+            status=status
+        )
+        # print("save_video_response: ", video_response_instance)
+        return video_task_instance
+    except Exception as e:
+        print("An error occurred in save_video_task", e)
+        return None
+    
+async def update_video_task(id, status='complete'):
+    try:
+        video_task_instance = await sync_to_async(VideoTaskModel.objects.get)(pk=id)
+        video_task_instance.status = status
+
+        await sync_to_async(video_task_instance.save)()
+        return video_task_instance
+    except VideoTaskModel.DoesNotExist:
+        return None
+    
 async def get_all_videos():
     try:
         return await sync_to_async(VideoRequestModel.objects.select_related('blogresponsemodel').all)()
@@ -48,7 +88,7 @@ async def get_video_by_status(status):
     except VideoRequestModel.DoesNotExist:
         return None
     
-async def save_video_request(topic, status, user, videourl=None, imgurl=None, long_video=False, theme='descriptive'):
+async def save_video_request(topic, status, user, videourl=None, imgurl=None, long_video=False, theme='build', video_name=None, transcript=None):
     try:
         create_video_request = sync_to_async(VideoRequestModel.objects.create)
         
@@ -59,7 +99,9 @@ async def save_video_request(topic, status, user, videourl=None, imgurl=None, lo
             videourl=videourl,
             imgurl=imgurl,
             long_video=long_video,
-            theme=theme
+            theme=theme,
+            video_name=video_name,
+            transcript=transcript
         )
         print("save_video_request: ", video_request_instance)
         return video_request_instance
@@ -93,9 +135,8 @@ async def get_video_response_by_request_id(request_id, since_ts):
     except VideoResponseModel.DoesNotExist:
         return [], since_ts
 
-
     
-async def update_video_request(request_id, status='awaiting', videourl=None, imgurl=None, topic=None):
+async def update_video_request(request_id, status='awaiting', videourl=None, imgurl=None, topic=None, video_name=None, transcript=None):
     try:
         video_request_instance = await sync_to_async(VideoRequestModel.objects.get)(pk=request_id)
         video_request_instance.status = status
@@ -105,6 +146,10 @@ async def update_video_request(request_id, status='awaiting', videourl=None, img
             video_request_instance.imgurl = imgurl
         if topic:
             video_request_instance.topic = topic
+        if video_name:
+            video_request_instance.video_name = video_name
+        if transcript:
+            video_request_instance.transcript = transcript
         await sync_to_async(video_request_instance.save)()
         return video_request_instance
     except VideoRequestModel.DoesNotExist:

@@ -7,44 +7,161 @@
     <div class="header-title h3 pl-4"><span class="text-primary-rainbow">Create Video</span> &nbsp;&nbsp;</div>
   </div>
   <div class="card-body">
-    <div class="row-cols-xl-4">
-      <div class="card">
-        <div style="position: relative;">
-          <img class="card-img-top" src="{% static selected_theme.url %}">
-        </div>
-      <div class="card-body shadow-sm">
-        <div class="row p-1">
-          <div class="col">
-            <p style="line-height: .60rem;">
-              <h4 class="mb-2">{{ selected_theme.name }}</h4>
-            </p>
-            <span class="tiny text-body-secondary">{{ selected_theme.description }}</span>
-
+    <div class="row align-items-stretch">
+      <div class="col-xl-3 col-lg-3 col-md-6 mb-3">
+        <div class="card card-fill shadow-sm">
+          <div class="card-header bg-primary">
+            <div class="col header-title h3 text-center text-white">Theme</div>
           </div>
-  
+          <div style="position: relative;">
+            <img class="card-img-top" src="{% static selected_theme.url %}">
+          </div>
+            <div class="row p-1">
+              <div class="col text-center">
+                <p style="line-height: .60rem;">
+                <h4 class="mb-2">{{ selected_theme.name }}</h4>
+                </p>
+                <span class="tiny text-body-secondary">{{ selected_theme.description }}</span>
+              </div>
+          </div>
         </div>
       </div>
+      {% if video.transcript %}
+      <div class="col-xl-3 col-lg-3 col-md-6 mb-3">
+        <div class="card card-fill shadow-sm">
+          <div class="card-header bg-primary">
+            <div class="col header-title h3 text-center text-white">Transcript</div>
+          </div>
+   
+          <div class="card-body shadow-sm">
+            <div class="row p-1">
+              <div class="col">
+                <span class="tiny text-body-secondary">{{ video.transcript }}</span>
+              </div>
+            </div>
+          </div>
+        </div>
       </div>
+      {% endif %}   
+      {% if video.imgurl %}
+      <div class="col-xl-3 col-lg-3 col-md-6 mb-3">
+        <div class="card card-fill shadow-sm">
+          <div class="card-header bg-primary">
+            <div class="col header-title h3 text-center text-white">Image</div>
+          </div>
+          <div style="position: relative;">
+            <img class="card-img-top" src="{% static video.imgurl %}">
+          </div>
+          </div>
+        </div>
+      </div>
+
+      {% endif %}  
+      {% if video.videourl %}
+      <div class="col-xl-3 col-lg-3 col-md-6 mb-3">
+        <div class="card card-fill shadow-sm">
+          <div class="card-header bg-primary">
+            <div class="col header-title h3 text-center text-white">Video</div>
+          </div>
+          <div style="position: relative;">
+            <video class="card-img-top"  controls>
+              <source src="{% static video.videourl %}" type="video/mp4">
+            </video>          
+        
+          </div>
+        </div>
+      </div>
+
+      {% endif %} 
     </div>
 
     <form id="topic-form">
       {% csrf_token %}
-      <div class="mb-3">
+      <div class="mb-3" id="default-form" style="display: none;">
         <div class="btn-group" role="group" aria-label="Basic checkbox toggle button group">
-          <!-- <input type="checkbox" class="btn-check" id="long-video" name="long-vide" autocomplete="off">
-          <label class="btn btn-outline-primary" for="long-video">Long</label>   -->
           <div class="form-check form-switch">
-            <input class="form-check-input" type="checkbox" id="long-video" style="width: 3rem; height: 1.5rem; border-radius: 1.5rem;">
-            <label class="form-check-label" for="long-video" style="font-size: 1.25rem; padding-left: 0.5rem;">Long Video</label>
-          </div>      
+            <input class="form-check-input" type="checkbox" id="default-long-video"
+              style="width: 3rem; height: 1.5rem; border-radius: 1.5rem;">
+            <label class="form-check-label" for="default-long-video"
+              style="font-size: 1.25rem; padding-left: 0.5rem;">Long Video</label>
+          </div>
           <div class="btn-group" role="group">
-            <input type="hidden" id="selectedtheme" name="selectedtheme" value="{{selected_theme.theme_id}}">
+            <input type="hidden" id="default-selectedtheme" name="default-selectedtheme"
+              value="{{selected_theme.theme_id}}">
           </div>
         </div>
         <div class="mt-4"></div> <!-- Add spacing here -->
-        <input id="topic" name="topic" class="form-control me-2 border-primary" type="text" placeholder="What's on your mind?">
+        <input id="default-topic" name="default-topic" class="form-control me-2 border-primary" type="text"
+          placeholder="What's on your mind?">
         <div class="mt-4"></div> <!-- Add spacing here -->
-        <button type="submit" class="btn btn-primary form-control">Submit</button>
+        <button type="submit" value="default" class="btn btn-primary form-control">Generate</button>
+      </div>
+      <div class="mb-3" id="transcript-form" style="display: none;">
+        <div class="btn-group" role="group" aria-label="Basic checkbox toggle button group">
+          <div class="form-check form-switch">
+            <input class="form-check-input" type="checkbox" id="transcript-long-video"
+              style="width: 3rem; height: 1.5rem; border-radius: 1.5rem;">
+            <label class="form-check-label" for="transcript-long-video"
+              style="font-size: 1.25rem; padding-left: 0.5rem;">Long Video</label>
+          </div>
+          <div class="btn-group" role="group">
+            <input type="hidden" id="transcript-selectedtheme" name="transcript-selectedtheme"
+              value="{{selected_theme.theme_id}}">
+          </div>
+        </div>
+        <div class="mt-4"></div> <!-- Add spacing here -->
+        <input id="transcript-topic" name="transcript-topic" class="form-control me-2 border-primary" type="text"
+          placeholder="What's on your mind?">
+        <div class="mt-4"></div> <!-- Add spacing here -->
+        <button type="submit" value="transcript" class="btn btn-primary form-control">Generate Transcript</button>
+      </div>
+      <div class="mb-3" id="image-form" style="display: none;">
+        <div class="mt-4"></div> <!-- Add spacing here -->
+        <input id="image-topic" name="image-topic" class="form-control me-2 border-primary" type="text"
+          placeholder="What's on your mind?">
+        <div class="mt-4"></div> <!-- Add spacing here -->
+        <input type="hidden" id="image_video_id" name="image_video_id" value="{{ video.id }}">
+        <input type="hidden" id="image_task_name" name="image_task_id" value="{{task_name }}">
+
+        <button type="submit" value="image" class="btn btn-primary form-control">Build Image</button>
+      </div>
+      <div class="mb-3" id="video-form" style="display: none;">
+        <div class="mt-4"></div> <!-- Add spacing here -->
+        <input id="video-topic" name="video-topic" class="form-control me-2 border-primary" type="text"
+          placeholder="What's on your mind?">
+        <div class="mt-4"></div> <!-- Add spacing here -->
+        <input type="hidden" id="video_video_id" name="video_video_id" value="{{ video.id }}">
+        <input type="hidden" id="video_task_name" name="video_task_id" value="{{task_name }}">
+
+        <button type="submit" value="video" class="btn btn-primary form-control">Build Video</button>
+      </div>
+      <div class="mb-3" id="publish-form" style="display: none;">
+        <div class="mt-4"></div> <!-- Add spacing here -->
+        <input type="hidden" id="publish-topic" name="publish-topic" class="form-control me-2 border-primary" type="text"
+          placeholder="What's on your mind?">
+        <div class="mt-4"></div> <!-- Add spacing here -->
+        <input type="hidden" id="publish_video_id" name="publish_video_id" value="{{ video.id }}">
+        <input type="hidden" id="publish_task_name" name="publish_task_id" value="{{task_name }}">
+
+        <button type="submit" value="publish" class="btn btn-primary form-control">Publish Video</button>
+      </div>
+    </form>
+
+    <form id="next-form" method="POST" action="{% url 'select_task' %}">
+      {% csrf_token %}
+      <div class="mb-3" id="task-form">
+        <div class="mt-4"></div> <!-- Add spacing here -->
+        <input type="hidden" id="video_id" name="video_id" value="">
+        <input type="hidden" id="task_id" name="task_id" value="">
+        <div class="mt-4 d-flex justify-content-end"> <!-- Add spacing here -->
+          <button type="submit" value="next" id="next-button" class="btn btn-primary btn-lg me-3"
+            style="display:none;">Next</button>
+        </div>
+        <div class="mt-4 d-flex justify-content-end"> <!-- Add spacing here -->
+          <a button type="submit" id="finish-button" class="btn btn-primary btn-lg me-3"
+            style="display:none;" href="{% url 'myvideos' %}">Finish</button>
+          </a>
+        </div>
       </div>
     </form>
   </div>
@@ -184,7 +301,7 @@
         <h4 class="mb-1 text-primary-rainbow" id="displaytopic" value="">Influencer</h4>
       </div>
     </div>
-  
+
   </div>
   <div class="card-body" id="msg"></div>
   <!-- <div class="card-footer">
@@ -223,93 +340,236 @@
     }
     return cookieValue;
   }
+
+  window.onload = function () {
+    // Check if the server sent data to show the form
+    var show_form_type = "{{ form_type}}"
+    console.log('show_form_type', show_form_type);
+
+    if (show_form_type === "default_form") {
+      document.getElementById("default-form").style.display = "block";
+    } else if (show_form_type === "transcript_form") {
+      document.getElementById("transcript-form").style.display = "block";
+    } else if (show_form_type === "image_form") {
+      document.getElementById("image-form").style.display = "block";
+    } else if (show_form_type === "video_form") {
+      document.getElementById("video-form").style.display = "block";
+    } else if (show_form_type === "publish_form") {
+      document.getElementById("publish-form").style.display = "block";
+    }  
+  }
+
   $(document).on('submit', '#topic-form', function (e) {
     e.preventDefault();
     $('#msg').empty();
     $('#response-header').hide();
     $('#response-body').hide();
 
-    topic = $('#topic').val();
+    var action = $(this).find('button[type=submit]:visible').val();
+    $('#default-form').hide();
+    $('#default-form').find('button[type="submit"]').prop('disabled', true);
+    $('#transcript-form').hide();
+    $('#transcript-form').find('button[type="submit"]').prop('disabled', true);
+    $('#image-form').hide();
+    $('#image-form').find('button[type="submit"]').prop('disabled', true);
+    $('#video-form').hide();
+    $('#video-form').find('button[type="submit"]').prop('disabled', true);
+    $('#publish-form').hide();
+    $('#publish-form').find('button[type="submit"]').prop('disabled', true);
 
-    $('#displaytopic').text(topic);
-    long_video = $('#long-video').is(':checked');
 
-    console.log('long_video', long_video);
+    if (action === 'transcript') {
+      console.log("Save button was clicked");
+      topic = $('#transcript-topic').val();
+      long_video = $('#transcript-long-video').is(':checked');
+      theme = $('#transcript-selectedtheme').val();
+      url = "{% url 'create_video' %}";
+      process_header = 'Generating Transcript';
+      interactive = true;
+    } else if (action === 'default') {
+      console.log("Publish button was clicked");
+      topic = $('#default-topic').val();
+      long_video = $('#default-long-video').is(':checked');
+      theme = $('#default-selectedtheme').val();
+      url = "{% url 'create_video' %}";
+      interactive = false
+    } else if (action === 'image') {
+      console.log("Image button was clicked");
+      topic = $('#image-topic').val();
+      video_id = $('#image_video_id').val();
+      task_name = $('#image_task_name').val();
+      url = "{% url 'process_task' %}";
+      process_header = 'Generating Image';
+      interactive = true
+    } else if (action === 'video') {
+      console.log("Video button was clicked");
+      topic = $('#video-topic').val();
+      video_id = $('#video_video_id').val();
+      task_name = $('#video_task_name').val();
+      url = "{% url 'process_task' %}";
+      process_header = 'Generating Video';
+      interactive = true
+    } else if (action === 'publish') {
+      console.log("Publish button was clicked");
+      topic = $('#publish-topic').val();
+      video_id = $('#publish_video_id').val();
+      task_name = $('#publish_task_name').val();
+      process_header = 'Publishing Video';
+      url = "{% url 'process_task' %}";
+      interactive = true
+    } else if (action === 'next') {
+      console.log("Next button was clicked");
+      console.log('step3', 'video_id', video_id, 'task_id', task_id);
+    }
 
-    var theme = $('#selectedtheme').val()
-    console.log('theme', theme);
-    if (topic === null || topic === '') { return; }
-    if (theme === null || theme === '') { return; }
- 
+    if (action === 'default' || action === 'transcript') {
+      if (topic === null || topic === '') { return; }
+      if (theme === null || theme === '') { return; }
+        $('#displaytopic').text(topic);
+        console.log('long_video', long_video);
+        console.log('theme', theme);
+        console.log('topic', topic);
+        data = {
+          topic: topic,
+          long_video: long_video,
+          theme: theme,
+          csrfmidddlewaretoken: $('input[name=csrfmidddlewaretoken]').val()
+        }
+    } else if(action === 'image' || action === 'video' || action === 'publish') {
+        $('#displaytopic').text(process_header);
+
+        console.log('video_id', video_id);
+        console.log('task_name', task_name);
+        if (video_id === null || video_id === '') { return; }
+        if (task_name === null || task_name === '') { return; }
+
+        data = {
+          video_id: video_id,
+          task_name: task_name,
+          csrfmidddlewaretoken: $('input[name=csrfmidddlewaretoken]').val()
+        }
+    } else if(action === 'next') {
+        console.log('video_id', video_id);
+        console.log('task_id', task_id);
+        if (video_id === null || video_id === '') { return; }
+        if (task_id === null || task_id === '') { return; }
+        return;
+    }
+
     $('#submit-button').hide();
     $.ajax({
       type: 'POST',
-      url: "{% url 'create_video' %}",
-      data: {
-        topic: $('#topic').val(),
-        long_video: $('#long_video').is(':checked'),
-        theme: theme,
-        csrfmidddlewaretoken: $('input[name=csrfmidddlewaretoken]').val()
-      },
+      url: url,
+      data: data,
       headers: {
         "X-Requested-With": "XMLHttpRequest",
         "X-CSRFToken": getCookie("csrftoken"),
       },
       success: function (response) {
-        $('#topic').val('');
-        $('#checkbox1').prop('checked', false);
-        $('#checkbox2').prop('checked', false);
-        $('#theme').val('Theme');
+        $('#default-topic').val('');
+        $('#transcript-topic').val('');
+        $('#image-topic').val('');
+        $('#video-topic').val('');
+        $('#publish-topic').val('');
+
+
 
         answer = response.message;
         console.log('response', response.id, response.message);
+        video_id = response.id;
+        if (response.task_id) {
+            task_id = response.task_id;
+        } else {
+            task_id = '';  // Fallback value when task_id is null or undefined
+        }
+        console.log('video_id', video_id, 'task_id', task_id,);
+
         let publisher_url = `ws://${window.location.host}/ws/video_retrieve/`;
         const socket = new WebSocket(publisher_url);
         socket.onopen = function (event) {
           console.log('WebSocket connection established.');
           socket.send(JSON.stringify({
             'command': 'subscribe',
-            'channel': response.id
+            'channel': video_id,
+            'interactive': interactive,
+            'task_id': task_id
           }));
         };
-        $('#response-header').show();
+        if(action === 'default'){
+          $('#response-header').show();
+        }
         $('#response-body').show();
         // When a message is received from the server
         socket.onmessage = function (event) {
           const message = JSON.parse(event.data);
-          console.log('Message received:', message.message.profile);
-          profile = message.message.profile.profile;
-          task = message.message.profile.task;
-          data = message.message.message;
-          url = message.message.profile.url;
-          if (data == 'DONE') {
+          if (message.message.message === 'COMPLETE') {
+            $('#loading-btn-header').empty();
+            $('#loading-btn-footer').empty();
+
+            $('#msg').html(`
+                        <div class="row align-items-center">
+                            <div class="card">
+                                <div class="card-body">
+                                    <div class="row align-items-center">
+                                        <h4 class="mb-1">${message.message.task_response}</h4>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>`);
+            $('#default-form').hide();
+            $('#default-form').find('button[type="submit"]').prop('disabled', true);
+            $('#transcript-form').hide();
+            $('#transcript-form').find('button[type="submit"]').prop('disabled', true);
+            $('#image-form').hide();
+            $('#image-form').find('button[type="submit"]').prop('disabled', true);
+            $('#video-form').hide();
+            $('#video-form').find('button[type="submit"]').prop('disabled', true);
+            $('#publish-form').hide();
+            $('#publish-form').find('button[type="submit"]').prop('disabled', true);
+            if(action === 'publish'){
+              $('#finish-button').show();
+            } else{
+              $('#next-button').show();
+            }
+            console.log('step2', 'video_id', video_id, 'task_id', task_id,);
+            $('#video_id').val(video_id);
+            $('#task_id').val(task_id);
+
+
+          } else {
+            profile = message.message.profile.profile;
+            task = message.message.profile.task;
+            data = message.message.message;
+            url = message.message.profile.url;
+            if (data == 'DONE' && action === 'default'){
               $('#loading-btn-header').empty();
               $('#loading-btn-footer').empty();
-          } else if (data !== undefined && data !== null) { // Check if data is not undefined or null
+            } else if (data !== undefined && data !== null) { // Check if data is not undefined or null
+              if (data == 'DONE'){ data = 'Prepaing...'}
               $('#msg').html(`
-                  <div class="row align-items-center">
-                      <div class="card">
-                          <div class="card-body">
-                              <div class="row align-items-center">
-                                  <div class="col-xl-1 col-lg-2">
-                                      <a class="avatar avatar-lg">
-                                          <img src="{% static '.' %}${url}" class="avatar-img rounded-circle" alt="Avatar Image">
-                                      </a>
-                                  </div>
-                                  <div class="col-xl-2 col-lg-2">
-                                      <h4 class="mb-1">${profile}</h4>
-                                      <p class="small text-body-secondary mb-1">${task}</p>
-                                  </div>
-                                  <div class="col-xl-9 col-lg-8">
-                                      <p class="small text-body-secondary mb-1">${data}</p>
+                      <div class="row align-items-center">
+                          <div class="card">
+                              <div class="card-body">
+                                  <div class="row align-items-center">
+                                      <div class="col-xl-1 col-lg-2">
+                                          <a class="avatar avatar-lg">
+                                              <img src="{% static '.' %}${url}" class="avatar-img rounded-circle" alt="Avatar Image">
+                                          </a>
+                                      </div>
+                                      <div class="col-xl-2 col-lg-2">
+                                          <h4 class="mb-1">${profile}</h4>
+                                          <p class="small text-body-secondary mb-1">${task}</p>
+                                      </div>
+                                      <div class="col-xl-9 col-lg-8">
+                                          <p class="small text-body-secondary mb-1">${data}</p>
+                                      </div>
                                   </div>
                               </div>
                           </div>
-                      </div>
-                  </div>`);
+                      </div>`);
+            }
           }
-
-      };
+        };
 
       },
       error: function (err) {

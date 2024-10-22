@@ -1,6 +1,31 @@
 {% extends "common/base_sidebar.html" %}
 {% load static %}
 {% block page_content %}
+<div class="breadcrumb">
+  <nav aria-label="breadcrumb">
+    <ol class="breadcrumb">
+      {% for task in context.tasks %}
+        {% if task in context.past_tasks %}
+          <!-- Form for past tasks -->
+          <li class="breadcrumb-item">
+            <form method="GET" action="{% url 'select_task' 'current' video.id task%}" style="display: inline;">
+              {% csrf_token %}
+              <input type="hidden" name="task" value="{{ task }}">
+              <button type="submit" class="btn btn-link p-0">{{ task|capfirst }}</button>
+            </form>
+          </li>
+        {% elif task == context.current_task %}
+          <li class="breadcrumb-item active" aria-current="page">{{ task|capfirst }}</li>
+        {% else %}
+          <li class="breadcrumb-item">{{ task|capfirst }}</li>
+        {% endif %}
+      {% endfor %}
+    </ol>
+
+  </nav>
+</div>
+
+
 
 <div class="card">
   <div class="card-header">
@@ -96,6 +121,11 @@
         <div class="mt-4"></div> <!-- Add spacing here -->
         <button type="submit" value="default" class="btn btn-primary form-control">Generate</button>
       </div>
+      <div class="mt-4 d-flex justify-content-end"> <!-- Add spacing here -->
+        <a button type="submit" id="default-finish-button" class="btn btn-primary btn-lg me-3"
+          style="display:none;" href="{% url 'myvideos' %}">Finish</button>
+        </a>
+      </div>
       <div class="mb-3" id="transcript-form" style="display: none;">
         <div class="btn-group" role="group" aria-label="Basic checkbox toggle button group">
           <div class="form-check form-switch">
@@ -113,6 +143,9 @@
         <input id="transcript-topic" name="transcript-topic" class="form-control me-2 border-primary" type="text"
           placeholder="What's on your mind?">
         <div class="mt-4"></div> <!-- Add spacing here -->
+        <input type="hidden" id="transcript_video_id" name="transcript_video_id" value="{{ video.id }}">
+        <input type="hidden" id="transcript_task_name" name="transcript_task_id" value="{{context.current_task }}">
+
         <button type="submit" value="transcript" class="btn btn-primary form-control">Generate Transcript</button>
       </div>
       <div class="mb-3" id="image-form" style="display: none;">
@@ -121,7 +154,7 @@
           placeholder="What's on your mind?">
         <div class="mt-4"></div> <!-- Add spacing here -->
         <input type="hidden" id="image_video_id" name="image_video_id" value="{{ video.id }}">
-        <input type="hidden" id="image_task_name" name="image_task_id" value="{{task_name }}">
+        <input type="hidden" id="image_task_name" name="image_task_id" value="{{context.current_task }}">
 
         <button type="submit" value="image" class="btn btn-primary form-control">Build Image</button>
       </div>
@@ -131,7 +164,7 @@
           placeholder="What's on your mind?">
         <div class="mt-4"></div> <!-- Add spacing here -->
         <input type="hidden" id="video_video_id" name="video_video_id" value="{{ video.id }}">
-        <input type="hidden" id="video_task_name" name="video_task_id" value="{{task_name }}">
+        <input type="hidden" id="video_task_name" name="video_task_id" value="{{context.current_task }}">
 
         <button type="submit" value="video" class="btn btn-primary form-control">Build Video</button>
       </div>
@@ -141,18 +174,17 @@
           placeholder="What's on your mind?">
         <div class="mt-4"></div> <!-- Add spacing here -->
         <input type="hidden" id="publish_video_id" name="publish_video_id" value="{{ video.id }}">
-        <input type="hidden" id="publish_task_name" name="publish_task_id" value="{{task_name }}">
+        <input type="hidden" id="publish_task_name" name="publish_task_id" value="{{context.current_task }}">
 
         <button type="submit" value="publish" class="btn btn-primary form-control">Publish Video</button>
       </div>
     </form>
+    {% if currentTask %}
 
-    <form id="next-form" method="POST" action="{% url 'select_task' %}">
+    <form id="next-form" method="GET" action="{% url 'select_task' 'next' video.id task_name %}">
       {% csrf_token %}
       <div class="mb-3" id="task-form">
         <div class="mt-4"></div> <!-- Add spacing here -->
-        <input type="hidden" id="video_id" name="video_id" value="">
-        <input type="hidden" id="task_id" name="task_id" value="">
         <div class="mt-4 d-flex justify-content-end"> <!-- Add spacing here -->
           <button type="submit" value="next" id="next-button" class="btn btn-primary btn-lg me-3"
             style="display:none;">Next</button>
@@ -164,6 +196,7 @@
         </div>
       </div>
     </form>
+    {% endif %}  
   </div>
 </div>
 <div class="card" id="response-header" style="display: none;">
@@ -343,20 +376,20 @@
 
   window.onload = function () {
     // Check if the server sent data to show the form
-    var show_form_type = "{{ form_type}}"
-    console.log('show_form_type', show_form_type);
+    var currentTask = "{{ context.current_task }}";
+    console.log('currentTask', currentTask);
 
-    if (show_form_type === "default_form") {
-      document.getElementById("default-form").style.display = "block";
-    } else if (show_form_type === "transcript_form") {
+    if (currentTask === "transcript") {
       document.getElementById("transcript-form").style.display = "block";
-    } else if (show_form_type === "image_form") {
+    } else if (currentTask === "image") {
       document.getElementById("image-form").style.display = "block";
-    } else if (show_form_type === "video_form") {
+    } else if (currentTask === "video") {
       document.getElementById("video-form").style.display = "block";
-    } else if (show_form_type === "publish_form") {
+    } else if (currentTask === "publish") {
       document.getElementById("publish-form").style.display = "block";
-    }  
+    } else {
+      document.getElementById("default-form").style.display = "block";
+    } 
   }
 
   $(document).on('submit', '#topic-form', function (e) {
@@ -378,21 +411,24 @@
     $('#publish-form').find('button[type="submit"]').prop('disabled', true);
 
 
-    if (action === 'transcript') {
-      console.log("Save button was clicked");
-      topic = $('#transcript-topic').val();
-      long_video = $('#transcript-long-video').is(':checked');
-      theme = $('#transcript-selectedtheme').val();
-      url = "{% url 'create_video' %}";
-      process_header = 'Generating Transcript';
-      interactive = true;
-    } else if (action === 'default') {
+    if (action === 'default') {
       console.log("Publish button was clicked");
       topic = $('#default-topic').val();
       long_video = $('#default-long-video').is(':checked');
       theme = $('#default-selectedtheme').val();
       url = "{% url 'create_video' %}";
       interactive = false
+    } else if (action === 'transcript') {
+      console.log("Transcript button was clicked");
+      topic = $('#transcript-topic').val();
+      long_video = $('#transcript-long-video').is(':checked');
+      theme = $('#transcript-selectedtheme').val();
+      video_id = $('#transcript_video_id').val();
+      task_name = $('#transcript_task_name').val();
+      url = "{% url 'process_task' %}";
+      process_header = 'Generating Transcript';
+      interactive = true;
+    
     } else if (action === 'image') {
       console.log("Image button was clicked");
       topic = $('#image-topic').val();
@@ -418,11 +454,12 @@
       url = "{% url 'process_task' %}";
       interactive = true
     } else if (action === 'next') {
+      selection_type = 'next'
       console.log("Next button was clicked");
       console.log('step3', 'video_id', video_id, 'task_id', task_id);
     }
 
-    if (action === 'default' || action === 'transcript') {
+    if (action === 'default') {
       if (topic === null || topic === '') { return; }
       if (theme === null || theme === '') { return; }
         $('#displaytopic').text(topic);
@@ -454,8 +491,24 @@
         if (video_id === null || video_id === '') { return; }
         if (task_id === null || task_id === '') { return; }
         return;
-    }
+    } else if(action === 'transcript') {
+        $('#displaytopic').text(process_header);
 
+        console.log('video_id', video_id);
+        console.log('task_name', task_name);
+        if (video_id === null || video_id === '') { return; }
+        if (task_name === null || task_name === '') { return; }
+        if (topic === null || topic === '') { return; }
+
+
+        data = {
+          topic: topic,
+          long_video: long_video,
+          video_id: video_id,
+          task_name: task_name,
+          csrfmidddlewaretoken: $('input[name=csrfmidddlewaretoken]').val()
+        }
+    }
     $('#submit-button').hide();
     $.ajax({
       type: 'POST',
@@ -544,6 +597,8 @@
             if (data == 'DONE' && action === 'default'){
               $('#loading-btn-header').empty();
               $('#loading-btn-footer').empty();
+              $('#default-finish-button').show();
+
             } else if (data !== undefined && data !== null) { // Check if data is not undefined or null
               if (data == 'DONE'){ data = 'Prepaing...'}
               $('#msg').html(`

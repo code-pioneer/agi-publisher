@@ -136,7 +136,7 @@ async def get_video_response_by_request_id(request_id, since_ts):
         return [], since_ts
 
     
-async def update_video_request(request_id, status='awaiting', videourl=None, imgurl=None, topic=None, video_name=None, transcript=None):
+async def update_video_request(request_id, status='awaiting', videourl=None, imgurl=None, topic=None, video_name=None, transcript=None, long_video=False):
     try:
         video_request_instance = await sync_to_async(VideoRequestModel.objects.get)(pk=request_id)
         video_request_instance.status = status
@@ -150,6 +150,9 @@ async def update_video_request(request_id, status='awaiting', videourl=None, img
             video_request_instance.video_name = video_name
         if transcript:
             video_request_instance.transcript = transcript
+        if long_video:
+            video_request_instance.long_video = long_video
+            
         await sync_to_async(video_request_instance.save)()
         return video_request_instance
     except VideoRequestModel.DoesNotExist:

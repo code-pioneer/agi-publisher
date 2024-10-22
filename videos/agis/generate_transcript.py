@@ -32,8 +32,6 @@ And get this, the Empire State Building has been featured in countless movies, T
 
 So, next time you're in the Big Apple, make sure to check out the Empire State Building and take in the breathtaking views from the top!
 
-Thanks for watching, and don't forget to hit that like button and subscribe for more fun facts about iconic landmarks!
-
     """
 
     )

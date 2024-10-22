@@ -4,9 +4,9 @@ from videos.db import update_video_request, update_video_task
 
 async def update_db(id, video_url, image_url, video_name, transcript, task_id):
 
-    await update_video_request(request_id=id, videourl=video_url, imgurl=image_url, video_name=video_name, transcript=transcript  )
-    await update_video_task(id=task_id)
-
+    task_instance = await update_video_task(id=task_id)
+    if task_instance.task_name != 'publish':
+        await update_video_request(request_id=id, videourl=video_url, imgurl=image_url, video_name=video_name, transcript=transcript  )
     return f'DB updated'
         
 @tool

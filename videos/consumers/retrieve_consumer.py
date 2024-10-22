@@ -36,20 +36,17 @@ class RetrieveVideoConsumer(AsyncWebsocketConsumer):
                             if response.get('message') == 'DONE':
                                 print(f"End of blog entries: {response}")
                                 if data['interactive']:
-                                    print(f"tesing1")
 
                                     video_task_instance = await get_task_by_id(id=data['task_id'].strip())
                                     if video_task_instance:
-                                        print(f"tesing2")
 
                                         while True:
                                             video_task_instance = await get_task_by_id(id=data['task_id'].strip())
                                             if video_task_instance.status == 'complete':
-                                                print(f"tesing3")
 
                                                 response = await get_video_by_id(id=data['channel'].strip())
                                                 if video_task_instance.task_name == "transcript":
-                                                    task_res = f'<h4 class="mb-1">{response.transcript}</h4>'
+                                                    task_res = f'<p class="mb-1">{response.transcript}</p>'
                                                 elif video_task_instance.task_name == "image":
                                                     selected_theme_url = static(f'{response.imgurl}')  # Static file path
                                                     task_res = f'''<div style="position: relative;">
@@ -66,7 +63,7 @@ class RetrieveVideoConsumer(AsyncWebsocketConsumer):
 
                                                 await self.send(text_data=json.dumps({'message': message }))
                                                 return
-                                            print(f"tesing4")
+                                            print(f"in loop")
                                             await asyncio.sleep(5)  # Wait for 5 seconds before checking for new entries
 
                                 return

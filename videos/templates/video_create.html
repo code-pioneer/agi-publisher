@@ -179,7 +179,7 @@
         <button type="submit" value="publish" class="btn btn-primary form-control">Publish Video</button>
       </div>
     </form>
-    {% if currentTask %}
+    {% if context.current_task %}
 
     <form id="next-form" method="GET" action="{% url 'select_task' 'next' video.id task_name %}">
       {% csrf_token %}
@@ -582,6 +582,7 @@
             if(action === 'publish'){
               $('#finish-button').show();
             } else{
+              console.log('setting next button')
               $('#next-button').show();
             }
             console.log('step2', 'video_id', video_id, 'task_id', task_id,);

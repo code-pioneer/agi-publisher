@@ -346,3 +346,25 @@ async def delete_by_id(request, id):
         return HttpResponseServerError('Humm... Something went wrong... Try later')
     
 from django.shortcuts import render
+
+
+@require_POST
+async def edit_transcript(request):
+    print("view edit_transcript")
+
+    try:
+        
+        async_get_is_authenticated = sync_to_async(lambda: request.user.is_authenticated)  
+        user_is_authenticated = await async_get_is_authenticated()
+        if not user_is_authenticated:
+            return redirect('/accounts/login/')
+        
+        video_id = request.POST.get('video_id')        
+        transcript = request.POST.get('transcript')
+        await update_video_request(request_id=video_id, transcript=transcript)
+        return JsonResponse({'message': 'Transcript updated successfully', 'id': video_id})
+
+       
+    except Exception as e:
+        print("An error occured in chat post view", e)
+        return HttpResponseServerError('Humm... Something went wrong... Try later')

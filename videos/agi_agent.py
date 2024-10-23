@@ -38,7 +38,7 @@ async def video_agent(topic, id, interactive_mode, task_name, task_id):
         elif task_name == 'image':
            input = f'''Your objective is to perform following tasks, Do not use any other tools. 
             1. Generate an approriate Image.   
-            2. Once image is ready,update Database with image_url.        
+            2. Once image is ready and image_url is available, update Database with image_url.        
             Topic: {topic}. VIDEO_PARAMS: {json.dumps(params)} ID: { video_instance.id} Filename: {video_instance.video_name} task_id: {task_id} video_url: ''  '''
         elif task_name == 'transcript':
             input = f'''Your objective is to perform following tasks, Do not use any other tools.

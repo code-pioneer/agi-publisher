@@ -5,20 +5,20 @@
   <nav aria-label="breadcrumb">
     <ol class="breadcrumb">
       {% for task in context.tasks %}
-        {% if task in context.past_tasks %}
-          <!-- Form for past tasks -->
-          <li class="breadcrumb-item">
-            <form method="GET" action="{% url 'select_task' 'current' video.id task%}" style="display: inline;">
-              {% csrf_token %}
-              <input type="hidden" name="task" value="{{ task }}">
-              <button type="submit" class="btn btn-link p-0">{{ task|capfirst }}</button>
-            </form>
-          </li>
-        {% elif task == context.current_task %}
-          <li class="breadcrumb-item active" aria-current="page">{{ task|capfirst }}</li>
-        {% else %}
-          <li class="breadcrumb-item">{{ task|capfirst }}</li>
-        {% endif %}
+      {% if task in context.past_tasks %}
+      <!-- Form for past tasks -->
+      <li class="breadcrumb-item">
+        <form method="GET" action="{% url 'select_task' 'current' video.id task%}" style="display: inline;">
+          {% csrf_token %}
+          <input type="hidden" name="task" value="{{ task }}">
+          <button type="submit" class="btn btn-link p-0">{{ task|capfirst }}</button>
+        </form>
+      </li>
+      {% elif task == context.current_task %}
+      <li class="breadcrumb-item active" aria-current="page">{{ task|capfirst }}</li>
+      {% else %}
+      <li class="breadcrumb-item">{{ task|capfirst }}</li>
+      {% endif %}
       {% endfor %}
     </ol>
 
@@ -41,13 +41,13 @@
           <div style="position: relative;">
             <img class="card-img-top" src="{% static selected_theme.url %}">
           </div>
-            <div class="row p-1">
-              <div class="col text-center">
-                <p style="line-height: .60rem;">
-                <h4 class="mb-2">{{ selected_theme.name }}</h4>
-                </p>
-                <span class="tiny text-body-secondary">{{ selected_theme.description }}</span>
-              </div>
+          <div class="row p-1">
+            <div class="col text-center">
+              <p style="line-height: .60rem;">
+              <h4 class="mb-2">{{ selected_theme.name }}</h4>
+              </p>
+              <span class="tiny text-body-secondary">{{ selected_theme.description }}</span>
+            </div>
           </div>
         </div>
       </div>
@@ -57,7 +57,7 @@
           <div class="card-header bg-primary">
             <div class="col header-title h3 text-center text-white">Transcript</div>
           </div>
-   
+
           <div class="card-body shadow-sm">
             <div class="row p-1">
               <div class="col">
@@ -67,7 +67,7 @@
           </div>
         </div>
       </div>
-      {% endif %}   
+      {% endif %}
       {% if video.imgurl %}
       <div class="col-xl-3 col-lg-3 col-md-6 mb-3">
         <div class="card card-fill shadow-sm">
@@ -77,127 +77,140 @@
           <div style="position: relative;">
             <img class="card-img-top" src="{% static video.imgurl %}">
           </div>
-          </div>
         </div>
       </div>
-
-      {% endif %}  
-      {% if video.videourl %}
-      <div class="col-xl-3 col-lg-3 col-md-6 mb-3">
-        <div class="card card-fill shadow-sm">
-          <div class="card-header bg-primary">
-            <div class="col header-title h3 text-center text-white">Video</div>
-          </div>
-          <div style="position: relative;">
-            <video class="card-img-top"  controls>
-              <source src="{% static video.videourl %}" type="video/mp4">
-            </video>          
-        
-          </div>
-        </div>
-      </div>
-
-      {% endif %} 
     </div>
 
-    <form id="topic-form">
-      {% csrf_token %}
-      <div class="mb-3" id="default-form" style="display: none;">
-        <div class="btn-group" role="group" aria-label="Basic checkbox toggle button group">
-          <div class="form-check form-switch">
-            <input class="form-check-input" type="checkbox" id="default-long-video"
-              style="width: 3rem; height: 1.5rem; border-radius: 1.5rem;">
-            <label class="form-check-label" for="default-long-video"
-              style="font-size: 1.25rem; padding-left: 0.5rem;">Long Video</label>
-          </div>
-          <div class="btn-group" role="group">
-            <input type="hidden" id="default-selectedtheme" name="default-selectedtheme"
-              value="{{selected_theme.theme_id}}">
-          </div>
+    {% endif %}
+    {% if video.videourl %}
+    <div class="col-xl-3 col-lg-3 col-md-6 mb-3">
+      <div class="card card-fill shadow-sm">
+        <div class="card-header bg-primary">
+          <div class="col header-title h3 text-center text-white">Video</div>
         </div>
-        <div class="mt-4"></div> <!-- Add spacing here -->
-        <input id="default-topic" name="default-topic" class="form-control me-2 border-primary" type="text"
-          placeholder="What's on your mind?">
-        <div class="mt-4"></div> <!-- Add spacing here -->
-        <button type="submit" value="default" class="btn btn-primary form-control">Generate</button>
-      </div>
-      <div class="mt-4 d-flex justify-content-end"> <!-- Add spacing here -->
-        <a button type="submit" id="default-finish-button" class="btn btn-primary btn-lg me-3"
-          style="display:none;" href="{% url 'myvideos' %}">Finish</button>
-        </a>
-      </div>
-      <div class="mb-3" id="transcript-form" style="display: none;">
-        <div class="btn-group" role="group" aria-label="Basic checkbox toggle button group">
-          <div class="form-check form-switch">
-            <input class="form-check-input" type="checkbox" id="transcript-long-video"
-              style="width: 3rem; height: 1.5rem; border-radius: 1.5rem;">
-            <label class="form-check-label" for="transcript-long-video"
-              style="font-size: 1.25rem; padding-left: 0.5rem;">Long Video</label>
-          </div>
-          <div class="btn-group" role="group">
-            <input type="hidden" id="transcript-selectedtheme" name="transcript-selectedtheme"
-              value="{{selected_theme.theme_id}}">
-          </div>
+        <div style="position: relative;">
+          <video class="card-img-top" controls>
+            <source src="{% static video.videourl %}" type="video/mp4">
+          </video>
+
         </div>
-        <div class="mt-4"></div> <!-- Add spacing here -->
-        <input id="transcript-topic" name="transcript-topic" class="form-control me-2 border-primary" type="text"
-          placeholder="What's on your mind?">
-        <div class="mt-4"></div> <!-- Add spacing here -->
-        <input type="hidden" id="transcript_video_id" name="transcript_video_id" value="{{ video.id }}">
-        <input type="hidden" id="transcript_task_name" name="transcript_task_id" value="{{context.current_task }}">
-
-        <button type="submit" value="transcript" class="btn btn-primary form-control">Generate Transcript</button>
       </div>
-      <div class="mb-3" id="image-form" style="display: none;">
-        <div class="mt-4"></div> <!-- Add spacing here -->
-        <input id="image-topic" name="image-topic" class="form-control me-2 border-primary" type="text"
-          placeholder="What's on your mind?">
-        <div class="mt-4"></div> <!-- Add spacing here -->
-        <input type="hidden" id="image_video_id" name="image_video_id" value="{{ video.id }}">
-        <input type="hidden" id="image_task_name" name="image_task_id" value="{{context.current_task }}">
+    </div>
 
-        <button type="submit" value="image" class="btn btn-primary form-control">Build Image</button>
+    {% endif %}
+  </div>
+
+  <form id="topic-form">
+    {% csrf_token %}
+    <div class="mb-3" id="default-form" style="display: none;">
+      <div class="btn-group" role="group" aria-label="Basic checkbox toggle button group">
+        <div class="form-check form-switch">
+          <input class="form-check-input" type="checkbox" id="default-long-video"
+            style="width: 3rem; height: 1.5rem; border-radius: 1.5rem;">
+          <label class="form-check-label" for="default-long-video"
+            style="font-size: 1.25rem; padding-left: 0.5rem;">Long Video</label>
+        </div>
+        <div class="btn-group" role="group">
+          <input type="hidden" id="default-selectedtheme" name="default-selectedtheme"
+            value="{{selected_theme.theme_id}}">
+        </div>
       </div>
-      <div class="mb-3" id="video-form" style="display: none;">
-        <div class="mt-4"></div> <!-- Add spacing here -->
-        <input id="video-topic" name="video-topic" class="form-control me-2 border-primary" type="text"
-          placeholder="What's on your mind?">
-        <div class="mt-4"></div> <!-- Add spacing here -->
-        <input type="hidden" id="video_video_id" name="video_video_id" value="{{ video.id }}">
-        <input type="hidden" id="video_task_name" name="video_task_id" value="{{context.current_task }}">
-
-        <button type="submit" value="video" class="btn btn-primary form-control">Build Video</button>
+      <div class="mt-4"></div> <!-- Add spacing here -->
+      <input id="default-topic" name="default-topic" class="form-control me-2 border-primary" type="text"
+        placeholder="What's on your mind?">
+      <div class="mt-4"></div> <!-- Add spacing here -->
+      <button type="submit" value="default" class="btn btn-primary form-control">Generate</button>
+    </div>
+    <div class="mt-4 d-flex justify-content-end"> <!-- Add spacing here -->
+      <a button type="submit" id="default-finish-button" class="btn btn-primary btn-lg me-3" style="display:none;"
+        href="{% url 'myvideos' %}">Finish</button>
+      </a>
+    </div>
+    <div class="mb-3" id="transcript-form" style="display: none;">
+      <div class="btn-group" role="group" aria-label="Basic checkbox toggle button group">
+        <div class="form-check form-switch">
+          <input class="form-check-input" type="checkbox" id="transcript-long-video"
+            style="width: 3rem; height: 1.5rem; border-radius: 1.5rem;">
+          <label class="form-check-label" for="transcript-long-video"
+            style="font-size: 1.25rem; padding-left: 0.5rem;">Long Video</label>
+        </div>
+        <div class="btn-group" role="group">
+          <input type="hidden" id="transcript-selectedtheme" name="transcript-selectedtheme"
+            value="{{selected_theme.theme_id}}">
+        </div>
       </div>
-      <div class="mb-3" id="publish-form" style="display: none;">
-        <div class="mt-4"></div> <!-- Add spacing here -->
-        <input type="hidden" id="publish-topic" name="publish-topic" class="form-control me-2 border-primary" type="text"
-          placeholder="What's on your mind?">
-        <div class="mt-4"></div> <!-- Add spacing here -->
-        <input type="hidden" id="publish_video_id" name="publish_video_id" value="{{ video.id }}">
-        <input type="hidden" id="publish_task_name" name="publish_task_id" value="{{context.current_task }}">
+      <div class="mt-4"></div> <!-- Add spacing here -->
+      <input id="transcript-topic" name="transcript-topic" class="form-control me-2 border-primary" type="text"
+        placeholder="What's on your mind?">
+      <div class="mt-4"></div> <!-- Add spacing here -->
+      <input type="hidden" id="transcript_video_id" name="transcript_video_id" value="{{ video.id }}">
+      <input type="hidden" id="transcript_task_name" name="transcript_task_id" value="{{context.current_task }}">
 
-        <button type="submit" value="publish" class="btn btn-primary form-control">Publish Video</button>
-      </div>
-    </form>
-    {% if context.current_task %}
+      <button type="submit" value="transcript" class="btn btn-primary form-control">Generate Transcript</button>
+    </div>
+    <div class="mb-3" id="image-form" style="display: none;">
+      <div class="mt-4"></div> <!-- Add spacing here -->
+      <input id="image-topic" name="image-topic" class="form-control me-2 border-primary" type="text"
+        placeholder="What's on your mind?">
+      <div class="mt-4"></div> <!-- Add spacing here -->
+      <input type="hidden" id="image_video_id" name="image_video_id" value="{{ video.id }}">
+      <input type="hidden" id="image_task_name" name="image_task_id" value="{{context.current_task }}">
 
+      <button type="submit" value="image" class="btn btn-primary form-control">Build Image</button>
+    </div>
+    <div class="mb-3" id="video-form" style="display: none;">
+      <div class="mt-4"></div> <!-- Add spacing here -->
+      <input id="video-topic" name="video-topic" class="form-control me-2 border-primary" type="text"
+        placeholder="What's on your mind?">
+      <div class="mt-4"></div> <!-- Add spacing here -->
+      <input type="hidden" id="video_video_id" name="video_video_id" value="{{ video.id }}">
+      <input type="hidden" id="video_task_name" name="video_task_id" value="{{context.current_task }}">
+
+      <button type="submit" value="video" class="btn btn-primary form-control">Build Video</button>
+    </div>
+    <div class="mb-3" id="publish-form" style="display: none;">
+      <div class="mt-4"></div> <!-- Add spacing here -->
+      <input type="hidden" id="publish-topic" name="publish-topic" class="form-control me-2 border-primary" type="text"
+        placeholder="What's on your mind?">
+      <div class="mt-4"></div> <!-- Add spacing here -->
+      <input type="hidden" id="publish_video_id" name="publish_video_id" value="{{ video.id }}">
+      <input type="hidden" id="publish_task_name" name="publish_task_id" value="{{context.current_task }}">
+
+      <button type="submit" value="publish" class="btn btn-primary form-control">Publish Video</button>
+    </div>
+  </form>
+  {% if context.current_task %}
+
+
+  <div class="mt-4 d-flex justify-content-end"> <!-- Container for both buttons -->
+    <!-- Edit Button -->
+    <button type="submit" value="" id="edit-transcript-button" class="btn btn-primary btn-lg mb-3 me-3"
+      style="display:none;">Edit Transcript</button>
+
+    <!-- Next Button -->
     <form id="next-form" method="GET" action="{% url 'select_task' 'next' video.id task_name %}">
       {% csrf_token %}
-      <div class="mb-3" id="task-form">
-        <div class="mt-4"></div> <!-- Add spacing here -->
-        <div class="mt-4 d-flex justify-content-end"> <!-- Add spacing here -->
-          <button type="submit" value="next" id="next-button" class="btn btn-primary btn-lg me-3"
-            style="display:none;">Next</button>
-        </div>
-        <div class="mt-4 d-flex justify-content-end"> <!-- Add spacing here -->
-          <a button type="submit" id="finish-button" class="btn btn-primary btn-lg me-3"
-            style="display:none;" href="{% url 'myvideos' %}">Finish</button>
-          </a>
-        </div>
-      </div>
+      <button type="submit" value="" id="next-button" class="btn btn-primary btn-lg mb-3 me-3"
+        style="display:none;">Next</button>
     </form>
-    {% endif %}  
+    <a button type="submit" id="finish-button" class="btn btn-primary btn-lg mb-3 me-3" style="display:none;"
+      href="{% url 'myvideos' %}">Finish</button>
+    </a>
   </div>
+
+
+  <form id="transcript-edit-form" style="display:none;">
+    {% csrf_token %}
+    <div class="mb-3">
+      <div class="mt-4"></div> <!-- Add spacing here -->
+      <textarea id="transcript-data" name="transcript-data" value="" class="form-control me-2 border-primary" rows="12"></textarea>
+      <div class="mt-4"></div> <!-- Add spacing here -->
+      <input type="hidden" id="edit_video_id" name="edit_video_id" value="{{ video.id }}">
+      <button type="submit" id="transcript-edit-btn" class="btn btn-primary form-control">Save Transcript</button>
+    </div>
+  </form>
+  {% endif %}
+</div>
 </div>
 <div class="card" id="response-header" style="display: none;">
   <div class="card-header">
@@ -389,8 +402,55 @@
       document.getElementById("publish-form").style.display = "block";
     } else {
       document.getElementById("default-form").style.display = "block";
-    } 
+    }
   }
+  document.getElementById("edit-transcript-button").addEventListener("click", function () {
+    console.log('testing edit 2')
+
+    // Hide the display view and show the input field
+    document.getElementById("response-header").style.display = "none";
+    document.getElementById("response-body").style.display = "none";
+    document.getElementById("edit-transcript-button").style.display = "none";
+    document.getElementById("transcript-edit-form").style.display = "block";
+    document.getElementById("next-button").style.display = "none";
+
+  });
+
+  $(document).on('submit', '#transcript-edit-form', function (e) {
+    console.log('testing edit 1')
+    e.preventDefault();
+    $('#msg').empty();
+    $('#response-header').hide();
+    $('#response-body').hide();
+    $('#transcript-edit-btn').hide();
+    transcript = $('#transcript-data').val();
+    video_id = $('#edit_video_id').val();
+    url = "{% url 'edit_transcript' %}";
+
+    data = {
+      video_id: video_id,
+      transcript: transcript,
+      csrfmidddlewaretoken: $('input[name=csrfmidddlewaretoken]').val()
+    }
+    $.ajax({
+      type: 'POST',
+      url: url,
+      data: data,
+      headers: {
+        "X-Requested-With": "XMLHttpRequest",
+        "X-CSRFToken": getCookie("csrftoken"),
+      },
+      success: function (response) {
+        $('#next-button').show();
+
+
+      },
+      error: function (err) {
+        console.log('error', err);
+      }
+    })
+  })
+
 
   $(document).on('submit', '#topic-form', function (e) {
     e.preventDefault();
@@ -428,7 +488,7 @@
       url = "{% url 'process_task' %}";
       process_header = 'Generating Transcript';
       interactive = true;
-    
+
     } else if (action === 'image') {
       console.log("Image button was clicked");
       topic = $('#image-topic').val();
@@ -462,52 +522,52 @@
     if (action === 'default') {
       if (topic === null || topic === '') { return; }
       if (theme === null || theme === '') { return; }
-        $('#displaytopic').text(topic);
-        console.log('long_video', long_video);
-        console.log('theme', theme);
-        console.log('topic', topic);
-        data = {
-          topic: topic,
-          long_video: long_video,
-          theme: theme,
-          csrfmidddlewaretoken: $('input[name=csrfmidddlewaretoken]').val()
-        }
-    } else if(action === 'image' || action === 'video' || action === 'publish') {
-        $('#displaytopic').text(process_header);
+      $('#displaytopic').text(topic);
+      console.log('long_video', long_video);
+      console.log('theme', theme);
+      console.log('topic', topic);
+      data = {
+        topic: topic,
+        long_video: long_video,
+        theme: theme,
+        csrfmidddlewaretoken: $('input[name=csrfmidddlewaretoken]').val()
+      }
+    } else if (action === 'image' || action === 'video' || action === 'publish') {
+      $('#displaytopic').text(process_header);
 
-        console.log('video_id', video_id);
-        console.log('task_name', task_name);
-        if (video_id === null || video_id === '') { return; }
-        if (task_name === null || task_name === '') { return; }
+      console.log('video_id', video_id);
+      console.log('task_name', task_name);
+      if (video_id === null || video_id === '') { return; }
+      if (task_name === null || task_name === '') { return; }
 
-        data = {
-          video_id: video_id,
-          task_name: task_name,
-          csrfmidddlewaretoken: $('input[name=csrfmidddlewaretoken]').val()
-        }
-    } else if(action === 'next') {
-        console.log('video_id', video_id);
-        console.log('task_id', task_id);
-        if (video_id === null || video_id === '') { return; }
-        if (task_id === null || task_id === '') { return; }
-        return;
-    } else if(action === 'transcript') {
-        $('#displaytopic').text(process_header);
+      data = {
+        video_id: video_id,
+        task_name: task_name,
+        csrfmidddlewaretoken: $('input[name=csrfmidddlewaretoken]').val()
+      }
+    } else if (action === 'next') {
+      console.log('video_id', video_id);
+      console.log('task_id', task_id);
+      if (video_id === null || video_id === '') { return; }
+      if (task_id === null || task_id === '') { return; }
+      return;
+    } else if (action === 'transcript') {
+      $('#displaytopic').text(process_header);
 
-        console.log('video_id', video_id);
-        console.log('task_name', task_name);
-        if (video_id === null || video_id === '') { return; }
-        if (task_name === null || task_name === '') { return; }
-        if (topic === null || topic === '') { return; }
+      console.log('video_id', video_id);
+      console.log('task_name', task_name);
+      if (video_id === null || video_id === '') { return; }
+      if (task_name === null || task_name === '') { return; }
+      if (topic === null || topic === '') { return; }
 
 
-        data = {
-          topic: topic,
-          long_video: long_video,
-          video_id: video_id,
-          task_name: task_name,
-          csrfmidddlewaretoken: $('input[name=csrfmidddlewaretoken]').val()
-        }
+      data = {
+        topic: topic,
+        long_video: long_video,
+        video_id: video_id,
+        task_name: task_name,
+        csrfmidddlewaretoken: $('input[name=csrfmidddlewaretoken]').val()
+      }
     }
     $('#submit-button').hide();
     $.ajax({
@@ -531,9 +591,9 @@
         console.log('response', response.id, response.message);
         video_id = response.id;
         if (response.task_id) {
-            task_id = response.task_id;
+          task_id = response.task_id;
         } else {
-            task_id = '';  // Fallback value when task_id is null or undefined
+          task_id = '';  // Fallback value when task_id is null or undefined
         }
         console.log('video_id', video_id, 'task_id', task_id,);
 
@@ -548,7 +608,7 @@
             'task_id': task_id
           }));
         };
-        if(action === 'default'){
+        if (action === 'default') {
           $('#response-header').show();
         }
         $('#response-body').show();
@@ -579,11 +639,24 @@
             $('#video-form').find('button[type="submit"]').prop('disabled', true);
             $('#publish-form').hide();
             $('#publish-form').find('button[type="submit"]').prop('disabled', true);
-            if(action === 'publish'){
+            if (action === 'publish') {
               $('#finish-button').show();
-            } else{
+            } else {
               console.log('setting next button')
               $('#next-button').show();
+              if (action === 'transcript') {
+                console.log('testing edit 3')
+
+                $('#edit-transcript-button').show();
+                let tempDiv = document.createElement('div');
+                tempDiv.innerHTML = message.message.task_response;
+                let cleanedText = tempDiv.textContent || tempDiv.innerText;
+                $('#transcript-data').val(cleanedText);
+
+
+
+
+              }
             }
             console.log('step2', 'video_id', video_id, 'task_id', task_id,);
             $('#video_id').val(video_id);
@@ -595,13 +668,13 @@
             task = message.message.profile.task;
             data = message.message.message;
             url = message.message.profile.url;
-            if (data == 'DONE' && action === 'default'){
+            if (data == 'DONE' && action === 'default') {
               $('#loading-btn-header').empty();
               $('#loading-btn-footer').empty();
               $('#default-finish-button').show();
 
             } else if (data !== undefined && data !== null) { // Check if data is not undefined or null
-              if (data == 'DONE'){ data = 'Prepaing...'}
+              if (data == 'DONE') { data = 'Prepaing...' }
               $('#msg').html(`
                       <div class="row align-items-center">
                           <div class="card">

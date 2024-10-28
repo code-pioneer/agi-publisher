@@ -27,7 +27,10 @@ async def video_agent(topic, id, interactive_mode, task_name, task_id):
     topic = video_instance.topic
     long_video = video_instance.long_video
     theme = video_instance.theme
-    params = {"long_video": long_video, "theme": theme}
+    voice = video_instance.voice
+    image_prompt = video_instance.image_prompt
+
+    params = {"long_video": long_video, "theme": theme, "voice": voice}
     if interactive_mode:
         if task_name == 'prep':
             input = f'''Your objective is to perform following tasks. 
@@ -39,7 +42,7 @@ async def video_agent(topic, id, interactive_mode, task_name, task_id):
            input = f'''Your objective is to perform following tasks, Do not use any other tools. 
             1. Generate an approriate Image.   
             2. Once image is ready and image_url is available, update Database with image_url.        
-            Topic: {topic}. VIDEO_PARAMS: {json.dumps(params)} ID: { video_instance.id} Filename: {video_instance.video_name} task_id: {task_id} video_url: ''  '''
+            Topic: {image_prompt}. VIDEO_PARAMS: {json.dumps(params)} ID: { video_instance.id} Filename: {video_instance.video_name} task_id: {task_id} video_url: ''  '''
         elif task_name == 'transcript':
             input = f'''Your objective is to perform following tasks, Do not use any other tools.
             1. Generate Filename for the topic. 
@@ -71,8 +74,8 @@ async def video_agent(topic, id, interactive_mode, task_name, task_id):
             2. Generate an approriate Image.
             3. Generate transcript for video creation.
             4. Generate Video using image and transcript.
-            4. Save the Video transcript result
-            5. Generate Social Post content.
+            5. Save the Video transcript result
+            6. Generate Social Post content.
             
             Topic: {topic}. VIDEO_PARAMS: {json.dumps(params)} ID: { video_instance.id}'''
             

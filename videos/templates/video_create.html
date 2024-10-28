@@ -150,7 +150,7 @@
     </div>
     <div class="mb-3" id="image-form" style="display: none;">
       <div class="mt-4"></div> <!-- Add spacing here -->
-      <input id="image-topic" name="image-topic" class="form-control me-2 border-primary" type="text"
+      <input id="image-prompt" name="image-prompt" class="form-control me-2 border-primary" type="text"
         placeholder="What's on your mind?">
       <div class="mt-4"></div> <!-- Add spacing here -->
       <input type="hidden" id="image_video_id" name="image_video_id" value="{{ video.id }}">
@@ -159,13 +159,53 @@
       <button type="submit" value="image" class="btn btn-primary form-control">Build Image</button>
     </div>
     <div class="mb-3" id="video-form" style="display: none;">
+      <div class="d-flex align-items-center mb-3 ms-3">
+
+        <!-- Dropdown menu -->
+        <div class="dropdown me-3">
+          <a class="btn btn-secondary dropdown-toggle" href="#" role="button" id="dropdownMenuLink"
+            data-bs-toggle="dropdown" aria-expanded="false">
+            Select Voice
+          </a>
+          <ul class="dropdown-menu" aria-labelledby="dropdownMenuLink">
+            <li><a class="dropdown-item" href="#" data-value="alloy">Alloy</a></li>
+            <li><a class="dropdown-item" href="#" data-value="echo">Echo</a></li>
+            <li><a class="dropdown-item" href="#" data-value="fable">Fable</a></li>
+            <li><a class="dropdown-item" href="#" data-value="onyx">Onyx</a></li>
+            <li><a class="dropdown-item" href="#" data-value="nova">Nova</a></li>
+            <li><a class="dropdown-item" href="#" data-value="shimmer">Shimmer</a></li>
+          </ul>
+        </div>
+        <!-- Hidden input to hold selected value -->
+        <input type="hidden" id="selectedVoiceValue" name="selected_voice">
+
+        <button class="btn btn-secondary" type="button" data-bs-toggle="collapse" data-bs-target="#collapseExample"
+          aria-expanded="false" aria-controls="collapseExample">
+          Voice Preview
+        </button>
+
+        <div class="collapse ms-3" id="collapseExample">
+            <ul class="list-group list-group-flush" style="margin-bottom: 0.5rem;">
+              {% for voice in voices %}
+              <li class="list-group-item d-flex justify-content-between align-items-center">
+                {{voice.name}}
+                <span class="rounded-pill ms-3">
+                  <audio controls style="width: 150px;height: 25px;">
+                    <source src="{%static voice.url %}" type="audio/mp3">
+                    Your browser does not support the audio element.
+                  </audio></span>
+              </li>
+              {% endfor %}
+            </ul>
+        </div>
+      </div>
+
       <div class="mt-4"></div> <!-- Add spacing here -->
-      <input id="video-topic" name="video-topic" class="form-control me-2 border-primary" type="text"
+      <input type="hidden" id="video-topic" name="video-topic" class="form-control me-2 border-primary" type="text"
         placeholder="What's on your mind?">
       <div class="mt-4"></div> <!-- Add spacing here -->
       <input type="hidden" id="video_video_id" name="video_video_id" value="{{ video.id }}">
       <input type="hidden" id="video_task_name" name="video_task_id" value="{{context.current_task }}">
-
       <button type="submit" value="video" class="btn btn-primary form-control">Build Video</button>
     </div>
     <div class="mb-3" id="publish-form" style="display: none;">
@@ -203,7 +243,8 @@
     {% csrf_token %}
     <div class="mb-3">
       <div class="mt-4"></div> <!-- Add spacing here -->
-      <textarea id="transcript-data" name="transcript-data" value="" class="form-control me-2 border-primary" rows="12"></textarea>
+      <textarea id="transcript-data" name="transcript-data" value="" class="form-control me-2 border-primary"
+        rows="12"></textarea>
       <div class="mt-4"></div> <!-- Add spacing here -->
       <input type="hidden" id="edit_video_id" name="edit_video_id" value="{{ video.id }}">
       <button type="submit" id="transcript-edit-btn" class="btn btn-primary form-control">Save Transcript</button>
@@ -404,18 +445,19 @@
       document.getElementById("default-form").style.display = "block";
     }
   }
-  document.getElementById("edit-transcript-button").addEventListener("click", function () {
-    console.log('testing edit 2')
+  if ("{{ context.current_task }}"){
+    document.getElementById("edit-transcript-button").addEventListener("click", function () {
+      console.log('testing edit 2')
 
-    // Hide the display view and show the input field
-    document.getElementById("response-header").style.display = "none";
-    document.getElementById("response-body").style.display = "none";
-    document.getElementById("edit-transcript-button").style.display = "none";
-    document.getElementById("transcript-edit-form").style.display = "block";
-    document.getElementById("next-button").style.display = "none";
+      // Hide the display view and show the input field
+      document.getElementById("response-header").style.display = "none";
+      document.getElementById("response-body").style.display = "none";
+      document.getElementById("edit-transcript-button").style.display = "none";
+      document.getElementById("transcript-edit-form").style.display = "block";
+      document.getElementById("next-button").style.display = "none";
 
-  });
-
+    });
+  }
   $(document).on('submit', '#transcript-edit-form', function (e) {
     console.log('testing edit 1')
     e.preventDefault();
@@ -451,6 +493,19 @@
     })
   })
 
+  // Listen for dropdown item selection
+  $('.dropdown-item').on('click', function (event) {
+    event.preventDefault();
+
+    // Get the selected value
+    const selectedValue = $(this).data('value');
+
+    // Update the hidden input with selected value
+    $('#selectedVoiceValue').val(selectedValue);
+
+    // Update dropdown display to show the selected option
+    $('#dropdownMenuLink').text($(this).text());
+  });
 
   $(document).on('submit', '#topic-form', function (e) {
     e.preventDefault();
@@ -459,20 +514,9 @@
     $('#response-body').hide();
 
     var action = $(this).find('button[type=submit]:visible').val();
-    $('#default-form').hide();
-    $('#default-form').find('button[type="submit"]').prop('disabled', true);
-    $('#transcript-form').hide();
-    $('#transcript-form').find('button[type="submit"]').prop('disabled', true);
-    $('#image-form').hide();
-    $('#image-form').find('button[type="submit"]').prop('disabled', true);
-    $('#video-form').hide();
-    $('#video-form').find('button[type="submit"]').prop('disabled', true);
-    $('#publish-form').hide();
-    $('#publish-form').find('button[type="submit"]').prop('disabled', true);
-
 
     if (action === 'default') {
-      console.log("Publish button was clicked");
+      console.log("Default button was clicked");
       topic = $('#default-topic').val();
       long_video = $('#default-long-video').is(':checked');
       theme = $('#default-selectedtheme').val();
@@ -491,7 +535,7 @@
 
     } else if (action === 'image') {
       console.log("Image button was clicked");
-      topic = $('#image-topic').val();
+      image_prompt = $('#image-prompt').val();
       video_id = $('#image_video_id').val();
       task_name = $('#image_task_name').val();
       url = "{% url 'process_task' %}";
@@ -502,6 +546,7 @@
       topic = $('#video-topic').val();
       video_id = $('#video_video_id').val();
       task_name = $('#video_task_name').val();
+      voice = $('#selectedVoiceValue').val();
       url = "{% url 'process_task' %}";
       process_header = 'Generating Video';
       interactive = true
@@ -522,6 +567,9 @@
     if (action === 'default') {
       if (topic === null || topic === '') { return; }
       if (theme === null || theme === '') { return; }
+      $('#default-form').hide();
+      $('#default-form').find('button[type="submit"]').prop('disabled', true);
+
       $('#displaytopic').text(topic);
       console.log('long_video', long_video);
       console.log('theme', theme);
@@ -532,13 +580,15 @@
         theme: theme,
         csrfmidddlewaretoken: $('input[name=csrfmidddlewaretoken]').val()
       }
-    } else if (action === 'image' || action === 'video' || action === 'publish') {
+    } else if (action === 'publish') {
       $('#displaytopic').text(process_header);
 
       console.log('video_id', video_id);
       console.log('task_name', task_name);
       if (video_id === null || video_id === '') { return; }
-      if (task_name === null || task_name === '') { return; }
+      if (task_name === null || task_name === '') { return; }    
+      $('#publish-form').hide();
+      $('#publish-form').find('button[type="submit"]').prop('disabled', true);
 
       data = {
         video_id: video_id,
@@ -559,11 +609,48 @@
       if (video_id === null || video_id === '') { return; }
       if (task_name === null || task_name === '') { return; }
       if (topic === null || topic === '') { return; }
-
+      $('#transcript-form').hide();
+      $('#transcript-form').find('button[type="submit"]').prop('disabled', true);
 
       data = {
         topic: topic,
         long_video: long_video,
+        video_id: video_id,
+        task_name: task_name,
+        csrfmidddlewaretoken: $('input[name=csrfmidddlewaretoken]').val()
+      }
+    } else if (action === 'video') {
+      $('#displaytopic').text(process_header);
+
+      console.log('video_id', video_id);
+      console.log('task_name', task_name);
+      console.log('voice', voice);
+
+      if (video_id === null || video_id === '') { return; }
+      if (task_name === null || task_name === '') { return; }
+      if (voice === null || voice === '') { return; }
+      $('#video-form').hide();
+      $('#video-form').find('button[type="submit"]').prop('disabled', true);
+
+      data = {
+        voice: voice,
+        video_id: video_id,
+        task_name: task_name,
+        csrfmidddlewaretoken: $('input[name=csrfmidddlewaretoken]').val()
+      }
+    } else if (action === 'image') {
+      $('#displaytopic').text(process_header);
+
+      console.log('video_id', video_id);
+      console.log('task_name', task_name);
+      if (video_id === null || video_id === '') { return; }
+      if (task_name === null || task_name === '') { return; }
+      if (image_prompt === null || image_prompt === '') { return; }
+      $('#image-form').hide();
+      $('#image-form').find('button[type="submit"]').prop('disabled', true);
+
+      data = {
+        image_prompt: image_prompt,
         video_id: video_id,
         task_name: task_name,
         csrfmidddlewaretoken: $('input[name=csrfmidddlewaretoken]').val()
@@ -581,7 +668,7 @@
       success: function (response) {
         $('#default-topic').val('');
         $('#transcript-topic').val('');
-        $('#image-topic').val('');
+        $('#image-prompt').val('');
         $('#video-topic').val('');
         $('#publish-topic').val('');
 

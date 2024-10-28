@@ -9,6 +9,8 @@ from videos.agi_agent import video_agent
 import asyncio
 from . agis.themes import themes
 from . agis.tasks import tasks
+from . agis.voice import voices
+
 
 team_template = 'videoteam.html'
 video_template   = 'video_create.html'
@@ -140,6 +142,8 @@ async def select_task(request,selection_type, video_id, task_name):
             'future_tasks': tasks[current_task_index+1:], # Future steps
         }
         items['context'] = context
+        if task_name == 'video':
+            items['voices'] = voices
         return render(request, video_template, items)
 
     except Exception as e:
@@ -226,6 +230,10 @@ async def process_task(request):
             video_id = request.POST.get("video_id")
             topic = request.POST.get("topic")
             long_video = request.POST.get('long_video') == 'true'
+            voice = request.POST.get('voice')
+            image_prompt = request.POST.get('image_prompt')
+
+
 
             async_get_is_authenticated = sync_to_async(lambda: request.user.is_authenticated)  
             user_is_authenticated = await async_get_is_authenticated()
@@ -235,6 +243,11 @@ async def process_task(request):
             video_instance = await get_video_by_id(id=video_id)
             if task_name == 'transcript':
                 video_instance = await update_video_request(request_id=video_id, topic=topic, long_video=long_video)
+            elif task_name == 'image':
+                video_instance = await update_video_request(request_id=video_id, image_prompt=image_prompt)
+            elif task_name == 'video':
+                video_instance = await update_video_request(request_id=video_id, voice=voice)
+
             else:
                 video_instance = await get_video_by_id(id=video_id)
 

@@ -13,6 +13,8 @@ class VideoRequestModel(models.Model):
     theme = models.CharField(max_length=100)
     video_name = models.CharField(max_length=100,null=True)
     transcript = models.TextField(max_length=5000, null=True)
+    voice = models.CharField(max_length=100,null=True)
+    image_prompt = models.CharField(max_length=500,null=True)
 
     
     def get_related_video_response(self):

@@ -88,7 +88,7 @@ async def get_video_by_status(status):
     except VideoRequestModel.DoesNotExist:
         return None
     
-async def save_video_request(topic, status, user, videourl=None, imgurl=None, long_video=False, theme='build', video_name=None, transcript=None):
+async def save_video_request(topic, status, user, videourl=None, imgurl=None, long_video=False, theme='build', video_name=None, transcript=None, voice=None, image_prompt=None):
     try:
         create_video_request = sync_to_async(VideoRequestModel.objects.create)
         
@@ -101,7 +101,9 @@ async def save_video_request(topic, status, user, videourl=None, imgurl=None, lo
             long_video=long_video,
             theme=theme,
             video_name=video_name,
-            transcript=transcript
+            transcript=transcript,
+            voice=voice,
+            image_prompt=image_prompt
         )
         print("save_video_request: ", video_request_instance)
         return video_request_instance
@@ -136,7 +138,7 @@ async def get_video_response_by_request_id(request_id, since_ts):
         return [], since_ts
 
     
-async def update_video_request(request_id, status='awaiting', videourl=None, imgurl=None, topic=None, video_name=None, transcript=None, long_video=False):
+async def update_video_request(request_id, status='awaiting', videourl=None, imgurl=None, topic=None, video_name=None, transcript=None, long_video=False, voice=None, image_prompt=None):
     try:
         video_request_instance = await sync_to_async(VideoRequestModel.objects.get)(pk=request_id)
         video_request_instance.status = status
@@ -152,6 +154,10 @@ async def update_video_request(request_id, status='awaiting', videourl=None, img
             video_request_instance.transcript = transcript
         if long_video:
             video_request_instance.long_video = long_video
+        if voice:
+            video_request_instance.voice = voice
+        if image_prompt:
+            video_request_instance.image_prompt = image_prompt
             
         await sync_to_async(video_request_instance.save)()
         return video_request_instance

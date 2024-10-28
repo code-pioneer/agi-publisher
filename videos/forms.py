@@ -6,7 +6,7 @@ class VideoRequestForm(forms.ModelForm):
 
     class Meta:
         model = VideoRequestModel
-        exclude = ["user","ts","status","videourl", "imgurl", "video_name", "transcript"]
+        exclude = ["user","ts","status","videourl", "imgurl", "video_name", "transcript", "voice", "image_prompt"]
 
 class VideoTaskForm(forms.ModelForm):
 

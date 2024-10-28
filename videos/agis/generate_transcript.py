@@ -14,9 +14,8 @@ async def generate_transcript(content: str, topic: str, video_params: str, callb
     print(f'generate_transcript')
     create_blog_template = PromptTemplate.from_template(
     """
-    Imagine you're creating a script for a {size} video on {topic}. Keep the script with in {words} words.
-    Please strictly follow the below provided theme while creating the script.
-    Theme: {theme}
+    Imagine you're creating a transcript for a {size} video about {topic}. Keep it within {words} words. 
+    Ensure the transcript strictly follows the {theme} style.
     
     Response must be in the following format as show in the example.
 
@@ -40,10 +39,10 @@ So, next time you're in the Big Apple, make sure to check out the Empire State B
     long_video = video_params_json.get("long_video", False)
     if long_video:
         size = f'long {LONG_VIDEO_SIZE} seconds with text scrolling speed of 25.0 pixels per second'
-        words = 650
+        words = 1075
     else:
         size = f'short {SHORT_VIDEO_SIZE} seconds with text scrolling speed of 25.0 pixels per second.'
-        words = 130
+        words = 215
     seoText = f'Make sure to generate SEO tags for the video to improve search engine visibility.'
 
     theme_id = video_params_json.get("theme", False)

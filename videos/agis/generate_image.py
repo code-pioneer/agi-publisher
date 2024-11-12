@@ -68,3 +68,22 @@ async def saveImage(image_url,fileName):
 
     print(f"Image saved {file_path}")
     return {'image_url': file_path}
+
+async def uploadImage(uploaded_file,fileName):
+    
+    # imageFileName= fileName.replace(".html","_title.png")
+    filename = f"{fileName}.png"
+    file_path = os.path.join(BASE_DIR, 'home', 'static', 'assets','media', filename) 
+
+    # Save the image
+    async with aiofiles.open(file_path, 'wb') as file:
+        # str_data = image_data.decode('utf-8')
+        for chunk in uploaded_file.chunks():
+            await file.write(chunk)
+
+    index = file_path.find('/assets')
+    if index != -1:
+        file_path = file_path[index:]
+
+    print(f"Image saved {file_path}")
+    return {'image_url': file_path}

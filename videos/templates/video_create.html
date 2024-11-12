@@ -150,108 +150,141 @@
     </div>
     <div class="mb-3" id="image-form" style="display: none;">
       <div class="mt-4"></div> <!-- Add spacing here -->
+      <div class="btn-group" role="group" aria-label="Basic checkbox toggle button group">
+        <div class="form-check form-switch">
+          <input class="form-check-input" type="checkbox" id="upload-image"
+            style="width: 3rem; height: 1.5rem; border-radius: 1.5rem;">
+          <label class="form-check-label" for="upload-image" style="font-size: 1.25rem; padding-left: 0.5rem;">Upload
+            Image</label>
+        </div>
+      </div>
+      <div class="btn-group" role="group">
+        <input type="hidden" id="transcript-selectedtheme" name="transcript-selectedtheme"
+          value="{{selected_theme.theme_id}}">
+      </div>
       <input id="image-prompt" name="image-prompt" class="form-control me-2 border-primary" type="text"
         placeholder="What's on your mind?">
       <div class="mt-4"></div> <!-- Add spacing here -->
       <input type="hidden" id="image_video_id" name="image_video_id" value="{{ video.id }}">
       <input type="hidden" id="image_task_name" name="image_task_id" value="{{context.current_task }}">
 
-      <button type="submit" value="image" class="btn btn-primary form-control">Build Image</button>
+      <button type="submit" value="image" id="image_submit_btn" class="btn btn-primary form-control">Build
+        Image</button>
     </div>
-    <div class="mb-3" id="video-form" style="display: none;">
-      <div class="d-flex align-items-center mb-3 ms-3">
 
-        <!-- Dropdown menu -->
-        <div class="dropdown me-3">
-          <a class="btn btn-secondary dropdown-toggle" href="#" role="button" id="dropdownMenuLink"
-            data-bs-toggle="dropdown" aria-expanded="false">
-            Select Voice
-          </a>
-          <ul class="dropdown-menu" aria-labelledby="dropdownMenuLink">
-            <li><a class="dropdown-item" href="#" data-value="alloy">Alloy</a></li>
-            <li><a class="dropdown-item" href="#" data-value="echo">Echo</a></li>
-            <li><a class="dropdown-item" href="#" data-value="fable">Fable</a></li>
-            <li><a class="dropdown-item" href="#" data-value="onyx">Onyx</a></li>
-            <li><a class="dropdown-item" href="#" data-value="nova">Nova</a></li>
-            <li><a class="dropdown-item" href="#" data-value="shimmer">Shimmer</a></li>
-          </ul>
-        </div>
-        <!-- Hidden input to hold selected value -->
-        <input type="hidden" id="selectedVoiceValue" name="selected_voice">
+<div class="mb-3" id="video-form" style="display: none;">
+  <div class="d-flex align-items-center mb-3 ms-3">
 
-        <button class="btn btn-secondary" type="button" data-bs-toggle="collapse" data-bs-target="#collapseExample"
-          aria-expanded="false" aria-controls="collapseExample">
-          Voice Preview
-        </button>
-
-        <div class="collapse ms-3" id="collapseExample">
-            <ul class="list-group list-group-flush" style="margin-bottom: 0.5rem;">
-              {% for voice in voices %}
-              <li class="list-group-item d-flex justify-content-between align-items-center">
-                {{voice.name}}
-                <span class="rounded-pill ms-3">
-                  <audio controls style="width: 150px;height: 25px;">
-                    <source src="{%static voice.url %}" type="audio/mp3">
-                    Your browser does not support the audio element.
-                  </audio></span>
-              </li>
-              {% endfor %}
-            </ul>
-        </div>
-      </div>
-
-      <div class="mt-4"></div> <!-- Add spacing here -->
-      <input type="hidden" id="video-topic" name="video-topic" class="form-control me-2 border-primary" type="text"
-        placeholder="What's on your mind?">
-      <div class="mt-4"></div> <!-- Add spacing here -->
-      <input type="hidden" id="video_video_id" name="video_video_id" value="{{ video.id }}">
-      <input type="hidden" id="video_task_name" name="video_task_id" value="{{context.current_task }}">
-      <button type="submit" value="video" class="btn btn-primary form-control">Build Video</button>
+    <!-- Dropdown menu -->
+    <div class="dropdown me-3">
+      <a class="btn btn-secondary dropdown-toggle" href="#" role="button" id="dropdownMenuLink"
+        data-bs-toggle="dropdown" aria-expanded="false">
+        Select Voice
+      </a>
+      <ul class="dropdown-menu" aria-labelledby="dropdownMenuLink">
+        <li><a class="dropdown-item" href="#" data-value="alloy">Alloy</a></li>
+        <li><a class="dropdown-item" href="#" data-value="echo">Echo</a></li>
+        <li><a class="dropdown-item" href="#" data-value="fable">Fable</a></li>
+        <li><a class="dropdown-item" href="#" data-value="onyx">Onyx</a></li>
+        <li><a class="dropdown-item" href="#" data-value="nova">Nova</a></li>
+        <li><a class="dropdown-item" href="#" data-value="shimmer">Shimmer</a></li>
+      </ul>
     </div>
-    <div class="mb-3" id="publish-form" style="display: none;">
-      <div class="mt-4"></div> <!-- Add spacing here -->
-      <input type="hidden" id="publish-topic" name="publish-topic" class="form-control me-2 border-primary" type="text"
-        placeholder="What's on your mind?">
-      <div class="mt-4"></div> <!-- Add spacing here -->
-      <input type="hidden" id="publish_video_id" name="publish_video_id" value="{{ video.id }}">
-      <input type="hidden" id="publish_task_name" name="publish_task_id" value="{{context.current_task }}">
+    <!-- Hidden input to hold selected value -->
+    <input type="hidden" id="selectedVoiceValue" name="selected_voice">
 
-      <button type="submit" value="publish" class="btn btn-primary form-control">Publish Video</button>
+    <button class="btn btn-secondary" type="button" data-bs-toggle="collapse" data-bs-target="#collapseExample"
+      aria-expanded="false" aria-controls="collapseExample">
+      Voice Preview
+    </button>
+
+    <div class="collapse ms-3" id="collapseExample">
+      <ul class="list-group list-group-flush" style="margin-bottom: 0.5rem;">
+        {% for voice in voices %}
+        <li class="list-group-item d-flex justify-content-between align-items-center">
+          {{voice.name}}
+          <span class="rounded-pill ms-3">
+            <audio controls style="width: 150px;height: 25px;">
+              <source src="{%static voice.url %}" type="audio/mp3">
+              Your browser does not support the audio element.
+            </audio></span>
+        </li>
+        {% endfor %}
+      </ul>
     </div>
-  </form>
-  {% if context.current_task %}
-
-
-  <div class="mt-4 d-flex justify-content-end"> <!-- Container for both buttons -->
-    <!-- Edit Button -->
-    <button type="submit" value="" id="edit-transcript-button" class="btn btn-primary btn-lg mb-3 me-3"
-      style="display:none;">Edit Transcript</button>
-
-    <!-- Next Button -->
-    <form id="next-form" method="GET" action="{% url 'select_task' 'next' video.id task_name %}">
-      {% csrf_token %}
-      <button type="submit" value="" id="next-button" class="btn btn-primary btn-lg mb-3 me-3"
-        style="display:none;">Next</button>
-    </form>
-    <a button type="submit" id="finish-button" class="btn btn-primary btn-lg mb-3 me-3" style="display:none;"
-      href="{% url 'myvideos' %}">Finish</button>
-    </a>
   </div>
 
-
-  <form id="transcript-edit-form" style="display:none;">
-    {% csrf_token %}
-    <div class="mb-3">
-      <div class="mt-4"></div> <!-- Add spacing here -->
-      <textarea id="transcript-data" name="transcript-data" value="" class="form-control me-2 border-primary"
-        rows="12"></textarea>
-      <div class="mt-4"></div> <!-- Add spacing here -->
-      <input type="hidden" id="edit_video_id" name="edit_video_id" value="{{ video.id }}">
-      <button type="submit" id="transcript-edit-btn" class="btn btn-primary form-control">Save Transcript</button>
-    </div>
-  </form>
-  {% endif %}
+  <div class="mt-4"></div> <!-- Add spacing here -->
+  <input type="hidden" id="video-topic" name="video-topic" class="form-control me-2 border-primary" type="text"
+    placeholder="What's on your mind?">
+  <div class="mt-4"></div> <!-- Add spacing here -->
+  <input type="hidden" id="video_video_id" name="video_video_id" value="{{ video.id }}">
+  <input type="hidden" id="video_task_name" name="video_task_id" value="{{context.current_task }}">
+  <button type="submit" value="video" class="btn btn-primary form-control">Build Video</button>
 </div>
+<div class="mb-3" id="publish-form" style="display: none;">
+  <div class="mt-4"></div> <!-- Add spacing here -->
+  <input type="hidden" id="publish-topic" name="publish-topic" class="form-control me-2 border-primary" type="text"
+    placeholder="What's on your mind?">
+  <div class="mt-4"></div> <!-- Add spacing here -->
+  <input type="hidden" id="publish_video_id" name="publish_video_id" value="{{ video.id }}">
+  <input type="hidden" id="publish_task_name" name="publish_task_id" value="{{context.current_task }}">
+
+  <button type="submit" value="publish" class="btn btn-primary form-control">Publish Video</button>
+</div>
+</form>
+{% if context.current_task %}
+
+
+<div class="mt-4 d-flex justify-content-end"> <!-- Container for both buttons -->
+  <!-- Edit Button -->
+  <button type="submit" value="" id="edit-transcript-button" class="btn btn-primary btn-lg mb-3 me-3"
+    style="display:none;">Edit Transcript</button>
+
+  <!-- Next Button -->
+  <form id="next-form" method="GET" action="{% url 'select_task' 'next' video.id task_name %}">
+    {% csrf_token %}
+    <button type="submit" value="" id="next-button" class="btn btn-primary btn-lg mb-3 me-3"
+      style="display:none;">Next</button>
+  </form>
+  <a button type="submit" id="finish-button" class="btn btn-primary btn-lg mb-3 me-3" style="display:none;"
+    href="{% url 'myvideos' %}">Finish</button>
+  </a>
+</div>
+
+
+<form id="transcript-edit-form" style="display:none;">
+  {% csrf_token %}
+  <div class="mb-3">
+    <div class="mt-4"></div> <!-- Add spacing here -->
+    <textarea id="transcript-data" name="transcript-data" value="" class="form-control me-2 border-primary"
+      rows="12"></textarea>
+    <div class="mt-4"></div> <!-- Add spacing here -->
+    <input type="hidden" id="edit_video_id" name="edit_video_id" value="{{ video.id }}">
+    <button type="submit" id="transcript-edit-btn" class="btn btn-primary form-control">Save Transcript</button>
+  </div>
+</form>
+
+<form id="upload-image-form" style="display:none;">
+  {% csrf_token %}
+  <div class="mb-3">
+    <div id="drop-area" class="border border-primary rounded p-5 text-center">
+      <input type="file" id="fileElem" accept="image/*" class="d-none">
+      <input type="hidden" id="upload_video_id" name="upload_video_id" value="{{ video.id }}">
+      <button type="button" class="btn btn-primary mb-3" value="select" id="selectFileButton">Select Image</button>
+      <p>or drag and drop here</p>
+    </div>
+    <!-- Image Preview Container -->
+    <div id="imagePreview" style="display: none; margin-top: 10px;">
+      <img id="previewImg" src="" alt="Selected Image" style="max-width: 100%; height: auto;">
+      <button type="button" id="removeImageButton" value="remove" class="btn btn-secondary mt-2">Remove Image</button>
+    </div>
+
+    <div class="mt-4"></div> <!-- Add spacing here -->
+    <button type="submit" id="upload-image-btn" value="upload" class="btn btn-primary form-control">Upload Image</button>
+  </div>
+</form>
+{% endif %}
 </div>
 <div class="card" id="response-header" style="display: none;">
   <div class="card-header">
@@ -445,9 +478,8 @@
       document.getElementById("default-form").style.display = "block";
     }
   }
-  if ("{{ context.current_task }}"){
+  if ("{{ context.current_task }}") {
     document.getElementById("edit-transcript-button").addEventListener("click", function () {
-      console.log('testing edit 2')
 
       // Hide the display view and show the input field
       document.getElementById("response-header").style.display = "none";
@@ -457,9 +489,140 @@
       document.getElementById("next-button").style.display = "none";
 
     });
+    var currentTask = "{{ context.current_task }}";
+    if (currentTask === 'image') {
+      console.log('inside image form')
+      const upload_image_checkbox = document.getElementById('upload-image');
+      const upload_image_form = document.getElementById('upload-image-form');
+      upload_image_checkbox.addEventListener('change', function () {
+        upload_image_form.style.display = upload_image_checkbox.checked ? 'inline-block' : 'none';
+        const displayStyle = upload_image_checkbox.checked ? 'none' : 'inline-block';
+        document.getElementById("image_submit_btn").style.display = displayStyle;
+        document.getElementById("image-prompt").style.display = displayStyle;
+        upload_video_id = document.getElementById("image_video_id").value;
+        document.getElementById("upload_video_id").value = upload_video_id;
+
+      });
+
+    }
+
   }
+  $('#upload-image-form').each(function () {
+    const fileInput = $('#fileElem');
+    const imagePreview = $('#imagePreview');
+    const previewImg = $('#previewImg');
+    const removeImageButton = $('#removeImageButton');
+    const uploadButton = $('#upload-image-btn');
+    let selectedFile = null;
+
+    // Click event for file selection button
+    $('#selectFileButton').click(function() {
+        fileInput.click();
+    });
+
+    // Handle file selection through input
+    fileInput.change(function() {
+        selectedFile = this.files[0];
+        if (selectedFile && selectedFile.type.startsWith('image/')) {
+            const reader = new FileReader();
+            reader.onload = function(e) {
+                previewImg.attr('src', e.target.result);
+                imagePreview.show();
+                uploadButton.prop('disabled', false); // Enable upload button
+            };
+            reader.readAsDataURL(selectedFile);
+        }
+    });
+
+    // Handle drag-and-drop functionality
+    $('#drop-area').on('dragover', function(event) {
+        event.preventDefault();
+        $(this).addClass('bg-light');
+    }).on('dragleave', function(event) {
+        event.preventDefault();
+        $(this).removeClass('bg-light');
+    }).on('drop', function(event) {
+        event.preventDefault();
+        $(this).removeClass('bg-light');
+
+        const dt = event.originalEvent.dataTransfer;
+        if (dt && dt.files.length) {
+            selectedFile = dt.files[0];
+            if (selectedFile && selectedFile.type.startsWith('image/')) {
+                const reader = new FileReader();
+                reader.onload = function(e) {
+                    previewImg.attr('src', e.target.result);
+                    imagePreview.show();
+                    uploadButton.prop('disabled', false); // Enable upload button
+                };
+                reader.readAsDataURL(selectedFile);
+            }
+        }
+    });
+    // Handle remove image button click
+    removeImageButton.click(function() {
+        selectedFile = null;
+        fileInput.val(''); // Clear the file input
+        imagePreview.hide(); // Hide the preview area
+        uploadButton.prop('disabled', true); // Disable upload button
+    });
+    
+    $('#upload-image-form').submit(function (event) {
+
+      event.preventDefault();
+
+      if (!selectedFile) {
+        alert("Please select a file to upload.");
+        return;
+      }
+      $('#msg').empty();
+      $('#response-header').hide();
+      $('#response-body').hide();
+      $('#upload-image-btn').hide();
+      $('#image_submit_btn').hide();
+      $('#removeImageButton').hide();
+      $('#image-form').hide();
+      $('#image-form').find('button[type="submit"]').prop('disabled', true);
+
+      video_id = $('#upload_video_id').val();
+      url = "{% url 'upload_image' %}";
+
+      const formData = new FormData();
+      formData.append('file', selectedFile);
+      formData.append('video_id', video_id);
+
+
+      data = {
+        video_id: video_id,
+        file: selectedFile,
+        processData: false,
+        contentType: false,
+        csrfmidddlewaretoken: $('input[name=csrfmidddlewaretoken]').val()
+      }
+      $.ajax({
+        type: 'POST',
+        url: url,
+        data: formData,
+        processData: false,
+        contentType: false,
+
+        headers: {
+          "X-Requested-With": "XMLHttpRequest",
+          "X-CSRFToken": getCookie("csrftoken"),
+        },
+        success: function (response) {
+          $('#next-button').show();
+        },
+        error: function (err) {
+          console.log('error', err);
+        }
+      })
+    });
+  });
+
+
+
   $(document).on('submit', '#transcript-edit-form', function (e) {
-    console.log('testing edit 1')
     e.preventDefault();
     $('#msg').empty();
     $('#response-header').hide();
@@ -513,8 +676,7 @@
     $('#response-header').hide();
     $('#response-body').hide();
 
-    var action = $(this).find('button[type=submit]:visible').val();
-
+    var action = $('#topic-form').find('button[type=submit]:visible').val();
     if (action === 'default') {
       console.log("Default button was clicked");
       topic = $('#default-topic').val();
@@ -586,7 +748,7 @@
       console.log('video_id', video_id);
       console.log('task_name', task_name);
       if (video_id === null || video_id === '') { return; }
-      if (task_name === null || task_name === '') { return; }    
+      if (task_name === null || task_name === '') { return; }
       $('#publish-form').hide();
       $('#publish-form').find('button[type="submit"]').prop('disabled', true);
 
@@ -648,6 +810,9 @@
       if (image_prompt === null || image_prompt === '') { return; }
       $('#image-form').hide();
       $('#image-form').find('button[type="submit"]').prop('disabled', true);
+      $('#upload-image-form').hide();
+      $('#upload-image-form').find('button[type="submit"]').prop('disabled', true);
+
 
       data = {
         image_prompt: image_prompt,
@@ -732,7 +897,6 @@
               console.log('setting next button')
               $('#next-button').show();
               if (action === 'transcript') {
-                console.log('testing edit 3')
 
                 $('#edit-transcript-button').show();
                 let tempDiv = document.createElement('div');
@@ -745,7 +909,6 @@
 
               }
             }
-            console.log('step2', 'video_id', video_id, 'task_id', task_id,);
             $('#video_id').val(video_id);
             $('#task_id').val(task_id);
 

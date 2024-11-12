@@ -14,6 +14,8 @@ urlpatterns = [
     path('task', views.process_task, name="process_task"),
     path('select_task/<str:selection_type>/<str:video_id>/<str:task_name>/', views.select_task, name="select_task"),
     path('edit', views.edit_transcript, name="edit_transcript"),
+    path('upload', views.upload_image, name="upload_image"),
+
 
 
 ]

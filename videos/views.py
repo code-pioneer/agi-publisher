@@ -10,6 +10,7 @@ import asyncio
 from . agis.themes import themes
 from . agis.tasks import tasks
 from . agis.voice import voices
+from . agis.generate_image import uploadImage
 
 
 team_template = 'videoteam.html'
@@ -376,6 +377,30 @@ async def edit_transcript(request):
         transcript = request.POST.get('transcript')
         await update_video_request(request_id=video_id, transcript=transcript)
         return JsonResponse({'message': 'Transcript updated successfully', 'id': video_id})
+
+       
+    except Exception as e:
+        print("An error occured in chat post view", e)
+        return HttpResponseServerError('Humm... Something went wrong... Try later')
+    
+@require_POST
+async def upload_image(request):
+    print("view upload_image")
+
+    try:
+        
+        async_get_is_authenticated = sync_to_async(lambda: request.user.is_authenticated)  
+        user_is_authenticated = await async_get_is_authenticated()
+        if not user_is_authenticated:
+            return redirect('/accounts/login/')
+        
+        video_id = request.POST.get('video_id')   
+        file = request.FILES['file']
+        video = await get_video_by_id(id=video_id)
+        image = await uploadImage(file, video.video_name)
+
+        await update_video_request(request_id=video_id, imgurl=image["image_url"])
+        return JsonResponse({'message': 'Image updated successfully', 'id': video_id})
 
        
     except Exception as e:
